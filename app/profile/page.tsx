@@ -13,6 +13,9 @@ export default function page() {
           <label htmlFor="website">webite
           <Input/>
           </label>
+          <label htmlFor="website">niraj
+          <Input/>
+          </label>
           <label htmlFor="youtuber">youtube
           <Input/>
           </label>s
