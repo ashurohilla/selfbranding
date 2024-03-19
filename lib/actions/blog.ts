@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { IBlog } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
 import { BlogFormSchemaType } from "../../app/dashboard/blog/schema";
+import { contents } from "cheerio/lib/api/traversing";
 
 const DASHBOARD = "/dashboard/blog";
 
@@ -19,7 +20,6 @@ export async function createBlog(data: {
 	const supabase = await createSupabaseServerClient();
 	const blogResult = await supabase
 		.from("blog")
-		.insert(blog)
 		.select("id")
 		.single();
 
@@ -82,13 +82,13 @@ export async function readBlogContent(blogId: string) {
 		.single();
 }
 
-export async function updateBlogById(blogId: string, data: IBlog) {
-	const supabase = await createSupabaseServerClient();
-	const result = await supabase.from("blog").update(data).eq("id", blogId);
-	revalidatePath(DASHBOARD);
-	revalidatePath("/blog/" + blogId);
-	return JSON.stringify(result);
-}
+// export async function updateBlogById(blogId: string, data: IBlog) {
+// 	const supabase = await createSupabaseServerClient();
+// 	const result = await supabase.from("blog").update(data).eq("id", blogId);
+// 	revalidatePath(DASHBOARD);
+// 	revalidatePath("/blog/" + blogId);
+// 	return JSON.stringify(result);
+// }
 
 export async function updateBlogDetail(
 	blogId: string,

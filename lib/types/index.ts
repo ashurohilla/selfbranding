@@ -3,7 +3,7 @@
 		coments_enables: boolean | null
 		content: string | null
 		created_at: string
-		id: number
+		id: string
 		image: string | null
 		meta_description: string | null
 		meta_tiltle: string | null
@@ -15,7 +15,7 @@
 
 export type IBlogDetial = {
 	created_at: string;
-	id: number;
+	id: string;
 	image: string;
 	is_premium: boolean;
 	is_published: boolean;
@@ -29,7 +29,7 @@ export type IBlogDetial = {
 
 export type IBlogForm = {
 	created_at: string;
-	id: number;
+	id: string;
 	image: string;
 	is_premium: boolean;
 	is_published: boolean;
@@ -45,7 +45,7 @@ export type Iuser = {
 	created_at: string;
 	display_name: string;
 	email: string;
-	id: number;
+	id: string;
 	image_url: string;
 	role: string;
 	stripe_customer_id: string | null;

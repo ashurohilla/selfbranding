@@ -45,7 +45,7 @@ export default function BlogForm({
 		defaultValues: {
 			title: defaultBlog?.title,
 			content: defaultBlog?.blog_content.content,
-			image_url: defaultBlog?.image_url,
+			image_url: defaultBlog?.image,
 			is_premium: defaultBlog?.is_premium,
 			is_published: defaultBlog?.is_published,
 		},

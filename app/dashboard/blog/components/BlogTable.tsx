@@ -6,14 +6,14 @@ import Link from "next/link";
 import { IBlog } from "@/lib/types";
 import SwitchForm from "./SwitchForm";
 import DeleteAlert from "./DeleteAlert";
-import { readBlogAdmin, updateBlogById } from "@/lib/actions/blog";
+// import { readBlogAdmin, updateBlogById } from "@/lib/actions/blog";
 
 export default async function BlogTable() {
-	const { data: blogs } = await readBlogAdmin();
+	// const { data: blogs } = await readBlogAdmin();
 
 	return (
 		<>
-			<div className="rounded-md bg-graident-dark border-[0.5px] overflow-y-scroll ">
+			{/* <div className="rounded-md bg-graident-dark border-[0.5px] overflow-y-scroll ">
 				<div className="w-[800px] md:w-full">
 					<div className="grid grid-cols-5 border-b p-5 dark:text-gray-500">
 						<h1 className=" col-span-2">Title</h1>
@@ -61,7 +61,7 @@ export default async function BlogTable() {
 						})}
 					</div>
 				</div>
-			</div>
+			</div> */}
 		</>
 	);
 }
