@@ -7,7 +7,7 @@ import { PlusIcon } from "@radix-ui/react-icons";
 export default function Blog() {
 	return (
 		<div className="space-y-5">
-			<div className="flex items-center justify-between">
+			<div className="flex items-center pt-[100px] justify-between">
 				<h1 className="text-3xl font-bold">Blogs</h1>
 				<Link href="/dashboard/blog/create">
 					<Button

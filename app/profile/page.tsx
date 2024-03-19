@@ -93,7 +93,7 @@ const handleedit = () =>{
       <Navbar />
 
       {showdata && isInstructor && instructorData ? (
-         <div className='flex justify-center'>
+         <div className='flex justify-center py-[120px] '>
         <div className=' justify-center items-center  gap-4'>
           <h2>Instructor Profile</h2>
           <p>Name: {instructorData.Name}</p>
@@ -107,7 +107,7 @@ const handleedit = () =>{
         </div>
             </div>
       ) : (
-        <div>
+        <div className='pt-20'>
           <Button className='' onClick={toggleForm}>
             Become Instructor
           </Button>
