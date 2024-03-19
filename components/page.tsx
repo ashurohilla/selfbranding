@@ -1,11 +1,11 @@
-import DeployButton from '../components/DeployButton'
-import AuthButton from '../components/AuthButton'
+import DeployButton from './DeployButton'
+import AuthButton from './AuthButton'
 import { createClient } from '@/utils/supabase/server'
 import ConnectSupabaseSteps from '@/components/ConnectSupabaseSteps'
 import SignUpUserSteps from '@/components/SignUpUserSteps'
 import Header from '@/components/Header'
 import { cookies } from 'next/headers'
-import Navbar from './navbar/navbar'
+import Navbar from '../app/navbar/navbar'
 
 export default async function Index() {
   const cookieStore = cookies()

@@ -11,13 +11,11 @@ export default function loginform() {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       )
       const handleloginwihgithub =  () =>{
-        supabase.auth.signInWithOAuth({
+    supabase.auth.signInWithOAuth({
             provider:"github",
             options: {
-                
                 redirectTo:location.origin + "/auth/callback? next= "+ pathname,
             },
-
         })
       }
       const handleloginwithgoogle =  () =>{

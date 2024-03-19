@@ -18,25 +18,34 @@ import {
 
 export default function navbar() {
   const pathname = usePathname()
-  console.log(pathname)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const userLoggedIn = user?.id ? false : true; // Check if user has an id
-    setIsLoggedIn(userLoggedIn);
-       
+    setIsLoggedIn(userLoggedIn); 
   }, []);
 
   const user = useUser((state) => state.user);
   return (
-    <div className="mx-4">
-      <nav className="mt-2">
-       <div className="mt-2 text-2xl ">
-       <Link className="pt-4" href="/">
-          Self branding
-        </Link>
-        
-        <div className=" flex float-right">
+    <div className=" z-10 bg-white/10 backdrop-blur-sm rounded-sm  shadow-sm w-full fixed ">
+    <nav className="py-2">
+      <div className=" w-full px-4 md:text-xl text-lg flex justify-between items-center">
+        <div className="flex">
+          <Link className="flex" href="/">
+            Hardware Garage
+          </Link>
+          <ul className="ml-10 flex md:mx-4 mx-2">
+          <Link className="flex" href="/course">
+          <li className="md:mx-6 mx-2">courses</li>
+
+          </Link>
+          <Link className="flex" href="/blogs">
+          <li className="md:mx-6 mx-2">Blogs</li>
+
+          </Link>
+          </ul>
+        </div>
+        <div>
           {user?.id ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -44,17 +53,16 @@ export default function navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>
-                <Link href={pathname === '/profile' ? '/dashboard' : '/profile'}>
-  {pathname === '/' ? 'Profile' : 'Dashboard'}
-</Link>
-
+                  <Link href={pathname === '/profile' ? '/dashboard' : '/profile'}>
+                    {pathname === '/' ? 'Profile' : 'Dashboard'}
+                  </Link>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   {" "}
                   <Link href={pathname === '/' ? '/dashboard' : '/'}>
-  {pathname === '/' ? 'Dashbaord' : 'Home'}
-</Link>
+                    {pathname === '/' ? 'Dashbaord' : 'Home'}
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link className="text-red-600" href="/login">
@@ -69,10 +77,9 @@ export default function navbar() {
               <Link href="/login">Login</Link>{" "}
             </h1>
           )}
-  
-   </div>
-        </div>  
-      </nav>
-    </div>
+        </div>
+      </div>
+    </nav>
+  </div>
   );
 }
