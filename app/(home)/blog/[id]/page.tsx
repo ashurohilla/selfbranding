@@ -35,15 +35,15 @@ import { html } from "cheerio/lib/api/manipulation";
 
 export default async function page({ params }: { params: { id: string } }) {
 	return (
-		<html>
+      <div>
 
 		<head>
 		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7557474007097933" crossOrigin="anonymous"></script>
-
+		</head>
 		<div className="max-w-5xl mx-auto min-h-screen  pt-10 space-y-10">
 			<Content id={params.id} />
 		</div>
-		</head>
-		</html>
+	  </div>
+		
 	);
 }
