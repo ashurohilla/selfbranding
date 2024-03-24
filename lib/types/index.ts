@@ -3,13 +3,13 @@
 		coments_enables: boolean | null
 		content: string | null
 		created_at: string
-		id: string
+		id: number
 		image: string | null
 		meta_description: string | null
 		meta_tiltle: string | null
 		published_at: string
 		slug: string
-		status: string
+		status: boolean
 		title: string | null
 };
 
@@ -17,14 +17,18 @@ export type IBlogDetial = {
 	created_at: string;
 	id: string;
 	image: string;
-	is_premium: boolean;
-	is_published: boolean;
 	title: string;
-	blog_content: {
-		blog_id: string;
-		content: string;
-		created_at: string;
-	};
+	status:boolean;
+	meta_description: string;
+	meta_tiltle: string;
+	coments_enabled: boolean;
+	published_at: string;
+	slug:string;
+	content:string;
+	author:string;
+
+
+	
 } | null;
 
 export type IBlogForm = {

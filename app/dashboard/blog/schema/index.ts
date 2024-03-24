@@ -8,17 +8,24 @@ export const BlogFormSchema = z
 		content: z.string().min(50, {
 			message: "Content is too short",
 		}),
-		image_url: z.string().url({
+		image: z.string().url({
 			message: "Invalid url",
 		}),
-		is_premium: z.boolean(),
-		is_published: z.boolean(),
+		status: z.boolean(),
+		meta_title: z.string(),
+		meta_description: z.string(),
+		created_at: z.string(),
+		slug: z.string(),
+		author: z.string(),
+		coments_enabled:z.boolean(),
+		
+
 	})
 	.refine(
 		(data) => {
-			const image_url = data.image_url;
+			const image = data.image;
 			try {
-				const url = new URL(image_url);
+				const url = new URL(image);
 				return url.hostname === "images.unsplash.com";
 			} catch {
 				return false;
@@ -26,7 +33,7 @@ export const BlogFormSchema = z
 		},
 		{
 			message: "Currently we are supporting only the image from unsplash",
-			path: ["image_url"],
+			path: ["image"],
 		}
 	);
 

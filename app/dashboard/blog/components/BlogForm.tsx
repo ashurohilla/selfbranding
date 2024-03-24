@@ -1,8 +1,9 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useEffect } from "react";
+import { useUser } from "@/lib/store/user";
 import {
 	Form,
 	FormControl,
@@ -17,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import slugify from "slugify";
 import {
 	EyeOpenIcon,
 	Pencil1Icon,
@@ -38,30 +40,62 @@ export default function BlogForm({
 }) {
 	const [isPending, startTransition] = useTransition();
 	const [isPreview, setPreivew] = useState(false);
+	const user = useUser((state) => state.user);
+
 
 	const form = useForm<z.infer<typeof BlogFormSchema>>({
 		mode: "all",
 		resolver: zodResolver(BlogFormSchema),
 		defaultValues: {
 			title: defaultBlog?.title,
-			content: defaultBlog?.blog_content.content,
-			image_url: defaultBlog?.image,
-			is_premium: defaultBlog?.is_premium,
-			is_published: defaultBlog?.is_published,
+			content: defaultBlog?.content,
+			image: defaultBlog?.image,
+			status:defaultBlog?.status,
+			author: defaultBlog?.author,
+			meta_title: defaultBlog?.meta_tiltle,
+			meta_description: defaultBlog?.meta_description,
+			created_at: defaultBlog?.created_at,
+			slug: defaultBlog?.slug,
+			coments_enabled:defaultBlog?.coments_enabled,
 		},
 	});
-
+	
 	const onSubmit = (data: z.infer<typeof BlogFormSchema>) => {
+		console.log(data);
 		startTransition(() => {
 			onHandleSubmit(data);
+
 		});
 	};
+
+	useEffect(() => {
+
+		if (form.getValues().title) {
+			const slug = slugify(form.getValues().title, { lower: true }) + user?.id;
+			form.setValue("slug", slug);
+		if(user?.id){
+			const author = user?.id;
+			form.setValue("author", author);
+			form.setValue("created_at", new Date().toISOString().slice(0, 16));
+		}
+		if(form.getValues().content){
+			const meta_description = form.getValues().content;
+			console.log(meta_description);
+			form.setValue("meta_description", meta_description);
+		}
+		if(form.getValues().title){
+			const meta_title = form.getValues().title;
+			form.setValue("meta_title", meta_title);
+		}
+			
+			}
+	}, [form.getValues().title]);
 
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="w-full border pb-5 rounded-md"
+				className="w-full pt-[100px] border pb-5 rounded-md"
 			>
 				<div className="border-b p-5 flex items-center sm:justify-between flex-wrap sm:flex-row gap-2">
 					<div className="flex items-center flex-wrap gap-5">
@@ -69,7 +103,7 @@ export default function BlogForm({
 							onClick={() => {
 								setPreivew(
 									!isPreview &&
-										!form.getFieldState("image_url").invalid
+										!form.getFieldState("image").invalid
 								);
 							}}
 							role="button"
@@ -88,47 +122,6 @@ export default function BlogForm({
 								</>
 							)}
 						</span>
-						<FormField
-							control={form.control}
-							name="is_premium"
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<div className="flex items-center gap-1 border p-2 rounded-md bg-zinc-800">
-											<StarIcon />
-											<span className="text-sm">
-												Premium
-											</span>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
-											/>
-										</div>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="is_published"
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<div className="flex items-center gap-1 border p-2 rounded-md bg-zinc-800">
-											<RocketIcon />
-
-											<span className="text-sm">
-												Publish
-											</span>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
-											/>
-										</div>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
 					</div>
 
 					<button
@@ -199,7 +192,7 @@ export default function BlogForm({
 
 				<FormField
 					control={form.control}
-					name="image_url"
+					name="image"
 					render={({ field }) => {
 						return (
 							<FormItem>
@@ -232,11 +225,11 @@ export default function BlogForm({
 											)}
 										>
 											{isPreview ? (
-												<div className="w-full h-80 relative mt-10 border rounded-md">
+												<div className=" mx-[100px] h-80 relative mt-10 border rounded-md">
 													<Image
 														src={
 															form.getValues()
-																.image_url
+																.image
 														}
 														alt="preview"
 														fill

@@ -1,3 +1,4 @@
+import { boolean } from "zod";
 import { IBlogDetial } from "./types";
 
 export const blogDeafultValue = `
@@ -76,17 +77,19 @@ export const blogs = [
 ];
 
 export const defaultCreateBlog: IBlogDetial = {
-	id: "",
-	title: "",
-	image: "",
 	created_at: "",
-	is_premium: false,
-	is_published: false,
-	blog_content: {
-		created_at: "",
-		content: "",
-		blog_id: "",
-	},
+	id: "",
+	image: "",
+	title: "",
+	status: true,
+	meta_description: "",
+	meta_tiltle: "",
+	coments_enabled: true,
+	published_at: "",
+	slug: "",	
+	content:"",	
+	author: "",
+
 };
 export const users = [
 	{

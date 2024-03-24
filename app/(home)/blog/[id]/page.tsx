@@ -2,6 +2,7 @@ import React from "react";
 import { IBlog } from "@/lib/types";
 import Image from "next/image";
 import Content from "./components/Content";
+import { html } from "cheerio/lib/api/manipulation";
 
 // export async function generateStaticParams() {
 // 	const { data: blogs } = await fetch(process.env.SITE_URL + "/blog?id=*").then((res) => res.json());
@@ -34,9 +35,15 @@ import Content from "./components/Content";
 
 export default async function page({ params }: { params: { id: string } }) {
 	return (
+		<html>
+
+		<head>
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7557474007097933" crossOrigin="anonymous"></script>
+
 		<div className="max-w-5xl mx-auto min-h-screen  pt-10 space-y-10">
-		
 			<Content id={params.id} />
 		</div>
+		</head>
+		</html>
 	);
 }

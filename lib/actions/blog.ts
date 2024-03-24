@@ -3,36 +3,33 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { IBlog } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
-import { BlogFormSchemaType } from "../../app/dashboard/blog/schema";
+import { BlogFormSchema, BlogFormSchemaType } from "../../app/dashboard/blog/schema";
 import { contents } from "cheerio/lib/api/traversing";
+import { SiNginx } from "react-icons/si";
 
 const DASHBOARD = "/dashboard/blog";
 
 export async function createBlog(data: {
 	content: string;
 	title: string;
-	image_url: string;
-	is_premium: boolean;
-	is_published: boolean;
+	image: string;
+	author:string;
+	meta_title: string;
+	meta_description: string;
+	slug: string;
+	status: boolean;
+	created_at: string;
+	coments_enabled: boolean;
+	
 }) {
-	const { ["content"]: excludedKey, ...blog } = data;
 
 	const supabase = await createSupabaseServerClient();
 	const blogResult = await supabase
 		.from("blog")
-		.select("id")
+		.insert(data)
 		.single();
 
-	if (blogResult.error?.message && !blogResult.data) {
-		return JSON.stringify(blogResult);
-	} else {
-		const result = await supabase
-			.from("blog_content")
-			.insert({ blog_id: blogResult?.data?.id!, content: data.content });
-
-		revalidatePath(DASHBOARD);
-		return JSON.stringify(result);
-	}
+    return blogResult;
 }
 
 export async function readBlog() {
@@ -82,13 +79,13 @@ export async function readBlogContent(blogId: string) {
 		.single();
 }
 
-// export async function updateBlogById(blogId: string, data: IBlog) {
-// 	const supabase = await createSupabaseServerClient();
-// 	const result = await supabase.from("blog").update(data).eq("id", blogId);
-// 	revalidatePath(DASHBOARD);
-// 	revalidatePath("/blog/" + blogId);
-// 	return JSON.stringify(result);
-// }
+export async function updateBlogById(blogId: string, data: IBlog) {
+	const supabase = await createSupabaseServerClient();
+	const result = await supabase.from("blog").update(data).eq("id", blogId);
+	revalidatePath(DASHBOARD);
+	revalidatePath("/blog/" + blogId);
+	return JSON.stringify(result);
+}
 
 export async function updateBlogDetail(
 	blogId: string,
