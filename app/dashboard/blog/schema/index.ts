@@ -18,8 +18,6 @@ export const BlogFormSchema = z
 		slug: z.string(),
 		author: z.string(),
 		coments_enabled:z.boolean(),
-		
-
 	})
 	.refine(
 		(data) => {

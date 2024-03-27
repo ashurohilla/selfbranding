@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { deleteBlogById } from "../../../../lib/actions/blog";
+import { deleteCoursebyid } from "../../../../lib/actions/blog";
 import { ChangeEvent, useTransition } from "react";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { toast } from "@/components/ui/use-toast";
@@ -24,7 +24,7 @@ export default function DeleteAlert({ id }: { id: number }) {
 		e.preventDefault();
 		startTransition(async () => {
 			const { error } = JSON.parse(
-				await deleteBlogById(id)
+				await deleteCoursebyid(id)
 			) as PostgrestSingleResponse<null>;
 			if (error) {
 				toast({

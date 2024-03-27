@@ -5,9 +5,9 @@ import Link from "next/link";
 import { IBlog } from "@/lib/types";
 import SwitchForm from "./SwitchForm";
 import DeleteAlert from "./DeleteAlert";
-import { readBlogAdmin, updateBlogById } from "@/lib/actions/blog";
-export default async function BlogTable() {
-    const { data: blogs } = await readBlogAdmin();
+import { Coursebyadmin, updateBlogById } from "@/lib/actions/blog";
+export default async function CourseTable() {
+    const { data: course } = await Coursebyadmin();
 
 	return (
 		<>
@@ -17,15 +17,15 @@ export default async function BlogTable() {
 						<h1 className=" col-span-2">Title</h1>
 					</div>
 					<div className="space-y-10 p-5">
-						{blogs?.map((blog, index) => {
+						{course?.map((courses, index) => {
 							
 							return (
 								<div className="grid grid-cols-5" key={index}>
 									<h1 className="dark:text-gray-200 col-span-2 font-lg font-medium">
-										{blog.title}
+										{courses.Name}
 									</h1>
 
-									<Actions id={blog.id } slug={blog.slug} />
+									<Actions id={courses.id } slug={courses.Description} />
 								</div>
 							);	
 						})}
@@ -40,7 +40,7 @@ const Actions = ({ id, slug }: { id: number; slug: string } ) => {
 	return (
 		<div className="flex items-center gap-2 md:flex-wrap">
 			{/* TODO: change to id */}
-			<Link href={`/blog/${slug}`}>
+			<Link href={`/course/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<EyeOpenIcon />
 					View
@@ -48,7 +48,7 @@ const Actions = ({ id, slug }: { id: number; slug: string } ) => {
 			</Link>
 			<DeleteAlert id={id} />
 
-			<Link href={`/dashboard/blog/edit/${id}`}>
+			<Link href={`/dashboard/course/edit/${id}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<Pencil1Icon />
 					Edit

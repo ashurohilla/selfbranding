@@ -4,7 +4,6 @@ import { useUser } from '@/lib/store/user'
 import Image from  "next/image"
 export default function profile() {
     const user = useUser((state) => state.user);
-    console.log(user?.user_metadata)
 
     if (!user || !user.user_metadata) {
         return <div>Loading...</div>; // Handle loading state or error if user data is not available

@@ -42,16 +42,32 @@ export async function readBlog() {
 }
 
 export async function readBlogAdmin() {
-	// await new Promise((resolve) => setTimeout(resolve, 2000));
+	await new Promise((resolve) => setTimeout(resolve, 2000));
 
 	const supabase = await createSupabaseServerClient();
+
 	return supabase
 		.from("blog")
 		.select("*")
+		.eq('author', '5023e815-5c4a-4cfe-8607-18c263d0fbe3' )
 		.order("created_at", { ascending: true });
+		
 }
 
-export async function readBlogById(blogId: string) {
+export async function Coursebyadmin() {
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+
+	const supabase = await createSupabaseServerClient();
+
+	return supabase
+		.from("course")
+		.select("*")
+		.eq('instructor', '5023e815-5c4a-4cfe-8607-18c263d0fbe3' )
+		.order("created_at", { ascending: true });
+		
+}
+
+export async function readBlogById(blogId: number) {
 	const supabase = await createSupabaseServerClient();
 	return supabase.from("blog").select("*").eq("id", blogId).single();
 }
@@ -60,11 +76,11 @@ export async function readBlogIds() {
 	return supabase.from("blog").select("id");
 }
 
-export async function readBlogDeatailById(id: string) {
+export async function readBlogDeatailById(id : number) {
 	const supabase = await createSupabaseServerClient();
 	return await supabase
 		.from("blog")
-		.select("*,content(*)")
+		.select("*")
 		.eq("id", id)
 		.single();
 }
@@ -88,34 +104,36 @@ export async function updateBlogById(blogId: string, data: IBlog) {
 }
 
 export async function updateBlogDetail(
-	blogId: string,
+	id: string,
 	data: BlogFormSchemaType
 ) {
-	const { ["content"]: excludedKey, ...blog } = data;
-
 	const supabase = await createSupabaseServerClient();
 	const resultBlog = await supabase
 		.from("blog")
-		.update(blog)
-		.eq("id", blogId);
-	if (resultBlog.error) {
-		return JSON.stringify(resultBlog);
+		.update(data)
+		.eq("id", id);
+	if (resultBlog) {
+		return (resultBlog);
 	} else {
-		const result = await supabase
-			.from("blog_content")
-			.update({ content: data.content })
-			.eq("blog_id", blogId);
 		revalidatePath(DASHBOARD);
-		revalidatePath("/blog/" + blogId);
-
-		return JSON.stringify(result);
 	}
 }
 
-export async function deleteBlogById(blogId: string) {
+export async function deleteBlogById(blogId: number) {
+	console.log("deleting blog post")
 	const supabase = await createSupabaseServerClient();
 	const result = await supabase.from("blog").delete().eq("id", blogId);
+	console.log(result);
 	revalidatePath(DASHBOARD);
-	revalidatePath("/blog/" + blogId);
+	revalidatePath("/blog/" + blogId);	
+	return JSON.stringify(result);
+}
+export async function deleteCoursebyid(course_id: number) {
+	console.log("deleting course")
+	const supabase = await createSupabaseServerClient();
+	const result = await supabase.from("course").delete().eq("id", course_id);
+	console.log(result);
+	revalidatePath(DASHBOARD);
+	revalidatePath("/course/" + course_id);	
 	return JSON.stringify(result);
 }

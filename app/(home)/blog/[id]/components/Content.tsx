@@ -18,17 +18,33 @@ interface BlogData {
   status: string;
   title: string | null;
 }
+interface AuthorData {
+          author: string | null
+          Bio: string | null
+          created_at: string
+          github: string | null
+          id: string
+          instagram: string | null
+          linkdin: string | null
+          Name: string | null
+}
 
 
 export default function Content({ id }: { id: string }) {
   const [loading, setLoading] = useState(true);
   const [blog, setBlog] = useState<BlogData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [author, setAuthor] = useState<AuthorData | null>(null);
+  const [authorid, setAuthorid] = useState<string | null>(null);
+
 
   const supabase = createBrowserClient(
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
 		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 	);
+
+
+
 
 
   const readBlogContent = async () => {
@@ -44,16 +60,39 @@ export default function Content({ id }: { id: string }) {
       }
 
       setBlog(data);
+      readauthorname(data?.author)
     } catch (err) {
       setError(`Failed to fetch blog post`);
     } finally {
       setLoading(false);
     }
   };
+  const readauthorname = async (authorid :String) => {
+    try {
+      const { data, error } = await supabase
+      .from("instructor")
+      .select("*")
+      .eq("id", authorid)
+      .single();
+      console.log(data)
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    setAuthor(data);
+    }
+    catch (err) {
+      setError(`failed to fetch author`);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     readBlogContent();
+   
   }, [id]);
+
 
   if (loading) {
     return <BlogContentLoading />;
@@ -64,15 +103,20 @@ export default function Content({ id }: { id: string }) {
   }
 
   return (
-    <div>
+    <div className="mx-4  ">
 
     	<div className="sm:px-10 space-y-5">
 				<h1 className=" text-3xl font-bold dark:text-gray-200">
         {blog?.title}
 				</h1>
-				<p className="text-sm dark:text-gray-400">
+		<div className=" flex justify-between px-2 py-2 font-lg">
+    <p className="text-sm flex dark:text-gray-400">
         {new Date(blog?.created_at!).toDateString()}
 				</p>
+        <p className="text-sm flex dark:text-gray-400">
+        {author?.Name}
+				</p>
+    </div>
         </div>
         
         <div className="w-full h-96 relative">

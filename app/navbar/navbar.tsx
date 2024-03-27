@@ -21,7 +21,7 @@ export default function navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userLoggedIn = user?.id ? false : true; // Check if user has an id
+  const userLoggedIn = user?.id ? false : true; // Check if user has an id
     setIsLoggedIn(userLoggedIn); 
   }, []);
 
@@ -35,7 +35,7 @@ export default function navbar() {
             Hardware Garage
           </Link>
           <ul className="ml-10 flex md:mx-4 mx-2">
-          <Link className="flex" href="/course">
+          <Link className="flex" href="/dashboard/course">
           <li className="md:mx-6 mx-2">courses</li>
 
           </Link>
