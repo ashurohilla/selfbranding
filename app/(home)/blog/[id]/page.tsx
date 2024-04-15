@@ -9,6 +9,25 @@ const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
+
+export async function generateStaticParams() {
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const { data: blogs, error } = await supabase
+    .from("blog")
+    .select("slug");
+
+  if (error) {
+    throw error;
+  }
+
+  return blogs?.map((blog) => ({ id: blog.slug }));
+}
+
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
     const { data, error } = await supabase
                 .from("blog")
@@ -28,29 +47,25 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         keywords: ["mechatronics", "arduino", "Raspberry pi"],
       };
     }
-  export default async function Page({ params }: { params: { id: string } }) {
-    return (
-      <div className="max-w-5xl mx-auto min-h-screen pt-10 space-y-10">
-        <Content id={params.id} />
-      </div>
-    );
-  }
-
-
-  // export async function generateStaticParams() {
-  //   const { data: blogs } = await fetch(`${SITE_URL}api/blog?id=*`
-  //   ).then((res) => res.json());
-  
-  //   return blogs;
-  // }
-
-
-//   export async function generateStaticParams(Context) {
-//     const id = Context.params.id;
-// 	const { data: blogs } = await fetch( `${SITE_URL}/blog/${id}`
-// 	).then((res) => res.json());
-
-//     console.log(blogs);
-
-// 	// return blogs;
-// }
+    export default async function Page({ params }: { params: { id: string } }) {
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+    
+      const { data: blog, error } = await supabase
+        .from("blog")
+        .select("*")
+        .eq("slug", params.id)
+        .single();
+    
+      if (error) {
+        throw error;
+      }
+    
+      return (
+        <div className="max-w-5xl mx-auto min-h-screen pt-10 space-y-10">
+          <Content id={blog?.slug} />
+        </div>
+      );
+    }
