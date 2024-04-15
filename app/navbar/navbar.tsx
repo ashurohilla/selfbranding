@@ -31,16 +31,16 @@ export default function navbar() {
     <nav className="py-2">
       <div className=" w-full px-4 md:text-xl text-lg flex justify-between items-center">
         <div className="flex">
-          <Link className="flex" href="/">
+          <Link className="flex text-white" href="/">
             Hardware Garage
           </Link>
           <ul className="ml-10 flex md:mx-4 mx-2">
           <Link className="flex" href="/dashboard/course">
-          <li className="md:mx-6 mx-2">courses</li>
+          <li className="md:mx-6 text-white mx-2">courses</li>
 
           </Link>
           <Link className="flex" href="/blogs">
-          <li className="md:mx-6 mx-2">Blogs</li>
+          <li className="md:mx-6 text-white mx-2">Blogs</li>
 
           </Link>
           </ul>
@@ -74,7 +74,7 @@ export default function navbar() {
           ) : (
             <h1>
               {" "}
-              <Link href="/login">Login</Link>{" "}
+              <Link className="text-white" href="/login">Login</Link>{" "}
             </h1>
           )}
         </div>

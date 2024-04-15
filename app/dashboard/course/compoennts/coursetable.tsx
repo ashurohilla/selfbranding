@@ -36,7 +36,7 @@ export default async function CourseTable() {
 	);
 }
 
-const Actions = ({ id, slug }: { id: number; slug: string } ) => {
+const Actions = ({ id, slug }: { id: string; slug: string } ) => {
 	return (
 		<div className="flex items-center gap-2 md:flex-wrap">
 			{/* TODO: change to id */}

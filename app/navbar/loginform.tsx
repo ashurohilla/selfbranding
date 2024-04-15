@@ -37,7 +37,7 @@ export default function loginform() {
     <div className='flex gap-8 justify-center'>
          <button className='px-2' onClick={handleloginwihgithub}>  < GitHubLogoIcon width="40" height="40"/> </button>
         
-         <button onClick={handleloginwithgoogle}> <svg xmlns="http://www.w3.org/2000/svg" width="40px" className="inline" viewBox="0 0 512 512">
+         <button onClick={handleloginwithgoogle}> <svg xmlns="http://www.w3.org/2000/svg" width="4  0px" className="inline" viewBox="0 0 512 512">
                   <path fill="#fbbd00"
                     d="M120 256c0-25.367 6.989-49.13 19.131-69.477v-86.308H52.823C18.568 144.703 0 198.922 0 256s18.568 111.297 52.823 155.785h86.308v-86.308C126.989 305.13 120 281.367 120 256z"
                     data-original="#fbbd00" />

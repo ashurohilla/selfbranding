@@ -36,3 +36,21 @@ export const BlogFormSchema = z
 	);
 
 export type BlogFormSchemaType = z.infer<typeof BlogFormSchema>;
+
+export const CourseFormSchema = z
+	.object({
+		Catogory_id: z.string().min(20, {
+			message: "Content is too short",
+		}),
+		banner_image: z.string().url({
+			message: "Invalid url",
+		}),
+		Description: z.string(),
+		instructor: z.string(),
+		created_at: z.string(),
+		Name: z.string(),
+		price: z.string(),
+	})
+
+
+export type CourseFormSchematype = z.infer<typeof CourseFormSchema>;

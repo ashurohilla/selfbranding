@@ -8,7 +8,6 @@ import DeleteAlert from "./DeleteAlert";
 import { readBlogAdmin, updateBlogById } from "@/lib/actions/blog";
 export default async function BlogTable() {
     const { data: blogs } = await readBlogAdmin();
-
 	return (
 		<>
 			<div className="rounded-md bg-graident-dark border-[0.5px] overflow-y-scroll ">

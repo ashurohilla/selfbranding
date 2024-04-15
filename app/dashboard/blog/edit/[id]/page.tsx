@@ -5,5 +5,5 @@ import { readBlogDeatailById } from "@/lib/actions/blog";
 
 export default async function Edit({ params }: { params: { id: number } }) {
 	const { data: blog } = await readBlogDeatailById(params.id);
-	return <EditForm blog={blog as IBlogDetial} />;
+	// return <EditForm blog={blog as IBlogDetial} />;
 }

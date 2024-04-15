@@ -90,15 +90,17 @@ export const defaultCreateBlog: IBlogDetial = {
 	author: "",
 
 };
-export const course :Icourse = {
-	author: "" ,
-	bannerImage: "",
-	categoryId: "",
-	description: "",
-	instructor: "",
-	name: "",
+
+export const defaultcourse :Icourse = {
+	banner_image: "",
+	created_at: "",
+	Catogory_id: "",
+	Description: "",
+	instructor: "", 
+    Name: "",
 	price: "",
 };
+
 export const users = [
 	{
 		display_name: "John Doe",

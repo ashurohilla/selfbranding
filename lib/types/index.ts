@@ -26,16 +26,23 @@ export type IBlogDetial = {
 	slug:string;
 	content:string;
 	author:string;
-} | null;
+} ;
 export type Icourse ={
-	author: string ;
-	bannerImage: string;
-	categoryId: string;
-	description: string;
+	banner_image: string;
+	Catogory_id: string;
+	created_at: string;
+	Description: string;
 	instructor: string;
-	name: string;
+	Name: string;
 	price: string;
-} | null;
+} ;
+export type Catagories ={
+	created_at: string
+	description: string
+	id: number
+	name: string
+  };
+
 
 export type IBlogForm = {
 	created_at: string;

@@ -2,19 +2,20 @@
 import React from "react";
 
 import { toast } from "@/components/ui/use-toast";
-import { defaultCreateBlog } from "@/lib/data";
+import { defaultcourse } from "@/lib/data";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import Courseform from "../compoennts/Courseform";
-import { createBlog } from "../../../../lib/actions/blog";
+import { createCourse } from "../../../../lib/actions/blog";
 import { useRouter } from "next/navigation";
-import { BlogFormSchema, BlogFormSchemaType } from "../../blog/schema";
+import {  CourseFormSchematype } from "../../blog/schema";
 
 export default function CreateForm() {
 	const router = useRouter();
 
-	const onHandleSubmit = async (data: BlogFormSchemaType) => {
+	const onHandleSubmit = async (data: CourseFormSchematype) => {
+		console.log(" creater page butoon pressed")
 		try {
-			const result = await createBlog(data);	
+			const result = await createCourse(data);	
 			if (!result) {
 				throw new Error("No response received from server.");
 			}
@@ -34,7 +35,7 @@ export default function CreateForm() {
 			} else {
 				toast({
 					title: "Successfully create a post 🎉",
-					description: data.title,
+					description: data.Name,
 				});
 				router.push("/dashboard");
 			}
@@ -45,6 +46,8 @@ export default function CreateForm() {
 	};
 	return (
 		<Courseform
+		onHandleSubmit={onHandleSubmit}
+			defaultCourse={defaultcourse}
 		/>
 	);
 }
