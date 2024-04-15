@@ -4,6 +4,7 @@ import Content from "./components/Content"
 import { SITE_URL } from "@/app/config";
 import { createServerClient } from "@supabase/ssr";
 import { createBrowserClient } from "@supabase/ssr";
+import Comments from "./components/coments/coments";
 
 const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -66,6 +67,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       return (
         <div className="max-w-5xl mx-auto min-h-screen pt-10 space-y-10">
           <Content id={blog?.slug} />
+          <Comments id={blog?.slug}/>
         </div>
       );
     }

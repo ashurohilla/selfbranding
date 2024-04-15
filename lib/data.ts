@@ -1,5 +1,6 @@
 import { boolean } from "zod";
 import { IBlogDetial , Icourse } from "./types";
+import { Coments } from "./types";
 export const blogDeafultValue = `
 ## Serendipity Chronicles: Tales from a Random Blog
 
@@ -100,6 +101,13 @@ export const defaultcourse :Icourse = {
     Name: "",
 	price: "",
 };
+export const defaultcoment :Coments = {
+	coment: "",
+    created_at: "",
+    slug_id: "",
+    user_id: "",
+};
+
 
 export const users = [
 	{

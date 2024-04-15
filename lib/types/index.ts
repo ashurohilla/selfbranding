@@ -36,6 +36,12 @@ export type Icourse ={
 	Name: string;
 	price: string;
 } ;
+export type Coments ={
+	coment: string;
+    created_at: string;
+    slug_id: string;
+    user_id: string;
+} ;
 export type Catagories ={
 	created_at: string
 	description: string
