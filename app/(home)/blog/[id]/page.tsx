@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         title: blog?.title,
         openGraph: {
           title: blog?.title,
-          url: `${SITE_URL}/blog/${params.id}`,
+          url: `${SITE_URL}blog/${params.id}`,
           siteName: "Hardware Garage",
           images: blog?.image,
           type: "website",
@@ -36,6 +36,13 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     );
   }
 
+
+  // export async function generateStaticParams() {
+  //   const { data: blogs } = await fetch(`${SITE_URL}api/blog?id=*`
+  //   ).then((res) => res.json());
+  
+  //   return blogs;
+  // }
 
 
 //   export async function generateStaticParams(Context) {
