@@ -14,6 +14,7 @@ export default function CreateForm() {
 	const router = useRouter();
 
 	const onHandleSubmit = async (data: BlogFormSchemaType) => {
+		console.log("submit button pressed")
 		try {
 			const result = await createBlog(data);	
 			if (!result) {

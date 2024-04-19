@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useEffect } from "react";
 import { useUser } from "@/lib/store/user";
-import ReactQuill , { Quill } from "react-quill";
+import ReactQuill  from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 
@@ -72,6 +72,7 @@ export default function BlogForm({
 	  if (form.getValues().title && user?.id) {
 		const slug = slugify(form.getValues().title, { lower: true }) + user?.id;
 		form.setValue("slug", slug);
+		console.log(slug);
 		form.setValue("author", user?.id);
 		form.setValue("created_at", new Date().toISOString().slice(0, 16));
 	  }
@@ -203,13 +204,13 @@ export default function BlogForm({
   
 		  <div className="w-full flex p-2 gap-2">
 			<div className="w-full">
-			  <ReactQuill
-				theme="snow"
+			  {/* <ReactQuill
+				theme="bubble"
 				value={content}
 				onChange={setContent}
 				modules={modules}
 				placeholder="Blog content"
-			  />
+			  /> */}
 			</div>
 			{isPreview && (
 			  <div className="w-full">
