@@ -8,6 +8,7 @@ import BlogForm from "../components/BlogForm";
 import { createBlog } from "../../../../lib/actions/blog";
 import { BlogFormSchemaType } from "../schema";
 import { useRouter } from "next/navigation";
+import NewBlogForm from "../components/newBlogForm";
 
 export default function CreateForm() {
 	const router = useRouter();
@@ -44,9 +45,15 @@ export default function CreateForm() {
 		}
 	};
 	return (
+		<div className="pt-[60px]">
+	{/* <NewBlogForm/> */}
+
+
 		<BlogForm
 			onHandleSubmit={onHandleSubmit}
 			defaultBlog={defaultCreateBlog}
-		/>
+			/>
+			</div>
 	);
+
 }

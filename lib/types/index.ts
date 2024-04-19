@@ -27,6 +27,17 @@ export type IBlogDetial = {
 	content:string;
 	author:string;
 } ;
+
+export type IAuthor = {
+	author: string | null
+	Bio: string | null
+	created_at: string
+	github: string | null
+	id: string
+	instagram: string | null
+	linkdin: string | null
+	Name: string | null
+} ;
 export type Icourse ={
 	banner_image: string;
 	Catogory_id: string;

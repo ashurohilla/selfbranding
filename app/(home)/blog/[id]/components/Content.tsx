@@ -4,103 +4,14 @@ import { createBrowserClient } from "@supabase/ssr";
 import React, { useEffect, useState } from "react";
 import { BlogContentLoading } from "./Skeleton";
 import Image from "next/image";
-interface BlogData {
-  author: string | null;
-  comments_enabled: boolean | null;
-  content: string | null;
-  created_at: string;
-  id: number;
-  image: string | null;
-  meta_description: string | null;
-  meta_title: string | null;
-  published_at: string;
-  slug: string;
-  status: string;
-  title: string | null;
+import supabase from "@/utils/supabase/supabase";
+import { IAuthor, IBlog } from "@/lib/types";
+
+interface Props {
+  blog: IBlog; // Define prop type'
+  author:IAuthor;
 }
-interface AuthorData {
-          author: string | null
-          Bio: string | null
-          created_at: string
-          github: string | null
-          id: string
-          instagram: string | null
-          linkdin: string | null
-          Name: string | null
-}
-
-
-export default function Content({ id }: { id: string }) {
-  const [loading, setLoading] = useState(true);
-  const [blog, setBlog] = useState<BlogData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [author, setAuthor] = useState<AuthorData | null>(null);
-  const [authorid, setAuthorid] = useState<string | null>(null);
-
-
-  const supabase = createBrowserClient(
-		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-	);
-
-
-
-
-
-  const readBlogContent = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("blog")
-        .select("*")
-        .eq("slug", id)
-        .single();
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      setBlog(data);
-      readauthorname(data?.author)
-    } catch (err) {
-      setError(`Failed to fetch blog post`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const readauthorname = async (authorid :String) => {
-    try {
-      const { data, error } = await supabase
-      .from("instructor")
-      .select("*")
-      .eq("id", authorid)
-      .single();
-      console.log(data)
-
-    if (error) {
-      throw new Error(error.message);
-    }
-    setAuthor(data);
-    }
-    catch (err) {
-      setError(`failed to fetch author`);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    readBlogContent();
-   
-  }, [id]);
-
-
-  if (loading) {
-    return <BlogContentLoading />;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+export default function Content({ blog , author  } : Props ) {
 
   return (
     <div className="mx-4  ">
