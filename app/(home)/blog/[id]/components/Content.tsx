@@ -58,13 +58,13 @@ export default function Content({ blog, author }: Props) {
     setIsCommentSectionOpen(!isCommentSectionOpen);
   };
   return (
-    <div>
+    <div className="mx-4">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
         <div className="sm:px-10 space-y-5">
-          <h1 className="text-6xl font-bold dark:text-gray-200">
+          <h1 className="text-6xl sm:text-2xl font-bold dark:text-gray-200">
             {blog?.title}
           </h1>
-          <div className=" flex justify-between px-2 py-2 font-lg">
+          <div className=" flex justify-between px-2 py-2 sm:mx-2 font-lg">
             <div className="flex gap-2 ">
               <div className="">
                 <Image
@@ -102,7 +102,7 @@ export default function Content({ blog, author }: Props) {
             </div>
           </div>
 
-          <div>
+          <div className="">
             <hr className="border-gray-200" />
 
             <div className="flex items-center justify-between mb-4 pt-2">
@@ -214,18 +214,18 @@ export default function Content({ blog, author }: Props) {
           </div>
         </div>
 
-        <div className="w-full mt-6 h-96 relative">
+        <div className="w-full px-8  mt-6 h-96 relative">
           <Image
             priority
             src={blog?.image!}
             alt="cover"
             fill
-            className=" object-cover object-center rounded-md border-[0.5px] border-zinc-600"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className=" object-cover sm:w-[300px] object-center rounded-md border-[0.5px] border-zinc-600"
+            sizes="(max-width: 300px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
         <div
-          className="font-[20px] mb-[20px] contentclass"
+          className="font-[20px]  mb-[20px] contentclass"
           dangerouslySetInnerHTML={{ __html: blog?.content || "" }}
         />
 
@@ -237,7 +237,7 @@ export default function Content({ blog, author }: Props) {
             isCommentSectionOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <Comments id={blog?.slug} />
+          <Comments id={blog?.slug} toggleCommentSection={toggleCommentSection} />
         </div>
     </div>
   );

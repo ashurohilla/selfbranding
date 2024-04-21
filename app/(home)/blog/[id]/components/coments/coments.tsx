@@ -10,15 +10,8 @@ import { useUser } from "@/lib/store/user";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { Cross1Icon } from "@radix-ui/react-icons";
+
 import { defaultcoment } from "@/lib/data";
 
 interface CommentData {
@@ -36,7 +29,7 @@ interface CommentData {
   }
 
 
-const Comments = ({ id }: { id: string }) => {
+const Comments = ({ id , toggleCommentSection  }: { id: string , toggleCommentSection: any }) => {
     const [AllComents, SetCommnetDATA] = useState<CommentData[] | null>(null);
     const [isLoading, setLoading] = useState(false);
     const [coment, setComment] = useState<string>(''); 
@@ -115,7 +108,17 @@ const Comments = ({ id }: { id: string }) => {
 }, [id, newCommentAdded]);
   return (
     <div className="container border-2 h-full mx-auto ">
-    <h1 className="text-soft text-xl pt-6 mb-8">ALL Responses</h1>
+      <div className="flex justify-between">
+
+    <h1 className="text-soft flex text-xl pt-6 mb-8">ALL Responses</h1>
+    <button onClick={toggleCommentSection} className="flex pt-8 float-right" >
+<Cross1Icon />
+  
+</button>
+      </div>
+    <div className="flex float-right">
+
+    </div>
     {user?.id ? (
       <div className="border-2 px-2 py-2">
 
@@ -126,7 +129,7 @@ const Comments = ({ id }: { id: string }) => {
         alt="picture"
         width={50}
         height={50}
-        >
+        >                                                                                                                                                                                                                            
         </Image>
                <h2 className="flex ml-2 font-medium pt-4">write your thoughts</h2>
           </div>
