@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useUser } from "@/lib/store/user";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -42,6 +43,9 @@ const Comments = ({ id }: { id: string }) => {
     const [newCommentAdded, setNewCommentAdded] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const user = useUser((state) => state.user);
+    const picture = user?.user_metadata?.picture
+
+
     const [formValues, setFormValues] = useState<postcomentdata>(defaultcoment);
     const form = useForm<postcomentdata>({
         defaultValues: formValues,
@@ -109,29 +113,41 @@ const Comments = ({ id }: { id: string }) => {
   readcommnets(id);
   setNewCommentAdded(false);
 }, [id, newCommentAdded]);
-
-    
-
-
   return (
-    <div className="container mx-auto mt-12">
-    <h1 className="text-softTextColor mb-8">Comments</h1>
+    <div className="container border-2 h-full mx-auto ">
+    <h1 className="text-soft text-xl pt-6 mb-8">ALL Responses</h1>
     {user?.id ? (
-  <div className="flex items-center justify-between gap-8">
-       <input
-            type="text"
+      <div className="border-2 px-2 py-2">
+
+        <div className="flex">
+
+        <Image className="rounded-full flex "
+        src={picture}
+        alt="picture"
+        width={50}
+        height={50}
+        >
+        </Image>
+               <h2 className="flex ml-2 font-medium pt-4">write your thoughts</h2>
+          </div>
+  <div className="flex pt-4 items-center justify-between gap-8">
+
+       <Input
+            name="coment"
+            type="textarea"
             placeholder="What are your thoughts"
             value={coment} // Bind input value to state
             onChange={handleInputChange} // Handle input change event
             autoFocus
-            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            className=""
           />
-    <button
+    <Button
       className="bg-teal-500 text-white font-bold px-5 py-4 rounded-md cursor-pointer"
       onClick={handleSubmit}
     >
       Send
-    </button>
+    </Button>
+  </div>
   </div>
 ) : (
   <Link href="/login" className="text-teal-500">
@@ -150,7 +166,7 @@ const Comments = ({ id }: { id: string }) => {
             
                 <div className="flex flex-col gap-1 text-softTextColor">
                   <span className="font-medium">{item.coment}</span>
-                  <span className="text-sm">{item.created_at}</span>
+                  {/* <span className="text-sm">{item.created_at}</span> */}
                 </div>
               </div>
             </div>
