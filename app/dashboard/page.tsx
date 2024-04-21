@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import BlogTable from "./blog/components/BlogTable";
 import { Button } from "@/components/ui/button";

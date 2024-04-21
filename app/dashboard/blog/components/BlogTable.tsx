@@ -35,7 +35,7 @@ export default async function BlogTable() {
 	);
 }
 
-const Actions = ({ id, slug }: { id: number; slug: string } ) => {
+const Actions = ({ id, slug }: { id: string; slug: string } ) => {
 	return (
 		<div className="flex items-center gap-2 md:flex-wrap">
 			{/* TODO: change to id */}
@@ -47,7 +47,7 @@ const Actions = ({ id, slug }: { id: number; slug: string } ) => {
 			</Link>
 			<DeleteAlert id={id} />
 
-			<Link href={`/dashboard/blog/edit/${id}`}>
+			<Link href={`/dashboard/blog/edit/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<Pencil1Icon />
 					Edit

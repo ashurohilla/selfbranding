@@ -17,7 +17,7 @@ import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { toast } from "@/components/ui/use-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
-export default function DeleteAlert({ id }: { id: number }) {
+export default function DeleteAlert({ id }: { id: string }) {
 	const [isPending, startTransition] = useTransition();
 
 	const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {

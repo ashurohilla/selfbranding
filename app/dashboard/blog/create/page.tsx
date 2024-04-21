@@ -1,8 +1,8 @@
-"use client";
+"use client"
 import React from "react";
 
 import { toast } from "@/components/ui/use-toast";
-import { defaultCreateBlog } from "@/lib/data";
+import { defaultBlog } from "@/lib/data";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import BlogForm from "../components/BlogForm";
 import { createBlog } from "../../../../lib/actions/blog";
@@ -38,7 +38,7 @@ export default function CreateForm() {
 					title: "Successfully create a post 🎉",
 					description: data.title,
 				});
-				router.push("/dashboard");
+				router.push("/dashboard/blog");
 			}
 		} catch (error) {
 			console.error("Error occurred while handling submit:", error);
@@ -52,7 +52,7 @@ export default function CreateForm() {
 
 		<BlogForm
 			onHandleSubmit={onHandleSubmit}
-			defaultBlog={defaultCreateBlog}
+			defaultBlog={defaultBlog}
 			/>
 			</div>
 	);

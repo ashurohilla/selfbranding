@@ -8,7 +8,6 @@ import Hero from "../../../components/Hero";
 export default async function Home() {
 	let { data: blogs } = await readBlog();
 
-
 	if (!blogs?.length) {
 		blogs = [];
 	}

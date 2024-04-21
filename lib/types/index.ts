@@ -1,9 +1,9 @@
     export type IBlog = {
 		author: string | null
-		coments_enables: boolean | null
+		coments_enabled: boolean | null
 		content: string | null
 		created_at: string
-		id: number
+		id: string
 		image: string | null
 		meta_description: string | null
 		meta_tiltle: string | null
@@ -29,14 +29,16 @@ export type IBlogDetial = {
 } ;
 
 export type IAuthor = {
-	author: string | null
+	author: string 
 	Bio: string | null
 	created_at: string
-	github: string | null
+	github: string 
 	id: string
-	instagram: string | null
-	linkdin: string | null
-	Name: string | null
+	instagram: string 
+	linkdin: string 
+	Name: string 
+	twiter: string 
+	profile:string
 } ;
 export type Icourse ={
 	banner_image: string;

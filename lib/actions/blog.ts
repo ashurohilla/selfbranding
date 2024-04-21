@@ -1,5 +1,4 @@
 "use server";
-
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { IBlog } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
@@ -109,12 +108,12 @@ export async function readBlogIds() {
 	return supabase.from("blog").select("id");
 }
 
-export async function readBlogDeatailById(id : number) {
+export async function readBlogDeatailById(id : string) {
 	const supabase = await createSupabaseServerClient();
 	return await supabase
 		.from("blog")
 		.select("*")
-		.eq("id", id)
+		.eq("slug", id)
 		.single();
 }
 
@@ -152,7 +151,7 @@ export async function updateBlogDetail(
 	}
 }
 
-export async function deleteBlogById(blogId: number) {
+export async function deleteBlogById(blogId: string) {
 	console.log("deleting blog post")
 	const supabase = await createSupabaseServerClient();
 	const result = await supabase.from("blog").delete().eq("id", blogId);

@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       .single();
 
       return (
-        <div className="max-w-5xl mx-auto min-h-screen pt-10 space-y-10">
+        <div className="max-w-[800px] pt-[120px] mx-auto min-h-screen space-y-10">
           <Content  blog={blog} author={authorData} />
           <Comments id ={blog?.slug}/>
         </div>

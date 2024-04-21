@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { BsCopy } from "react-icons/bs";
 import { IoCheckmarkOutline } from "react-icons/io5";
@@ -9,9 +8,8 @@ export default function CopyButton({ id }: { id: string }) {
 	const [onSuccess, setSuccess] = useState(false);
 
 	const handleCopy = async () => {
-		let text = document.getElementById(id)!.textContent;
 		try {
-			await navigator.clipboard.writeText(text!);
+			await navigator.clipboard.writeText(id);
 			setOnCopy(true);
 		} catch (err) {
 			console.error("Failed to copy: ", err);
@@ -19,7 +17,7 @@ export default function CopyButton({ id }: { id: string }) {
 	};
 	return (
 		<div
-			className="hover:scale-105 relative hover:bg-zinc-700 p-2 rounded-md cursor-pointer"
+			className="hover:scale-105 relative hover:bg-zinc-200 p-2 rounded-md cursor-pointer"
 			onClick={handleCopy}
 		>
 			<IoCheckmarkOutline
