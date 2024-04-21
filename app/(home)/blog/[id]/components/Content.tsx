@@ -36,22 +36,16 @@ export default function Content({ blog , author  } : Props ) {
   const blogUrl = `https://${SITE_URL}/blog/${blog?.slug}`;
 
   const shareOnTwitter = () => {
-    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(blogUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?url=$${blogUrl}`;
     window.open(twitterUrl, '_blank');
   };
-  const copylink = () => {
-    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(blogUrl)}`;
-    window.open(twitterUrl, '_blank');
-  };
-
-
   const shareonthreads = () => {
-    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(blogUrl)}`;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${blogUrl}`;
     window.open(facebookUrl, '_blank');
   };
 
   const shareOnLinkedIn = () => {
-    const linkedInUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(blogUrl)}`;
+    const linkedInUrl = `https://www.linkedin.com/shareArticle?url=$${blogUrl}}`;
     window.open(linkedInUrl, '_blank');
   };
   return (
