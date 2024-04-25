@@ -88,8 +88,8 @@ img{
 }
 iframe{
   display: flex;
-  width: 680px;
-  height: 400px;
+  width: 780px;
+  height: 450px;
 }
 
 /* @media print {
@@ -107,5 +107,16 @@ iframe{
 
 .ql-syntax{
   padding: 20px;
+}
+
+
+p{
+ font-size: 20PX;
+ font-family: 'Charter', serif;
+}
+
+.ql-size-large{
+ font-size: 20px;
+
 }
 

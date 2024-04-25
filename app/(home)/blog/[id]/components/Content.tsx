@@ -26,12 +26,6 @@ import "highlight.js/styles/atom-one-dark.min.css";
 
 // import "highlight.js/styles/intellij-light.css";
 
-
-
-
-
-
-
 const Coments = dynamic(() => import('./coments/coments'), { ssr: false })
 import {
   DropdownMenu,
@@ -61,7 +55,7 @@ export default function Content({ blog, author }: Props) {
       const speech = new SpeechSynthesisUtterance(blog?.content || " ");
       const voices = window.speechSynthesis.getVoices();
       console.log(voices)
-      speech.voice = voices[4]; // Change this to the desired voice
+      speech.voice = voices[5]; // Change this to the desired voice
       window.speechSynthesis.speak(speech);
       setIsSpeaking(true);
     }

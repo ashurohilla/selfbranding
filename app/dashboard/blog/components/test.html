@@ -1,276 +1,167 @@
-<p>step to add react quill in the blog content </p><p><br></p><pre class="ql-syntax" spellcheck="false"><span class="hljs-string">"use client"</span>;
-  <span class="hljs-keyword">import</span> <span class="hljs-title class_">MarkdownPreview</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"@/components/markdown/MarkdownPreview"</span>;
-  <span class="hljs-keyword">import</span> { createBrowserClient } <span class="hljs-keyword">from</span> <span class="hljs-string">"@supabase/ssr"</span>;
-  <span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">"react"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">BlogContentLoading</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"./Skeleton"</span>;
-  <span class="hljs-keyword">import</span> <span class="hljs-title class_">Image</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"next/image"</span>;
-  <span class="hljs-keyword">import</span> supabase <span class="hljs-keyword">from</span> <span class="hljs-string">"@/utils/supabase/supabase"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">IAuthor</span>, <span class="hljs-title class_">IBlog</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"@/lib/types"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">BsGithub</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/bs"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">BsInstagram</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/bs"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">PiLinkedinLogo</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/pi"</span>;
-  <span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"next/link"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">BsTwitter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/bs"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">AiOutlineComment</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/ai"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">PlayCircle</span>, <span class="hljs-title class_">Speaker</span>, <span class="hljs-title class_">TwitterIcon</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"lucide-react"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">IoShare</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/io5"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">BsThreeDotsVertical</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"react-icons/bs"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Share1Icon</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"@radix-ui/react-icons"</span>;
-  <span class="hljs-keyword">import</span> <span class="hljs-title class_">CopyButton</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"@/components/markdown/CopyButton"</span>;
-  <span class="hljs-keyword">import</span> dynamic <span class="hljs-keyword">from</span> <span class="hljs-string">'next/dynamic'</span>
-  <span class="hljs-keyword">import</span> <span class="hljs-string">"react-quill/dist/quill.snow.css"</span>;
-  <span class="hljs-keyword">import</span> <span class="hljs-string">'highlight.js/styles/atom-one-dark.css'</span>;
-  <span class="hljs-keyword">const</span> <span class="hljs-title class_">Coments</span> = <span class="hljs-title function_">dynamic</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./coments/coments'</span>), { <span class="hljs-attr">ssr</span>: <span class="hljs-literal">false</span> })
-  <span class="hljs-keyword">import</span> {
-  &nbsp; <span class="hljs-title class_">DropdownMenu</span>,
-  &nbsp; <span class="hljs-title class_">DropdownMenuContent</span>,
-  &nbsp; <span class="hljs-title class_">DropdownMenuItem</span>,
-  &nbsp; <span class="hljs-title class_">DropdownMenuLabel</span>,
-  &nbsp; <span class="hljs-title class_">DropdownMenuSeparator</span>,
-  &nbsp; <span class="hljs-title class_">DropdownMenuTrigger</span>,
-  } <span class="hljs-keyword">from</span> <span class="hljs-string">"@/components/ui/dropdown-menu"</span>;
-  <span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">SITE_URL</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"@/app/config"</span>;
-  
-  interface <span class="hljs-title class_">Props</span> {
-  &nbsp; <span class="hljs-attr">blog</span>: <span class="hljs-title class_">IBlog</span>; <span class="hljs-comment">// Define prop type'</span>
-  &nbsp; <span class="hljs-attr">author</span>: <span class="hljs-title class_">IAuthor</span>;
-  }
-  <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Content</span>(<span class="hljs-params">{ blog, author }: Props</span>) {
-  &nbsp; <span class="hljs-keyword">const</span> [isCommentSectionOpen, setIsCommentSectionOpen] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
-  &nbsp; <span class="hljs-keyword">const</span> blogUrl = <span class="hljs-string">`https://<span class="hljs-subst">${SITE_URL}</span>/blog/<span class="hljs-subst">${blog?.slug}</span>`</span>;
-  &nbsp; <span class="hljs-keyword">const</span> [isSpeaking, setIsSpeaking] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>); <span class="hljs-comment">// Track if speaking is active</span>
-  
-  &nbsp; <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleSpeak</span> = () =&gt; {
-  &nbsp; &nbsp; <span class="hljs-keyword">if</span> (isSpeaking) {
-  &nbsp; &nbsp; &nbsp; <span class="hljs-comment">// If already speaking, stop speaking</span>
-  &nbsp; &nbsp; &nbsp; <span class="hljs-variable language_">window</span>.<span class="hljs-property">speechSynthesis</span>.<span class="hljs-title function_">cancel</span>();
-  &nbsp; &nbsp; &nbsp; <span class="hljs-title function_">setIsSpeaking</span>(<span class="hljs-literal">false</span>);
-  &nbsp; &nbsp; } <span class="hljs-keyword">else</span> {
-  &nbsp; &nbsp; &nbsp; <span class="hljs-keyword">const</span> speech = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SpeechSynthesisUtterance</span>(blog?.<span class="hljs-property">content</span> || <span class="hljs-string">" "</span>);
-  &nbsp; &nbsp; &nbsp; <span class="hljs-keyword">const</span> voices = <span class="hljs-variable language_">window</span>.<span class="hljs-property">speechSynthesis</span>.<span class="hljs-title function_">getVoices</span>();
-  &nbsp; &nbsp; &nbsp; <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(voices)
-  &nbsp; &nbsp; &nbsp; speech.<span class="hljs-property">voice</span> = voices[<span class="hljs-number">4</span>]; <span class="hljs-comment">// Change this to the desired voice</span>
-  &nbsp; &nbsp; &nbsp; <span class="hljs-variable language_">window</span>.<span class="hljs-property">speechSynthesis</span>.<span class="hljs-title function_">speak</span>(speech);
-  &nbsp; &nbsp; &nbsp; <span class="hljs-title function_">setIsSpeaking</span>(<span class="hljs-literal">true</span>);
-  &nbsp; &nbsp; }
-  &nbsp; };
-  
-  
-  
-  &nbsp; <span class="hljs-keyword">const</span> <span class="hljs-title function_">shareOnTwitter</span> = () =&gt; {
-  &nbsp; &nbsp; <span class="hljs-keyword">const</span> twitterUrl = <span class="hljs-string">`https://twitter.com/intent/tweet?url=$<span class="hljs-subst">${blogUrl}</span>`</span>;
-  &nbsp; &nbsp; <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">open</span>(twitterUrl, <span class="hljs-string">"_blank"</span>);
-  &nbsp; };
-  &nbsp; <span class="hljs-keyword">const</span> <span class="hljs-title function_">shareonthreads</span> = () =&gt; {
-  &nbsp; &nbsp; <span class="hljs-keyword">const</span> facebookUrl = <span class="hljs-string">`https://www.facebook.com/sharer/sharer.php?u=<span class="hljs-subst">${blogUrl}</span>`</span>;
-  &nbsp; &nbsp; <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">open</span>(facebookUrl, <span class="hljs-string">"_blank"</span>);
-  &nbsp; };
-  
-  &nbsp; <span class="hljs-keyword">const</span> <span class="hljs-title function_">shareOnLinkedIn</span> = () =&gt; {
-  &nbsp; &nbsp; <span class="hljs-keyword">const</span> linkedInUrl = <span class="hljs-string">`https://www.linkedin.com/shareArticle?url=$<span class="hljs-subst">${blogUrl}</span>}`</span>;
-  &nbsp; &nbsp; <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">open</span>(linkedInUrl, <span class="hljs-string">"_blank"</span>);
-  &nbsp; };
-  &nbsp; <span class="hljs-keyword">const</span> <span class="hljs-title function_">toggleCommentSection</span> = () =&gt; {
-  &nbsp; &nbsp; <span class="hljs-title function_">setIsCommentSectionOpen</span>(!isCommentSectionOpen);
-  &nbsp; };
-  &nbsp; <span class="hljs-keyword">return</span> (
-  &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"md:mx-2 mx-2 &nbsp;sm:mx-4 "</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">backdrop-filter</span> <span class="hljs-attr">backdrop-blur-lg</span> ${<span class="hljs-attr">isCommentSectionOpen</span> ? "<span class="hljs-attr">opacity-60</span> " <span class="hljs-attr">:</span> ""}`}&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"sm:mx-2 mx-0 space-y-5"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"text-6xl font-bold dark:text-gray-200"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {blog?.title}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">" flex justify-between px-1 py-2 mx-0 sm:mx-2 font-lg"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex gap-2 "</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">""</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Image</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"rounded-full px-1 py-1 "</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">width</span>=<span class="hljs-string">{60}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">height</span>=<span class="hljs-string">{60}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">alt</span>=<span class="hljs-string">"profile"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">src</span>=<span class="hljs-string">{author?.profile}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"pt-2"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"text-lg font-medium &nbsp;dark:text-gray-400"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {author?.Name}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"text-sm &nbsp; font-medium &nbsp;dark:text-gray-400"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {new Date(blog?.created_at!).toDateString()}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex pt-10 gap-3"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"_blank"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{author?.github}</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">BsGithub</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"_blank"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{author?.instagram}</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">BsInstagram</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"_blank"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{author?.twiter}</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">BsTwitter</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"_blank"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{author?.linkdin}</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">PiLinkedinLogo</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"text-lg font-medium flex dark:text-gray-400"</span>&gt;&lt;/<span class="hljs-name">p</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">""</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">hr</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"border-gray-200"</span> /&gt;</span>
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex items-center justify-between mb-4 pt-2"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex items-center space-x-4"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">onClick</span>=<span class="hljs-string">{toggleCommentSection}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"ml-[60px] flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">AiOutlineComment</span> /&gt;</span>{" "}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex items-center space-x-4"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-  &nbsp; <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleSpeak}</span>
-  &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">text-gray-600</span> <span class="hljs-attr">rounded-full</span> <span class="hljs-attr">hover:text-gray-800</span> <span class="hljs-attr">transition</span> <span class="hljs-attr">animate-pulse</span> ${
-  &nbsp; &nbsp; <span class="hljs-attr">isSpeaking</span> ? '<span class="hljs-attr">bg-orange-500</span>' <span class="hljs-attr">:</span> ''
-  &nbsp; }`}
-  &gt;</span>
-  &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"material-icons"</span>&gt;</span>
-  &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">PlayCircle</span> /&gt;</span>
-  &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"text-gray-600 font-medium text-xl hover:text-gray-800 transition"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenu</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuTrigger</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {" "}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"material-icons"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">IoShare</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuTrigger</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuContent</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuLabel</span>&gt;</span>
-  
-  
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex pl-3 px-2"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">" py-2"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Share1Icon</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex ml-2 pt-1 "</span>&gt;</span>Copy link<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"ml-1"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {" "}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">CopyButton</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{blogUrl}</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  
-  
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuLabel</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuSeparator</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">onClick</span>=<span class="hljs-string">{shareOnTwitter}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"flex px-2 py-2 "</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"pt-1 "</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">TwitterIcon</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex ml-2 &nbsp;"</span>&gt;</span> Share on twiter<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  
-  
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">onClick</span>=<span class="hljs-string">{shareonthreads}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"flex px-2 py-2 "</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"pt-1"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">BsInstagram</span> /&gt;</span>{" "}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex ml-2 &nbsp;"</span>&gt;</span> Share on threads<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  
-  
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">onClick</span>=<span class="hljs-string">{shareOnLinkedIn}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"flex px-2 py-2 "</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"pt-1"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">PiLinkedinLogo</span> /&gt;</span>{" "}
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"flex ml-2 &nbsp;"</span>&gt;</span>Share on Linkdin<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  
-  
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuContent</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenu</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenu</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuTrigger</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"material-icons"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">BsThreeDotsVertical</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuTrigger</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuContent</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuLabel</span>&gt;</span>My Account<span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuLabel</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuSeparator</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Link</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"font-medium text-green-400"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">target</span>=<span class="hljs-string">"_blank"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">href</span>=<span class="hljs-string">{author?.twiter}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Follow Author
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">DropdownMenuItem</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"font-large text-red-700"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuItem</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenuContent</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">DropdownMenu</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">hr</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"border-gray-200 font-mono"</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  
-  &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"w-full px-8 &nbsp;mt-6 h-96 relative"</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Image</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">priority</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">src</span>=<span class="hljs-string">{blog?.image!}</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">alt</span>=<span class="hljs-string">"cover"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">fill</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">" object-cover sm:w-[300px] object-center rounded-md border-[0.5px] border-zinc-600"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 300px) 100vw, (max-width: 1200px) 50vw, 33vw"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">"font-[20px] &nbsp;mb-[20px] contentclass"</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">dangerouslySetInnerHTML</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">__html:</span> <span class="hljs-attr">blog</span>?<span class="hljs-attr">.content</span> || "" }}
-  &nbsp; &nbsp; &nbsp; &nbsp; /&gt;</span>
-  &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  
-  &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">fixed</span> <span class="hljs-attr">inset-y-0</span> <span class="hljs-attr">right-0</span> <span class="hljs-attr">z-50</span> <span class="hljs-attr">w-</span>[<span class="hljs-attr">400px</span>] <span class="hljs-attr">bg-white</span> <span class="hljs-attr">transform</span> <span class="hljs-attr">transition-transform</span> ${
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-attr">isCommentSectionOpen</span> ? "<span class="hljs-attr">translate-x-0</span>" <span class="hljs-attr">:</span> "<span class="hljs-attr">translate-x-full</span>"
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }`}
-  &nbsp; &nbsp; &nbsp; &nbsp; &gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;<span class="hljs-name">Coments</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{blog?.slug}</span> <span class="hljs-attr">toggleCommentSection</span>=<span class="hljs-string">{toggleCommentSection}</span> /&gt;</span>
-  &nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; &nbsp; <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  &nbsp; );
-  }
-  </pre><p><br></p><p><br></p>
+<p><br /></p>
+<p>
+  <span style="background-color: rgb(255, 255, 255); color: rgb(13, 13, 13)"
+    >Are you intrigued by the world of electronics and eager to dive into the
+    realm of microcontrollers? Arduino is an excellent platform for beginners
+    and seasoned enthusiasts alike to explore the fascinating world of physical
+    computing. In this guide, we'll walk through the basics of Arduino
+    programming, provide some code examples, and offer tips to help you get
+    started on your Arduino journey.</span
+  >
+</p>
+<p><br /></p>
+<h1><span style="color: rgb(255, 153, 0)">What is Arduino?</span></h1>
+<p><br /></p>
+<p>
+  <span style="background-color: rgb(255, 255, 255); color: rgb(13, 13, 13)"
+    >Arduino is an open-source electronics platform based on easy-to-use
+    hardware and software. It consists of a microcontroller board and a
+    development environment for writing, compiling, and uploading code to the
+    board. Arduino boards come in various shapes and sizes, catering to
+    different project requirements.</span
+  >
+</p>
+<h1><br /></h1>
+<h1>
+  <span style="color: rgb(255, 153, 0)"
+    >Setting Up Your Arduino Environment</span
+  >
+</h1>
+<p><br /></p>
+<p>
+  Before we delve into programming, let's set up our Arduino environment. Follow
+  these simple steps to get started:
+</p>
+<p><br /></p>
+<ul>
+  <li>
+    <span style="color: var(--tw-prose-bold)" class="ql-size-large"
+      >Download the Arduino IDE:</span
+    ><span class="ql-size-large">
+      Visit the official Arduino website (https://www.arduino.cc/en/software)
+      and download the Arduino Integrated Development Environment (IDE) suitable
+      for your operating system.</span
+    >
+  </li>
+  <li>
+    <span style="color: var(--tw-prose-bold)" class="ql-size-large"
+      >Install the IDE:</span
+    ><span class="ql-size-large">
+      Once the download is complete, follow the installation instructions
+      provided on the website.</span
+    >
+  </li>
+  <li>
+    <span style="color: var(--tw-prose-bold)" class="ql-size-large"
+      >Connect Your Arduino Board:</span
+    ><span class="ql-size-large">
+      Connect your Arduino board to your computer using a USB cable. Ensure that
+      the necessary drivers are installed if you're using a specific Arduino
+      variant.</span
+    >
+  </li>
+  <li>
+    <span style="color: var(--tw-prose-bold)" class="ql-size-large"
+      >Select Your Board and Port:</span
+    ><span class="ql-size-large">
+      Launch the Arduino IDE, navigate to the 'Tools' menu, and select the
+      appropriate board from the 'Board' submenu. Similarly, choose the correct
+      port from the 'Port' submenu.</span
+    >
+  </li>
+</ul>
+<p><br /></p>
+<p>
+  <img
+    src="https://images.unsplash.com/photo-1603732551658-5fabbafa84eb?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YXJkdWlub3xlbnwwfHwwfHx8MA%3D%3D"
+    alt="1000+ Arduino Pictures | Download Free Images on Unsplash"
+  />
+</p>
+<p><br /></p>
+<h1><span style="color: rgb(255, 153, 0)">Your First Arduino Sketch</span></h1>
+<p><br /></p>
+<p>
+  Now that our environment is set up let's dive into some programming. In
+  Arduino, programs are called sketches. Open the Arduino IDE and follow along
+  with this simple LED blinking example:
+</p>
+<p><br /></p>
+<pre
+  class="ql-syntax"
+  spellcheck="false"
+><span class="hljs-comment">// Define the pin connected to the LED</span>
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> ledPin = <span class="hljs-number">13</span>;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>{
+&nbsp;<span class="hljs-comment">// Initialize the digital pin as an output</span>
+&nbsp;<span class="hljs-built_in">pinMode</span>(ledPin, <span class="hljs-literal">OUTPUT</span>);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">loop</span><span class="hljs-params">()</span> </span>{
+&nbsp;<span class="hljs-comment">// Turn the LED on</span>
+&nbsp;<span class="hljs-built_in">digitalWrite</span>(ledPin, <span class="hljs-literal">HIGH</span>);
+&nbsp;<span class="hljs-built_in">delay</span>(<span class="hljs-number">1000</span>); <span class="hljs-comment">// Wait for 1 second</span>
+&nbsp;&nbsp;
+&nbsp;<span class="hljs-comment">// Turn the LED off</span>
+&nbsp;<span class="hljs-built_in">digitalWrite</span>(ledPin, <span class="hljs-literal">LOW</span>);
+&nbsp;<span class="hljs-built_in">delay</span>(<span class="hljs-number">1000</span>); <span class="hljs-comment">// Wait for 1 second</span>
+}
+</pre>
+<p><br /></p>
+<h1><span style="color: rgb(255, 153, 0)">Understanding the Code</span></h1>
+<p><br /></p>
+<p>
+  const int <em style="color: rgb(255, 153, 0)">ledPin = 13</em
+  ><span style="color: rgb(255, 153, 0)">;</span>: This line declares a constant
+  integer variable named ledPin and assigns it the value 13. This is the pin
+  number to which the LED is connected.
+</p>
+<p><br /></p>
+<p>
+  <em style="color: rgb(255, 153, 0)">void setup():</em><em> </em>The setup()
+  function is called once when the Arduino board is powered on or reset. In this
+  function, we initialize the digital pin ledPin as an output using the
+  <span style="color: rgb(255, 153, 0)">pinMode()</span> function.
+</p>
+<p><br /></p>
+<p>
+  <span style="color: rgb(255, 153, 0)">void loop():</span> The loop() function
+  is where the main code execution happens. It runs continuously after the
+  <span style="color: rgb(255, 153, 0)">setup()</span> function finishes. In
+  this function, we turn the LED on, wait for one second, turn it off, and wait
+  for another second.
+</p>
+<p><br /></p>
+<p><br /></p>
+<h1><span style="color: rgb(255, 153, 0)">Uploading the Sketch</span></h1>
+<p>
+  Once you've written the code, it's time to upload it to your Arduino board.
+  Follow these steps:
+</p>
+<p><br /></p>
+<ul>
+  <li>
+    Click the 'Upload' button (the right arrow icon) in the Arduino IDE toolbar.
+  </li>
+  <li>
+    The IDE will compile your sketch and upload it to the connected Arduino
+    board.
+  </li>
+  <li>
+    Once the upload is complete, you should see the LED blinking on your Arduino
+    board.
+  </li>
+</ul>
+<p><br /></p>
+<h1><span style="color: rgb(255, 153, 0)">Conclusion</span></h1>
+<p><br /></p>
+<p>
+  <span style="color: rgb(102, 185, 102)"
+    >Congratulations! You've written and uploaded your first Arduino sketch.
+    This is just the beginning of your Arduino journey. Experiment with
+    different components, sensors, and actuators to create exciting projects.
+    Remember, the Arduino community is vast and supportive, so don't hesitate to
+    seek help or share your creations. Happy tinkering!</span
+  >
+</p>
+<p><br /></p>

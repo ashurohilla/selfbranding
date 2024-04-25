@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { BsSave } from "react-icons/bs";
 import { readCatogries } from "@/lib/actions/blog";
 import { Catagories } from "@/lib/types";
+import slugify from "slugify";
+
 interface CourseFormProps {
   onHandleSubmit: (data: Icourse) => void;
   defaultCourse: Icourse;
@@ -21,7 +23,6 @@ export default function Courseform({
   const [formValues, setFormValues] = useState<Icourse>(defaultCourse);
   const [categories, setCategories] = useState<Catagories[]>([]);
 
-
   const form = useForm<Icourse>({
     defaultValues: formValues,
   });
@@ -34,7 +35,6 @@ export default function Courseform({
   const fetchCategories = async () => {
     try {
       const { data: Catagories } = await readCatogries();
-      console.log(Catagories);
       if (Catagories) {
         setCategories(Catagories);
       } } 
@@ -44,11 +44,11 @@ export default function Courseform({
 };
 
   const onSubmit = (data: Icourse) => {
-    
     if (user?.id) {
       const instructor = user?.id;
+      const slug = slugify(form.getValues().Name, { lower: true }) + instructor;
       const created_at = new Date().toISOString().slice(0, 16);
-      const newData = { ...data, instructor, created_at };
+      const newData = { ...data, instructor, created_at, slug  };
       onHandleSubmit(newData);
     }
   };
@@ -56,13 +56,13 @@ export default function Courseform({
   useEffect(() => {
     if (user?.id) {
       const instructor = user?.id;
-      console.log(instructor)
-      const Catogory_id = "hello";
+      const Catogory_id = " ";
       setFormValues({
         ...formValues,
         instructor,
         Catogory_id,
         created_at: new Date().toISOString().slice(0, 16),
+    
       });
     }
   }, [user?.id]);

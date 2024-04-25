@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-
 import { toast } from "@/components/ui/use-toast";
 import { defaultcourse } from "@/lib/data";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";

@@ -48,6 +48,7 @@ export type Icourse ={
 	instructor: string;
 	Name: string;
 	price: string;
+	slug:string;
 } ;
 export type Coments ={
 	coment: string;

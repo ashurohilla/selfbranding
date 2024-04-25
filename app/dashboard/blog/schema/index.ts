@@ -50,6 +50,7 @@ export const CourseFormSchema = z
 		created_at: z.string(),
 		Name: z.string(),
 		price: z.string(),
+		slug: z.string(),
 	})
 
 

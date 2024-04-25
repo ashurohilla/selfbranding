@@ -8,6 +8,7 @@ import Comments from "./components/coments/coments";
 import supabase from "@/utils/supabase/supabase";
 import { IAuthor } from "@/lib/types";
 import "react-quill/dist/quill.snow.css";
+import Footer from "@/components/Footer";
 
 export async function generateStaticParams() {
   const { data: blogs, error } = await supabase
