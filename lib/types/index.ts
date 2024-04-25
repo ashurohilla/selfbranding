@@ -1,7 +1,7 @@
     export type IBlog = {
 		author: string | null
 		coments_enabled: boolean | null
-		content: string | null
+		content: string 
 		created_at: string
 		id: string
 		image: string | null

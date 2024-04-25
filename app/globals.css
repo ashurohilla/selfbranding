@@ -56,4 +56,56 @@
 }
 .contentclass:p{
  font-size: large;
+
 }
+
+/* pre{
+  margin-top: 10px;
+  padding: 400px;
+  box-sizing: border-box;
+	width: 100%;
+	overflow: auto;
+	line-height: 20px;
+	background: #193549;
+  font-size: 0.7em;  
+	padding: 10px;
+  border-radius: 20px;
+  border-color: black;
+  border-width: 2px;
+
+} */
+
+pre{
+ 
+	overflow: auto;
+  border-radius: 20px;
+  border-color: black;
+  border-width: 2px;
+
+}
+img{
+  background: cover;
+}
+iframe{
+  display: flex;
+  width: 680px;
+  height: 400px;
+}
+
+/* @media print {
+	pre {
+		overflow-x: auto;
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap !important;
+		white-space: -pre-wrap;
+		white-space: -o-pre-wrap;
+		word-wrap: break-word;
+		background: #fff;
+	}
+} */
+
+
+.ql-syntax{
+  padding: 20px;
+}
+

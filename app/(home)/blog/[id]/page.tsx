@@ -7,6 +7,8 @@ import { createBrowserClient } from "@supabase/ssr";
 import Comments from "./components/coments/coments";
 import supabase from "@/utils/supabase/supabase";
 import { IAuthor } from "@/lib/types";
+import "react-quill/dist/quill.snow.css";
+
 export async function generateStaticParams() {
   const { data: blogs, error } = await supabase
     .from("blog")
@@ -56,7 +58,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       .single();
 
       return (
-        <div className="max-w-[700px] pt-[120px] mx-auto min-h-screen space-y-10">
+        <div className="max-w-[800px] pt-[60px] mx-auto min-h-screen space-y-10">
           <Content  blog={blog} author={authorData} />
       
         </div>

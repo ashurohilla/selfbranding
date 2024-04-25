@@ -12,12 +12,27 @@ import { PiLinkedinLogo } from "react-icons/pi";
 import Link from "next/link";
 import { BsTwitter } from "react-icons/bs";
 import { AiOutlineComment } from "react-icons/ai";
-import { PlayCircle, TwitterIcon } from "lucide-react";
+import { PlayCircle, Speaker, TwitterIcon } from "lucide-react";
 import { IoShare } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
 import CopyButton from "@/components/markdown/CopyButton";
-import Comments from "./coments/coments";
+import dynamic from 'next/dynamic'
+import "react-quill/dist/quill.snow.css";
+// import 'highlight.js/styles/arduino-light.min.css';
+import "highlight.js/styles/atom-one-dark.min.css";
+
+
+
+// import "highlight.js/styles/intellij-light.css";
+
+
+
+
+
+
+
+const Coments = dynamic(() => import('./coments/coments'), { ssr: false })
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,11 +50,24 @@ interface Props {
 export default function Content({ blog, author }: Props) {
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
   const blogUrl = `https://${SITE_URL}/blog/${blog?.slug}`;
+  const [isSpeaking, setIsSpeaking] = useState(false); // Track if speaking is active
 
   const handleSpeak = () => {
-    const speech = new SpeechSynthesisUtterance(blog?.content || " ");
-    window.speechSynthesis.speak(speech);
+    if (isSpeaking) {
+      // If already speaking, stop speaking
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      const speech = new SpeechSynthesisUtterance(blog?.content || " ");
+      const voices = window.speechSynthesis.getVoices();
+      console.log(voices)
+      speech.voice = voices[4]; // Change this to the desired voice
+      window.speechSynthesis.speak(speech);
+      setIsSpeaking(true);
+    }
   };
+
+
 
   const shareOnTwitter = () => {
     const twitterUrl = `https://twitter.com/intent/tweet?url=$${blogUrl}`;
@@ -58,13 +86,13 @@ export default function Content({ blog, author }: Props) {
     setIsCommentSectionOpen(!isCommentSectionOpen);
   };
   return (
-    <div className="mx-4">
+    <div className="md:mx-2 mx-2  sm:mx-4 ">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
-        <div className="sm:px-10 space-y-5">
-          <h1 className="text-6xl sm:text-2xl font-bold dark:text-gray-200">
+        <div className="sm:mx-2 mx-0 space-y-5">
+          <h1 className="text-6xl font-bold dark:text-gray-200">
             {blog?.title}
           </h1>
-          <div className=" flex justify-between px-2 py-2 sm:mx-2 font-lg">
+          <div className=" flex justify-between px-1 py-2 mx-0 sm:mx-2 font-lg">
             <div className="flex gap-2 ">
               <div className="">
                 <Image
@@ -115,16 +143,28 @@ export default function Content({ blog, author }: Props) {
                     <AiOutlineComment />{" "}
                   </span>
                 </button>
+
+
+
+
+
+
+
+
               </div>
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={handleSpeak}
-                  className="text-gray-600 hover:text-gray-800 transition"
-                >
-                  <span className="material-icons">
-                    <PlayCircle />
-                  </span>
-                </button>
+              <button
+  onClick={handleSpeak}
+  className={`text-gray-600 rounded-full hover:text-gray-800 transition animate-pulse ${
+    isSpeaking ? 'bg-orange-500' : ''
+  }`}
+>
+  <span className="material-icons">
+    <PlayCircle />
+  </span>
+</button>
+
+
                 <button className="text-gray-600 font-medium text-xl hover:text-gray-800 transition">
                   <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -135,6 +175,9 @@ export default function Content({ blog, author }: Props) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuLabel>
+
+
+
                         <button className="flex pl-3 px-2">
                           <span className=" py-2">
                             <Share1Icon />
@@ -145,6 +188,9 @@ export default function Content({ blog, author }: Props) {
                             <CopyButton id={blogUrl} />
                           </span>
                         </button>
+
+
+
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>
@@ -157,6 +203,9 @@ export default function Content({ blog, author }: Props) {
                           </span>
                           <span className="flex ml-2  "> Share on twiter</span>
                         </button>
+
+
+
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <button
@@ -168,8 +217,13 @@ export default function Content({ blog, author }: Props) {
                           </span>
                           <span className="flex ml-2  "> Share on threads</span>
                         </button>
+
+
+
                       </DropdownMenuItem>
                       <DropdownMenuItem>
+
+
                         <button
                           onClick={shareOnLinkedIn}
                           className="flex px-2 py-2 "
@@ -179,12 +233,15 @@ export default function Content({ blog, author }: Props) {
                           </span>
                           <span className="flex ml-2  ">Share on Linkdin</span>
                         </button>
+
+
+
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </button>
-                <button className="text-gray-600 mr-4 hover:text-gray-800 transition">
-                  <DropdownMenu>
+
+             <DropdownMenu>
                     <DropdownMenuTrigger>
                       <span className="material-icons">
                         <BsThreeDotsVertical />
@@ -207,7 +264,6 @@ export default function Content({ blog, author }: Props) {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </button>
               </div>
             </div>
             <hr className="border-gray-200 font-mono" />
@@ -228,16 +284,14 @@ export default function Content({ blog, author }: Props) {
           className="font-[20px]  mb-[20px] contentclass"
           dangerouslySetInnerHTML={{ __html: blog?.content || "" }}
         />
-
-       
       </div>
 
       <div
-          className={`fixed inset-y-0 right-0 z-50 w-[400px] bg-white transform transition-transform ${
+          className={`fixed inset-y-0 right-0 z-50 w-[360px] bg-white transform transition-transform ${
             isCommentSectionOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <Comments id={blog?.slug} toggleCommentSection={toggleCommentSection} />
+          <Coments id={blog?.slug} toggleCommentSection={toggleCommentSection} />
         </div>
     </div>
   );
