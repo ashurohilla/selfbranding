@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Charter&display=swap');
  
 
 
@@ -53,10 +54,6 @@
 .contentclass:img{
   border-radius: 50%;
   width: 50%;
-}
-.contentclass:p{
- font-size: large;
-
 }
 
 /* pre{
@@ -111,12 +108,10 @@ iframe{
 
 
 p{
- font-size: 20PX;
  font-family: 'Charter', serif;
 }
 
 .ql-size-large{
  font-size: 20px;
-
 }
 

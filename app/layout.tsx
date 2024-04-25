@@ -3,6 +3,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import Sessioprovider from '@/components/session-provider'
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react"
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : 'http://localhost:3000'
@@ -34,7 +35,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <main className='w-full mx-4'></main>
+            <main className='w-full mx-4'>
+              <Analytics/>
+            </main>
           {children}
           </ThemeProvider>
           <Toaster />

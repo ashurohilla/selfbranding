@@ -80,7 +80,7 @@ export default function Content({ blog, author }: Props) {
     setIsCommentSectionOpen(!isCommentSectionOpen);
   };
   return (
-    <div className="md:mx-2 mx-2  sm:mx-4 ">
+    <div className="md:mx-2 mx-2 text-md md:text-xl  sm:mx-4 ">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
         <div className="sm:mx-2 mx-0 space-y-5">
           <h1 className="md:text-6xl text-2xl font-bold dark:text-gray-200">
