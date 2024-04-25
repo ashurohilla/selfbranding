@@ -39,6 +39,7 @@ export async function createCourse(data: {
 	instructor: string;
 	Name: string;
 	price: string;
+	slug: string;
 	
 }) {
 

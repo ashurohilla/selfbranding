@@ -100,6 +100,7 @@ export const defaultcourse :Icourse = {
 	instructor: "", 
     Name: "",
 	price: "",
+	slug: "",
 };
 export const defaultcoment :Coments = {
 	coment: "",
