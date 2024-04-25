@@ -83,7 +83,7 @@ export default function Content({ blog, author }: Props) {
     <div className="md:mx-2 mx-2  sm:mx-4 ">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
         <div className="sm:mx-2 mx-0 space-y-5">
-          <h1 className="text-6xl font-bold dark:text-gray-200">
+          <h1 className="md:text-6xl text-2xl font-bold dark:text-gray-200">
             {blog?.title}
           </h1>
           <div className=" flex justify-between px-1 py-2 mx-0 sm:mx-2 font-lg">
