@@ -6,7 +6,9 @@ import { IBlog } from "@/lib/types";
 import SwitchForm from "./SwitchForm";
 import DeleteAlert from "./DeleteAlert";
 import { readBlogAdmin, updateBlogById } from "@/lib/actions/blog";
+import supabase from "@/utils/supabase/supabase";
 export default async function BlogTable() {
+
     const { data: blogs } = await readBlogAdmin();
 	return (
 		<>

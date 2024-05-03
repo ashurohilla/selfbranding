@@ -50,7 +50,7 @@ import { ReactNode, useRef, useTransition } from "react";
 import { IBlogDetial, IBlogForm } from "@/lib/types";
 import { Switch } from "@/components/ui/switch";
 import { BsSave } from "react-icons/bs";
-import { BlogFormSchemaType } from "../schema";
+import { BlogFormSchemaType } from "../../blog/schema";
 import Link from "next/link";
 import logo from "../../../image.png"
 import ReactQuill from "react-quill";
@@ -76,7 +76,7 @@ interface CustomQuillProps extends ReactQuill.ReactQuillProps {
     }
   );
 
-export default function BlogForm({
+export default function ChapterForm({
   onHandleSubmit,
   defaultBlog,
 }: {

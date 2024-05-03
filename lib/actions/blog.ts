@@ -1,6 +1,6 @@
 "use server";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { IBlog } from "@/lib/types";
+import { IBlog, IModule } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
 import { BlogFormSchema, BlogFormSchemaType } from "../../app/dashboard/blog/schema";
 import { contents } from "cheerio/lib/api/traversing";
@@ -28,6 +28,25 @@ export async function createBlog(data: {
 		.insert(data)
 		.single();
 
+    return blogResult;
+}
+
+export async function createModule(data: {
+	created_at?: string;
+	module_name: string;
+	module_description: string;
+	module_number: number;
+	course_id: string;
+	slug: string;
+	
+}) {
+
+	const supabase = await createSupabaseServerClient();
+	const blogResult = await supabase
+		.from("modules")
+		.insert(data)
+		.single();
+	revalidatePath("/dashbaord/course/build");	
     return blogResult;
 }
 
@@ -78,11 +97,15 @@ export async function readBlogAdmin() {
 	await new Promise((resolve) => setTimeout(resolve, 2000));
 
 	const supabase = await createSupabaseServerClient();
+	const { data: { user } } = await supabase.auth.getUser()
+	const id = user?.id
+
+
 
 	return supabase
 		.from("blog")
 		.select("*")
-		// .eq('author', 'hjgkj' )
+		.eq('author', id || " " )
 		.order("created_at", { ascending: true });
 		
 }
@@ -162,11 +185,50 @@ export async function deleteBlogById(blogId: string) {
 	return JSON.stringify(result);
 }
 export async function deleteCoursebyid(course_id: string) {
-	console.log("deleting course")
 	const supabase = await createSupabaseServerClient();
 	const result = await supabase.from("course").delete().eq("id", course_id);
 	console.log(result);
 	revalidatePath(DASHBOARD);
 	revalidatePath("/course/" + course_id);	
+	return JSON.stringify(result);
+}
+export async function deleteModulebyid(mdoule_id: number) {
+	const supabase = await createSupabaseServerClient();
+	const result = await supabase.from("modules").delete().eq("id", mdoule_id);
+	console.log(result);
+	revalidatePath(DASHBOARD);
+	revalidatePath("/course/" + mdoule_id);	
+	return JSON.stringify(result);
+}
+export async function deletechapterbyid(chapter_id: number) {
+	const supabase = await createSupabaseServerClient();
+	const result = await supabase.from("chapters").delete().eq("id", chapter_id);
+	console.log(result);
+	revalidatePath(DASHBOARD);
+	revalidatePath("/course/" + chapter_id);
+	return JSON.stringify(result);
+}
+
+
+
+export async function readmodulesbycourseId(courseId: string) {
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+	const supabase = await createSupabaseServerClient();
+	return supabase.from("modules").select("*").eq("course_id", courseId).order("module_number", { ascending: true });
+
+}
+export async function readchaptersbymodule(courseId: string) {
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+	const supabase = await createSupabaseServerClient();
+	return supabase.from("chapters").select("*").eq("slug", courseId).order("chapterno", { ascending: true });
+
+}
+
+
+export async function updatemodulebyid(id: number, data: IModule) {
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+	const supabase = await createSupabaseServerClient();
+	const result = await supabase.from("modules").update(data).eq("id", id);
+	revalidatePath(DASHBOARD);
 	return JSON.stringify(result);
 }

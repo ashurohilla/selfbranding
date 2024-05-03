@@ -5,6 +5,7 @@ import {
 	LinkedInLogoIcon,
 	DiscordLogoIcon,
 } from "@radix-ui/react-icons";
+import Link from "next/link";
 export default function Footer() {
 	return (
 		<footer className=" border-t py-10">
@@ -26,6 +27,17 @@ export default function Footer() {
 				<h1 className="text-sm">
 					&copy; 2024 Ashish Rohilla.All right reserved
 				</h1>
+				<Link
+				href="/privacypolicy">
+				<h1>priacy policy</h1>
+				</Link>
+				<Link
+				href="/contactus">
+				<h1>contact us</h1>
+				</Link><Link
+				href="/aboutus">
+				<h1>About us </h1>
+				</Link>
 			</div>
 		</footer>
 	);

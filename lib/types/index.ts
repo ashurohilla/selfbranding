@@ -13,6 +13,7 @@
 		title: string | null
 };
 
+
 export type IBlogDetial = {
 	created_at: string;
 	id: string;
@@ -26,7 +27,17 @@ export type IBlogDetial = {
 	slug:string;
 	content:string;
 	author:string;
-} ;
+};
+
+export type IModule = {
+   id: number
+   created_at: string;
+   module_name: string;
+   module_description: string;
+   module_number: number;
+   course_id: string;
+   slug:string;
+};
 
 export type IAuthor = {
 	author: string 

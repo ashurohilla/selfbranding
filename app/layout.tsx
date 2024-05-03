@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import Sessioprovider from '@/components/session-provider'
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : 'http://localhost:3000'
@@ -37,6 +38,7 @@ export default function RootLayout({
           >
             <main className='w-full mx-4'>
               <Analytics/>
+              <SpeedInsights/>
             </main>
           {children}
           </ThemeProvider>
