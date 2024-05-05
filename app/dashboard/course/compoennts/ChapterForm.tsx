@@ -47,13 +47,17 @@ import {
   StarIcon,
 } from "@radix-ui/react-icons";
 import { ReactNode, useRef, useTransition } from "react";
-import { IBlogDetial, IBlogForm } from "@/lib/types";
+import { IchapterDetails, IBlogForm } from "@/lib/types";
 import { Switch } from "@/components/ui/switch";
 import { BsSave } from "react-icons/bs";
-import { BlogFormSchemaType } from "../../blog/schema";
+import { Chapterformschematype } from "../../blog/schema";
 import Link from "next/link";
 import logo from "../../../image.png"
 import ReactQuill from "react-quill";
+import { Catagories, IModule } from "@/lib/types";
+import { readCatogries , readmodulescourse } from "@/lib/actions/blog";
+import { Button } from "@/components/ui/button";
+
 
 interface CustomQuillProps extends ReactQuill.ReactQuillProps {
     hookRef: (ref: ReactQuill | null) => void; 
@@ -77,54 +81,87 @@ interface CustomQuillProps extends ReactQuill.ReactQuillProps {
   );
 
 export default function ChapterForm({
+  id,
   onHandleSubmit,
-  defaultBlog,
+  defaultlesson,
 }: {
-  defaultBlog: IBlogDetial;
-  onHandleSubmit: (data: BlogFormSchemaType) => void;
+  id: string;
+  defaultlesson: IchapterDetails;
+  onHandleSubmit: (data: Chapterformschematype) => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isPreview, setPreview] = useState(false);
+  const [categories, setCategories] = useState<Catagories[]>([]);
+  const [modulescourse, setModulecourse] = useState<IModule>();
+
+
   const user = useUser((state) => state.user);
   // const [content, setContent] = useState<string>('');
 
-  const form = useForm<BlogFormSchemaType>({
+  const form = useForm<Chapterformschematype>({
     mode: "all",
     defaultValues: {
-      title: defaultBlog?.title,
-      image: defaultBlog?.image || "",
-      status: defaultBlog?.status || true,
-      author: defaultBlog?.author || "",
-      content: defaultBlog?.content || "",
-      meta_title: defaultBlog?.meta_tiltle || "",
-      meta_description: defaultBlog?.meta_description || "",
-      created_at: defaultBlog?.created_at || "",
-      slug: defaultBlog?.slug || "",
-      coments_enabled: defaultBlog?.coments_enabled || false,
+      catagory_id: defaultlesson?.catagory_id || 0,
+      chapter_name: defaultlesson?.chapter_name || "",
+      content: defaultlesson?.content || "",
+      course_id: defaultlesson?.course_id || "",
+      created_at: defaultlesson?.created_at || "",
+      description: defaultlesson?.description || "",
+      instructor: defaultlesson?.instructor || "",
+      module_id: defaultlesson?.module_id || "",
+      chapterno: defaultlesson?.chapterno || "",
+      slug: defaultlesson?.slug || " ",
     },
   });
 
-  const onSubmit = (data: BlogFormSchemaType) => {
+  const onSubmit = (data: Chapterformschematype) => {
     console.log(data);
     console.log("button pressed");
     startTransition(() => {
       onHandleSubmit(data);
     });
   };
+  useEffect(() => {
+    // Fetch categories from Supabase backend
+    fetchCategories();
+    fetchmodulecourse();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const { data: Catagories } = await readCatogries();
+      if (Catagories) {
+        setCategories(Catagories);
+      } } 
+      catch (error) {
+        console.log(error);
+  };
+};
+
+const fetchmodulecourse = async () => {
+  try {
+    const { data: modulescourse } = await readmodulescourse(id);
+    if (modulescourse) {
+      setModulecourse(modulescourse);
+    } } 
+    catch (error) {
+      console.log(error);
+};
+};
+console.log(modulescourse);
 
   useEffect(() => {
-    if (form.getValues().title && user?.id) {
-      const slug = slugify(form.getValues().title, { lower: true }) + user?.id;
-      const meta_title = form.getValues().title;
-      const meta_description = form.getValues().content;
+  if (form.getValues().chapter_name && user?.id) {
+      const slug = slugify(form.getValues().chapter_name, { lower: true }) + user?.id;
+      const course_id = modulescourse?.course_id || "";
       form.setValue("slug", slug);
-      form.setValue("meta_title", meta_title);
-      form.setValue("meta_description", meta_description);
-      console.log(slug);
-      form.setValue("author", user?.id);
+      form.setValue("instructor", user?.id);
       form.setValue("created_at", new Date().toISOString().slice(0, 16));
+      form.setValue("module_id", id );
+      form.setValue("course_id",  course_id )
+
     }
-  }, [form.getValues().title, user?.id]);
+  }, [form.getValues().chapter_name, user?.id]);
 
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -166,7 +203,7 @@ export default function ChapterForm({
           <div className="flex items-center flex-wrap gap-5">
             <span
               onClick={() => {
-                setPreview(!isPreview && !form.getFieldState("image").invalid);
+                setPreview(!isPreview && !form.getFieldState("chapter_name").invalid);
               }}
               role="button"
               tabIndex={0}
@@ -186,7 +223,7 @@ export default function ChapterForm({
             </span>
           </div>
 
-          <button
+          <Button
             type="submit"
             role="button"
             className={cn(
@@ -197,7 +234,7 @@ export default function ChapterForm({
           >
             <BsSave className="animate-bounce group-disabled:animate-none" />
             Save
-          </button>
+          </Button>
         </div>
 
 
@@ -206,7 +243,7 @@ export default function ChapterForm({
           <div className="mx-[300px]">
             <FormField
               control={form.control}
-              name="title"
+              name="chapter_name"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -220,8 +257,8 @@ export default function ChapterForm({
                     </div>
                   </FormControl>
 
-                  {form.getFieldState("title").invalid &&
-                    form.getValues().title && (
+                  {form.getFieldState("chapter_name").invalid &&
+                    form.getValues().chapter_name && (
                       <div className="px-2">
                         <FormMessage />
                       </div>
@@ -230,7 +267,93 @@ export default function ChapterForm({
               )}
             />
 
+
+<FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="w-full  break-words p-2 gap-2">
+                      <Input
+                        placeholder="chapter description "
+                        {...field}
+                        autoFocus
+                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full "
+                      />
+                    </div>
+                  </FormControl>
+
+                  {form.getFieldState("description").invalid &&
+                    form.getValues().description && (
+                      <div className="px-2">
+                        <FormMessage />
+                      </div>
+                    )}
+                </FormItem>
+              )}
+            />
             <FormField
+              control={form.control}
+              name="chapterno"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="w-full  break-words p-2 gap-2">
+                      <Input
+                      type="number"
+                        placeholder="chapter no "
+                        {...field}
+                        autoFocus
+                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full "
+                      />
+                    </div>
+                  </FormControl>
+
+                  {form.getFieldState("chapterno").invalid &&
+                    form.getValues().chapterno && (
+                      <div className="px-2">
+                        <FormMessage />
+                      </div>
+                    )}
+                </FormItem>
+              )}
+            />
+
+
+
+<FormField
+  control={form.control}
+  name="catagory_id"
+  render={({ field }) => (
+    <FormItem>
+      <FormControl>
+        <div className="w-full break-words p-2 gap-2">
+          <label className="block font-bold mb-2" htmlFor="Category">
+            Category
+          </label>
+          <select
+            {...field}
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </FormControl>
+
+      {form.formState.errors.catagory_id && (
+        <div className="px-2">
+          <FormMessage>{form.formState.errors.catagory_id.message}</FormMessage>
+        </div>
+      )}
+    </FormItem>
+  )}
+/>
+            {/* <FormField
               control={form.control}
               name="image"
               render={({ field }) => {
@@ -253,14 +376,14 @@ export default function ChapterForm({
                   </FormItem>
                 );
               }}
-            />
+            /> */}
             <div className=" p-2 gap-2">
               <div className=" contentclass">
               <MyReactQuill
                hookRef={(ref) => console.log(ref)} theme="bubble" 
                 value={form.getValues().content}
                 modules={modules}
-                placeholder="Blog content"
+                placeholder="chapter content"
            onChange={(value : '') => form.setValue("content", value)} />
                 {/* <ReactQuill
                   theme="bubble"
@@ -280,7 +403,7 @@ export default function ChapterForm({
             <div className="">
               <div className="space-y-5 ">
                 <h1 className="text-6xl  font-bold dark:text-gray-200">
-                {form.getValues().title || "Untitled blog"}
+                {form.getValues().chapter_name || "Untitled blog"}
                 </h1>
                 <div className=" flex justify-between px-1 py-2 mx-0 sm:mx-2 font-lg">
                   <div className="flex gap-2 ">
@@ -456,14 +579,14 @@ export default function ChapterForm({
               </div>
       
               <div className="w-full px-8  mt-6 h-96 relative">
-                <Image
+                {/* <Image
                   priority
                   src={form.getValues().image}
                   alt="cover"
                   fill
                   className=" object-cover sm:w-[300px] object-center rounded-md border-[0.5px] border-zinc-600"
                   sizes="(max-width: 300px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
+                /> */}
               </div>
               <div
   className="font-[20px]  mb-[20px] contentclass"

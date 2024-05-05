@@ -31,6 +31,29 @@ export async function createBlog(data: {
     return blogResult;
 }
 
+export async function createlesson(data: {
+	catagory_id: number
+	chapter_name: string
+	content: string 
+	course_id: string 
+	created_at: string
+	description: string 
+	instructor: string
+	module_id: string 
+	chapterno:string 
+	slug: string 
+	
+}) {
+
+	const supabase = await createSupabaseServerClient();
+	const blogResult = await supabase
+		.from("chapters")
+		.insert(data)
+		.single();
+
+    return blogResult;
+}
+
 export async function createModule(data: {
 	created_at?: string;
 	module_name: string;
@@ -81,6 +104,15 @@ export async function readCatogries() {
 		.select("*")
 		.order("created_at", { ascending: true });
 }
+export async function readmodulescourse(id: string) {
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+	const supabase = await createSupabaseServerClient();
+	return supabase
+		.from("modules")
+		.select("*")
+		.eq("slug", id)
+		.single();
+}	
 
 
 
@@ -91,6 +123,14 @@ export async function readBlog() {
 		.select("*")
 		.eq("status", true)
 		// .order("created_at", { ascending: true });
+}
+
+export async function readcourse() {
+	const supabase = await createSupabaseServerClient();
+	return supabase
+		.from("course")
+		.select("*")
+		.order("created_at", { ascending: true });
 }
 
 export async function readBlogAdmin() {
@@ -220,7 +260,7 @@ export async function readmodulesbycourseId(courseId: string) {
 export async function readchaptersbymodule(courseId: string) {
 	await new Promise((resolve) => setTimeout(resolve, 2000));
 	const supabase = await createSupabaseServerClient();
-	return supabase.from("chapters").select("*").eq("slug", courseId).order("chapterno", { ascending: true });
+	return supabase.from("chapters").select("*").eq("module_id", courseId).order("chapterno", { ascending: true });
 
 }
 

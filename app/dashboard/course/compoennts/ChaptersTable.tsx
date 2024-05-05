@@ -13,14 +13,15 @@ interface Props {
     id: string;
   }
   
-export default async function ChapterTable( {id}: Props) {
+export default async function 
+ChapterTable( {id}: Props) {
 
     const { data: chapters } = await readchaptersbymodule(id);
 	return (
 		<>
 			<div className="rounded-md bg-graident-dark border-[0.5px] overflow-y-scroll ">
 				<div className="w-[800px] md:w-full">
-					<div className="grid grid-cols-5 border-b p-5 dark:text-gray-500">
+					<div className="grid grid-cols-2 border-b p-5 dark:text-gray-500">
 						<h1 className=" col-span-2">Title</h1>
                         <Link className="" 
                         href={`/dashboard/course/build/chapter/lesson/${id}`}>

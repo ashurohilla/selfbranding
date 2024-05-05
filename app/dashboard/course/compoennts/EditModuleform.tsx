@@ -44,14 +44,16 @@ function ModuleForm( { id , module }: Props) {
         module_description: module.module_description,
         module_number: module.module_number,
         course_id: module.course_id,
-        slug: module.slug,
+        slug: " ",
       });
     }
   }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
-    const slugifiedName = slugify(`${updatedFormData.module_name}-${id}`);
+    console.log(updatedFormData.module_name);
+    const slugifiedName = slugify(`${updatedFormData.module_name}-${module.course_id}`); // Use updated module name here
+    console.log(slugifiedName);
     const date = new Date().toDateString().slice(0,16);
     setFormData({
       ...updatedFormData,
@@ -81,7 +83,7 @@ function ModuleForm( { id , module }: Props) {
       const result = await updatemodulebyid(module.id , formData);
       console.log("Module added successfully:", result);
       toast({
-        title: "Successfully create a post 🎉",
+        title: "Successfully updated a post 🎉",
         description: formData.module_name,
       });
       router.push(`/dashboard/course/build/${module.course_id}`);

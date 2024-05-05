@@ -3,21 +3,7 @@ import { SITE_URL } from "@/app/config"
 import supabase from "@/utils/supabase/supabase";
 import "react-quill/dist/quill.snow.css";
 import ModuleTable from "../../compoennts/NewModuleTable";
-
-
-export async function generateStaticParams() {
-  const { data: course, error } = await supabase
-    .from("course")
-    .select("slug");
-
-  if (error) {
-    throw error;
-  }
-
-  return course?.map((course) => ({ id: course.slug }));
-}
-
-    export default async function Page({ params }: { params: { id : string } }) {
+ export default async function Page({ params }: { params: { id : string } }) {
       const { data: course, error } = await supabase
         .from("course")
         .select("*")
@@ -39,15 +25,9 @@ export async function generateStaticParams() {
           {new Date(course?.created_at!).toDateString()}
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-4  mx-2 grid-flow-row mt-10">
         <div className="border-2 rounded-md  border-black">
-
           <ModuleTable id={course.slug}/>
-      
         </div>
-
-        <div>here is am</div>
-      </div>
     </div>
           {/* <CourseDashboard  id={params.id}  course={course} /> */}
         </div>

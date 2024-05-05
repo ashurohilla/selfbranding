@@ -1,5 +1,5 @@
 import { boolean } from "zod";
-import { IBlogDetial , Icourse } from "./types";
+import { IBlogDetial , Icourse, IchapterDetails } from "./types";
 import { Coments } from "./types";
 export const blogDeafultValue = `
 ## Serendipity Chronicles: Tales from a Random Blog
@@ -89,6 +89,20 @@ export const defaultBlog: IBlogDetial = {
 	slug: "",	
 	content:"",	
 	author: "",
+
+};
+export const defaultlesson: IchapterDetails = {
+	catagory_id: 1,
+	chapter_name: "",
+	content: "", 
+	course_id: "",
+	created_at: "",
+	description: "", 
+	id: 0,
+	instructor: "",
+	module_id: "" ,
+	chapterno:"", 
+	slug: "", 
 
 };
 

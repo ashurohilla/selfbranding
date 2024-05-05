@@ -55,3 +55,24 @@ export const CourseFormSchema = z
 
 
 export type CourseFormSchematype = z.infer<typeof CourseFormSchema>;
+
+export const Chapterformschema = z
+	.object({
+		content: z.string().min(20, {
+			message: "Content is too short",
+		}),
+		chapter_name: z.string().url({
+			message: "Invalid url",
+		}),
+		chapterno: z.string(),
+		created_at: z.string(),
+		instructor: z.string(),
+		module_id: z.string(),
+		slug: z.string(),
+		catagory_id: z.number(),
+		course_id: z.string(),
+		description: z.string(),
+	})
+
+
+export type Chapterformschematype = z.infer<typeof Chapterformschema>;

@@ -16,7 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function navbar() {
+export default function 
+navbar() {
   const pathname = usePathname()
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -31,16 +32,16 @@ export default function navbar() {
     <nav className="py-2">
       <div className=" w-full px-4 md:text-xl text-lg flex justify-between items-center">
         <div className="flex">
-          <Link className="flex text-white" href="/">
+          <Link className="flex text-black" href="/">
             Hardware Garage
           </Link>
           <ul className="ml-10 flex md:mx-4 mx-2">
-          <Link className="flex" href="/dashboard/course">
-          <li className="md:mx-6 text-white mx-2">courses</li>
+          <Link className="flex" href="/courses">
+          <li className="md:mx-6 text-black mx-2">courses</li>
 
           </Link>
           <Link className="flex" href="/blogs">
-          <li className="md:mx-6 text-white mx-2">Blogs</li>
+          <li className="md:mx-6 text-black mx-2">Blogs</li>
 
           </Link>
           </ul>
@@ -48,7 +49,7 @@ export default function navbar() {
         <div>
           {user?.id ? (
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger >
                 <Profile />
               </DropdownMenuTrigger>
               <DropdownMenuContent>

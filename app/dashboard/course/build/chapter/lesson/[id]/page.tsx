@@ -2,19 +2,19 @@
 import React from "react";
 
 import { toast } from "@/components/ui/use-toast";
-import { defaultBlog } from "@/lib/data";
+import { defaultlesson } from "@/lib/data";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { createBlog } from "@/lib/actions/blog";
-import { BlogFormSchemaType } from "@/app/dashboard/blog/schema";
+import { createlesson } from "@/lib/actions/blog";
+import { Chapterformschematype } from "@/app/dashboard/blog/schema";
 import { useRouter } from "next/navigation";
 import ChapterForm from "@/app/dashboard/course/compoennts/ChapterForm";
-export default function CreateForm() {
+export default function CreateForm({ params }: { params: { id : string } }) {
 	const router = useRouter();
 
-	const onHandleSubmit = async (data: BlogFormSchemaType) => {
+	const onHandleSubmit = async (data: Chapterformschematype) => {
 		console.log("submit button pressed")
 		try {
-			const result = await createBlog(data);	
+			const result = await createlesson(data);	
 			if (!result) {
 				throw new Error("No response received from server.");
 			}
@@ -34,9 +34,9 @@ export default function CreateForm() {
 			} else {
 				toast({
 					title: "Successfully create a post 🎉",
-					description: data.title,
+					description: data.chapter_name,
 				});
-				router.push("/dashboard/blog");
+				router.push(`/dashboard/course/build/${data.course_id}`);
 			}
 		} catch (error) {
 			console.error("Error occurred while handling submit:", error);
@@ -47,10 +47,10 @@ export default function CreateForm() {
 		<div className="pt-[60px]">
 	{/* <NewBlogForm/> */}
 
-
 		<ChapterForm
+		    id={params.id}
 			onHandleSubmit={onHandleSubmit}
-			defaultBlog={defaultBlog}
+			defaultlesson={defaultlesson}
 			/>
 			</div>
 	);
