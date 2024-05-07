@@ -28,20 +28,20 @@ navbar() {
 
   const user = useUser((state) => state.user);
   return (
-    <div className=" z-10 bg-white/10 backdrop-blur-sm rounded-sm  shadow-sm w-full fixed ">
-    <nav className="py-2">
+    <div className=" z-10 md:bg-white/10   backdrop-blur-sm rounded-sm  shadow-sm w-full fixed ">
+    <nav className="md:py-2 py-0">
       <div className=" w-full px-4 md:text-xl text-lg flex justify-between items-center">
         <div className="flex">
-          <Link className="flex text-black" href="/">
+          <Link className="flex md:text-2xl  text-sm text-[#c5aa6a]" href="/">
             Hardware Garage
           </Link>
           <ul className="ml-10 flex md:mx-4 mx-2">
           <Link className="flex" href="/courses">
-          <li className="md:mx-6 text-black mx-2">courses</li>
+          <li className="md:mx-6 mx-1 md:text-2xl  text-sm text-[#c5aa6a] ">courses</li>
 
           </Link>
           <Link className="flex" href="/blogs">
-          <li className="md:mx-6 text-black mx-2">Blogs</li>
+          <li className="md:mx-6  md:text-2xl  text-sm text-[#c5aa6a] mx-1">Blogs</li>
 
           </Link>
           </ul>

@@ -122,8 +122,19 @@ export async function readBlog() {
 		.from("blog")
 		.select("*")
 		.eq("status", true)
-		// .order("created_at", { ascending: true });
+		.range(0, 7)
+		.order("created_at", { ascending: true });
 }
+export async function readmoreblog() {
+	const supabase = await createSupabaseServerClient();
+	return supabase
+		.from("blog")
+		.select("*")
+		.eq("status", true)
+		.range(0, 35)
+		.order("created_at", { ascending: true });
+}
+
 
 export async function readcourse() {
 	const supabase = await createSupabaseServerClient();

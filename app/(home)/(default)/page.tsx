@@ -14,9 +14,8 @@ export default async function Home() {
 
 	return (
 		<div>
-				<div>
+			
 				<Navbar/>
-			</div>
 			<Hero/>
 
 	

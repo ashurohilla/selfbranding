@@ -14,7 +14,7 @@ export default function profile() {
    alt ={user?.user_metadata.user_name}
    width={50}
    height={50}
-   className='rounded-full ring-2 mr-10 ring-slate-500'
+   className='rounded-full ring-2 mr-2 md:mr-10 ring-slate-500'
    />
   )
 }
