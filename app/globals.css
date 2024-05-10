@@ -71,6 +71,10 @@
   border-width: 2px;
 
 } */
+.contentclass:h1{
+  font-size: 60px;
+  font-family: 'Helvetica Neue', sans-serif;
+}
 
 pre{
  
@@ -108,10 +112,19 @@ iframe{
 
 
 p{
+ color: rgb(34, 34, 34);
  font-family: 'Charter', serif;
+ font-size: 21px;
+
 }
 
 .ql-size-large{
- font-size: 20px;
+ font-size: 30px;
+ font-weight: bold;
+}
+.ql-size-huge{
+  font-size: 30px;
+  font-weight: bold;
+
 }
 

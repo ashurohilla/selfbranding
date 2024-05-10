@@ -25,9 +25,13 @@ export default function RootLayout({
       <meta name="google-adsense-account" content="ca-pub-7557474007097933">
       </meta>
       <head>
+        
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7557474007097933"
      crossOrigin="anonymous"></script>
      <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap"/>
+
+
       </head>
       <body>
         <ThemeProvider
