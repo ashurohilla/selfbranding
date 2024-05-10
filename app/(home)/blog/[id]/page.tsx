@@ -59,9 +59,14 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       .single();
 
       return (
+         <article>
         <div className="max-w-[800px] pt-[60px] mx-auto min-h-screen space-y-10">
+
+
           <Content  blog={blog} author={authorData} />
+       
       
         </div>
+         </article>
       );
     }
