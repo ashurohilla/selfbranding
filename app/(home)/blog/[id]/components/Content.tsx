@@ -80,7 +80,7 @@ export default function Content({ blog, author }: Props) {
     setIsCommentSectionOpen(!isCommentSectionOpen);
   };
   return (
-    <div className="md:mx-2 mx-2 text-md md:text-xl  sm:mx-4 ">
+    <div className="md:mx-2 mx-4 text-md md:text-xl bg-white  sm:mx-4 ">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
         <div className="sm:mx-2 mx-0 space-y-5">
           <h1 className="md:text-6xl text-2xl font-bold dark:text-gray-200">
@@ -137,12 +137,6 @@ export default function Content({ blog, author }: Props) {
                     <AiOutlineComment />{" "}
                   </span>
                 </button>
-
-
-
-
-
-
 
 
               </div>
@@ -264,18 +258,18 @@ export default function Content({ blog, author }: Props) {
           </div>
         </div>
 
-        <div className="w-full px-8  mt-6 h-96 relative">
+        <div className="w-full px-8  mt-6 md:h-96 h-48 relative">
           <Image
             priority
             src={blog?.image!}
             alt="cover"
             fill
-            className=" object-cover sm:w-[300px] object-center rounded-md border-[0.5px] border-zinc-600"
+            className=" object-cover object-center rounded-md border-[0.5px] border-zinc-600"
             sizes="(max-width: 300px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
         <div
-          className="font-[20px]  mb-[20px] contentclass"
+          className=" mb-[20px] contentclass"
           dangerouslySetInnerHTML={{ __html: blog?.content || "" }}
         />
       </div>

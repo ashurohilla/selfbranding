@@ -1,13 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Charter&display=swap');
- 
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap'); 
 
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 0%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -71,10 +70,6 @@
   border-width: 2px;
 
 } */
-.contentclass:h1{
-  font-size: 60px;
-  font-family: 'Helvetica Neue', sans-serif;
-}
 
 pre{
  
@@ -93,17 +88,7 @@ iframe{
   height: 450px;
 }
 
-/* @media print {
-	pre {
-		overflow-x: auto;
-		white-space: pre-wrap;
-		white-space: -moz-pre-wrap !important;
-		white-space: -pre-wrap;
-		white-space: -o-pre-wrap;
-		word-wrap: break-word;
-		background: #fff;
-	}
-} */
+
 
 
 .ql-syntax{
@@ -112,9 +97,13 @@ iframe{
 
 
 p{
- color: rgb(34, 34, 34);
- font-family: 'Charter', serif;
- font-size: 21px;
+ color: black;
+ font-family: "Lat", serif;
+ font-size: 20px;
+ font-weight:200;
+ font-style:normal;
+
+
 
 }
 
@@ -126,5 +115,23 @@ p{
   font-size: 30px;
   font-weight: bold;
 
+}
+@media (max-width: 568px) {
+  p {
+    
+    font-size: 16px; /* Adjust font size for smaller screens */
+    font-family: "Lat", serif;
+    font-weight:200;
+    font-style:small; 
+  }
+  .ql-size-huge{
+    font-size: 20px;
+    font-weight: bold;
+  
+  }
+  .ql-size-large{
+    font-size: 20px;
+    font-weight: bold;
+   }
 }
 
