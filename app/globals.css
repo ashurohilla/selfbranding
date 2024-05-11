@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -72,12 +72,13 @@
 } */
 
 pre{
- 
 	overflow: auto;
   border-radius: 20px;
   border-color: black;
   border-width: 2px;
-
+  height: 550px;
+  overflow-y: auto;
+  font-size: 16px;
 }
 img{
   background: cover;
@@ -133,5 +134,14 @@ p{
     font-size: 20px;
     font-weight: bold;
    }
+   pre{
+    overflow: auto;
+    border-radius: 20px;
+    border-color: black;
+    border-width: 2px;
+    height: 400px;
+    overflow-y: auto;
+    font-size: 14px;
+  }
 }
 

@@ -8,7 +8,7 @@ import Comments from "./components/coments/coments";
 import supabase from "@/utils/supabase/supabase";
 import { IAuthor } from "@/lib/types";
 import "react-quill/dist/quill.snow.css";
-import Footer from "@/components/Footer";
+import Navbar from "@/app/navbar/navbar";
 
 export async function generateStaticParams() {
   const { data: blogs, error } = await supabase
@@ -59,14 +59,14 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       .single();
 
       return (
-         <article>
+        <div>
+          <Navbar/>
+
+         <article className="pt-8">
         <div className="max-w-[800px] pt-[60px] mx-auto min-h-screen space-y-10">
-
-
           <Content  blog={blog} author={authorData} />
-       
-      
         </div>
          </article>
+        </div>
       );
     }
