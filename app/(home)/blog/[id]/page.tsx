@@ -14,7 +14,6 @@ export async function generateStaticParams() {
   const { data: blogs, error } = await supabase
     .from("blog")
     .select("slug");
-
   if (error) {
     throw error;
   }
@@ -61,7 +60,6 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       return (
         <div>
           <Navbar/>
-
          <article className="pt-8">
         <div className="max-w-[800px] pt-[60px] mx-auto min-h-screen space-y-10">
           <Content  blog={blog} author={authorData} />
