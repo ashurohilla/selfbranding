@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap>  {
 
     // Map blogs to postEntries with required properties
     const postEntries = blogs?.map((blog) => ({
-        url: `${process.env.Site_URL}/blog/${blog?.slug}`,
+        url: `${process.env.SITE_URL}/blog/${blog?.slug}`,
         lastModified: new Date(blog.created_at),
         changeFrequency: 'weekly', // Default value
         priority: 0.5, // Default value
