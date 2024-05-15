@@ -34,6 +34,7 @@ export type IchapterDetails = {
 	content: string | null
 	course_id: string 
 	created_at: string
+	image: string 
 	description: string | null
 	id: number
 	instructor: string

@@ -143,5 +143,10 @@ p{
     overflow-y: auto;
     font-size: 14px;
   }
+  iframe{
+    display: flex;
+    width: 365px;
+    height: 250px;
+  }
 }
 

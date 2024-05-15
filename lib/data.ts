@@ -95,6 +95,7 @@ export const defaultlesson: IchapterDetails = {
 	catagory_id: 1,
 	chapter_name: "",
 	content: "", 
+	image:"",
 	course_id: "",
 	created_at: "",
 	description: "", 

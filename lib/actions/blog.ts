@@ -34,6 +34,7 @@ export async function createBlog(data: {
 export async function createlesson(data: {
 	catagory_id: number
 	chapter_name: string
+	image:string
 	content: string 
 	course_id: string 
 	created_at: string
@@ -125,6 +126,17 @@ export async function readBlog() {
 		.range(0, 7)
 		.order("created_at", { ascending: true });
 }
+export async function readchapter() {
+	const supabase = await createSupabaseServerClient();
+	return supabase
+		.from("chapters")
+		.select("*")
+		.range(0, 10)
+		.order("created_at", { ascending: true });
+}
+
+
+
 export async function readmoreblog() {
 	const supabase = await createSupabaseServerClient();
 	return supabase

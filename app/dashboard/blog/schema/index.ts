@@ -64,6 +64,7 @@ export const Chapterformschema = z
 		chapter_name: z.string().url({
 			message: "Invalid url",
 		}),
+		image:z.string(),
 		chapterno: z.string(),
 		created_at: z.string(),
 		instructor: z.string(),
