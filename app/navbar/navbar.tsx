@@ -84,9 +84,9 @@ navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <h1>
+            <h1 className="text-black">
               {" "}
-              <Link className="text-white" href="/login">Login</Link>{" "}
+              <Link className="text-black" href="/login">Login</Link>{" "}
             </h1>
           )}
         </div>
