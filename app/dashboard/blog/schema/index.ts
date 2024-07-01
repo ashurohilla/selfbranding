@@ -73,6 +73,7 @@ export const Chapterformschema = z
 		catagory_id: z.number(),
 		course_id: z.string(),
 		description: z.string(),
+		pdffiles: z.string(),
 	})
 
 

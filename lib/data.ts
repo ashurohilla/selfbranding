@@ -104,6 +104,7 @@ export const defaultlesson: IchapterDetails = {
 	module_id: "" ,
 	chapterno:"", 
 	slug: "", 
+	pdffiles: "",
 
 };
 

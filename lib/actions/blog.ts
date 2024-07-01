@@ -43,7 +43,7 @@ export async function createlesson(data: {
 	module_id: string 
 	chapterno:string 
 	slug: string 
-	
+	pdffiles:string
 }) {
 
 	const supabase = await createSupabaseServerClient();
@@ -53,6 +53,21 @@ export async function createlesson(data: {
 		.single();
 
     return blogResult;
+}
+
+export async function savepdf(pdfFile: File) {
+	const supabase = await createSupabaseServerClient();
+	const filedata = await supabase.storage
+		.from("pdffiles")
+		.upload(`pdf/${pdfFile.name}`, pdfFile, {
+			cacheControl: '3600',
+			upsert: false 
+		  
+		  });
+
+		  console.log(filedata);
+
+    return filedata;
 }
 
 export async function createModule(data: {
