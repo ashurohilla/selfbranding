@@ -2,7 +2,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { IBlog, IModule } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
-import { BlogFormSchema, BlogFormSchemaType } from "../../app/dashboard/blog/schema";
+import { BlogFormSchema, BlogFormSchemaType, Chapterformschematype } from "../../app/dashboard/blog/schema";
 import { contents } from "cheerio/lib/api/traversing";
 import { SiNginx } from "react-icons/si";
 
@@ -248,6 +248,22 @@ export async function updateBlogDetail(
 		.eq("id", id);
 	if (resultBlog) {
 		return (resultBlog);
+	} else {
+		revalidatePath(DASHBOARD);
+	}
+}
+
+export async function updatechapter(
+	id: string,
+	data: Chapterformschematype
+) {
+	const supabase = await createSupabaseServerClient();
+	const resultchapter = await supabase
+		.from("chapter")
+		.update(data)
+		.eq("id", id);
+	if (resultchapter) {
+		return (resultchapter);
 	} else {
 		revalidatePath(DASHBOARD);
 	}

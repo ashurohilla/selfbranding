@@ -79,7 +79,8 @@ interface CustomQuillProps extends ReactQuill.ReactQuillProps {
       //  loading: () => <div>hi</div>
     }
   );
-export default function ChapterForm({
+
+export default function Editchapterform({
   id,
   onHandleSubmit,
   defaultlesson,

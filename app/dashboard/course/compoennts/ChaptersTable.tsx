@@ -71,6 +71,12 @@ const Actions = ({ id, slug }: { id: number; slug: string } ) => {
 					Edit
 				</Button>
 			</Link>
+			<Link href={`/chapter/${slug}`}>
+				<Button className="flex gap-2 items-center" variant="outline">
+					<Pencil1Icon />
+					View
+				</Button>
+			</Link>
 		</div>
 	);
 };
