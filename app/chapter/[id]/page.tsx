@@ -10,6 +10,7 @@ import supabase from "@/utils/supabase/supabase";
 import { IAuthor } from "@/lib/types";
 import "react-quill/dist/quill.snow.css";
 import Navbar from "@/app/navbar/navbar";
+import "react-quill/dist/quill.bubble.css";
 
 export async function generateStaticParams() {
   const { data: chapters, error } = await supabase

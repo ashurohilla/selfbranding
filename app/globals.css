@@ -71,15 +71,19 @@
 
 } */
 
-pre{
-	overflow: auto;
+pre {
+  overflow: auto;
   border-radius: 20px;
   border-color: black;
   border-width: 2px;
-  height: 550px;
+  border-style: solid; /* Added to ensure border is visible */
+  max-height: 550px; /* Maximum height */
+  min-height: 50px;  /* Minimum height to avoid collapsing completely */
   overflow-y: auto;
   font-size: 16px;
+  padding: 10px; /* Added for better content spacing */
 }
+
 img{
   background: cover;
 }
@@ -113,9 +117,29 @@ p{
  font-weight: bold;
 }
 .ql-size-huge{
-  font-size: 30px;
+  font-size: 50px;
   font-weight: bold;
 
+}
+
+
+.contentclass ol,
+.contentclass ul {
+  margin-left: 20px; /* Indent lists */
+  padding-left: 20px; /* Add padding to lists */
+}
+
+.contentclass li {
+  margin-bottom: 5px; /* Space between list items */
+}
+
+.contentclass {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+li {
+  font-size:large;
 }
 @media (max-width: 568px) {
   p {
@@ -139,7 +163,6 @@ p{
     border-radius: 20px;
     border-color: black;
     border-width: 2px;
-    height: 400px;
     overflow-y: auto;
     font-size: 14px;
   }

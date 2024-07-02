@@ -17,8 +17,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
 import CopyButton from "@/components/markdown/CopyButton";
 import dynamic from 'next/dynamic'
-import "react-quill/dist/quill.snow.css"
-import "highlight.js/styles/atom-one-dark.min.css";
+// import "react-quill/dist/quill.snow.css"
+  import "highlight.js/styles/atom-one-dark.min.css";
 
 const Coments = dynamic(() => import('./coments'), { ssr: false })
 import {
@@ -263,7 +263,7 @@ export default function Content({ chapter, author }: Props) {
           />
         </div>
         <div
-          className=" mb-[20px] contentclass"
+          className=" mb-[20px] pt-10 contentclass"
           dangerouslySetInnerHTML={{ __html: chapter?.content || "" }}
         />
       </div>
