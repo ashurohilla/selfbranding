@@ -50,10 +50,10 @@
     --ring: 224.3 76.3% 48%;
   }
 }
-.contentclass:img{
+/* .contentclass:img{
   border-radius: 50%;
   width: 50%;
-}
+} */
 
 /* pre{
   margin-top: 10px;
@@ -71,32 +71,32 @@
 
 } */
 
-pre {
+/* pre {
   overflow: auto;
   border-radius: 20px;
   border-color: black;
   border-width: 2px;
-  border-style: solid; /* Added to ensure border is visible */
-  max-height: 550px; /* Maximum height */
-  min-height: 50px;  /* Minimum height to avoid collapsing completely */
+  border-style: solid; 
+  max-height: 550px;
+  min-height: 50px; 
   overflow-y: auto;
   font-size: 16px;
-  padding: 10px; /* Added for better content spacing */
-}
+  padding: 10px; 
+} */
 
-img{
+/* img{
   background: cover;
 }
 iframe{
   display: flex;
   width: 780px;
   height: 450px;
-}
+} */
 
 
 
 
-.ql-syntax{
+/* .ql-syntax{
   padding: 20px;
 }
 
@@ -120,19 +120,19 @@ p{
   font-size: 50px;
   font-weight: bold;
 
-}
+} */
 
-
+/* 
 .contentclass ol,
 .contentclass ul {
-  margin-left: 20px; /* Indent lists */
-  padding-left: 20px; /* Add padding to lists */
+  margin-left: 20px; 
+  padding-left: 20px; 
 }
 
 .contentclass li {
-  margin-bottom: 5px; /* Space between list items */
-}
-
+  margin-bottom: 5px; 
+} */
+/* 
 .contentclass {
   font-size: 20px;
   margin-bottom: 20px;
@@ -140,12 +140,11 @@ p{
 
 li {
   font-size:large;
-}
-@media (max-width: 568px) {
+} */
+/* @media (max-width: 568px) {
   p {
     
-    font-size: 16px; /* Adjust font size for smaller screens */
-    font-family: "Lat", serif;
+    font-size: 16px; 
     font-weight:200;
     font-style:small; 
   }
@@ -157,8 +156,8 @@ li {
   .ql-size-large{
     font-size: 20px;
     font-weight: bold;
-   }
-   pre{
+   } */
+   /* pre{
     overflow: auto;
     border-radius: 20px;
     border-color: black;
@@ -171,5 +170,5 @@ li {
     width: 365px;
     height: 250px;
   }
-}
+} */
 

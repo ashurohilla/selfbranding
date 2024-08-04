@@ -2,9 +2,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/store/user";
-import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
-import dynamic from "next/dynamic";
 import { BsGithub } from "react-icons/bs";
 import { BsInstagram } from "react-icons/bs";
 import { PiLinkedinLogo } from "react-icons/pi";
@@ -14,9 +11,9 @@ import { PlayCircle, Speaker, TwitterIcon } from "lucide-react";
 import { IoShare } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
-import hljs from 'highlight.js';
+import NiwiTextEditor from "./niwi-text-editor/niwi-text-editor";
 // import 'highlight.js/styles/github.css'; // or any other style you prefer
-import "highlight.js/styles/atom-one-dark.min.css";
+import NiwiInitializeHtmlPlugin from "./niwi-text-editor/plugins/NiwiInitializeHtmlPlugin/NiwiInitializeHtmlPlugin";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -36,8 +33,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import MarkdownPreview from "@/components/markdown/MarkdownPreview";
-import Image from "next/image";
+ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import slugify from "slugify";
 import {
@@ -48,33 +44,11 @@ import {
 } from "@radix-ui/react-icons";
 import { ReactNode, useRef, useTransition } from "react";
 import { IBlogDetial, IBlogForm } from "@/lib/types";
-import { Switch } from "@/components/ui/switch";
 import { BsSave } from "react-icons/bs";
 import { BlogFormSchemaType } from "../schema";
 import Link from "next/link";
 import logo from "../../../image.png"
-import ReactQuill from "react-quill";
 
-interface CustomQuillProps extends ReactQuill.ReactQuillProps {
-    hookRef: (ref: ReactQuill | null) => void; 
-  }
-  const MyReactQuill = dynamic(
-    async () => {
-      // @ts-ignore
-      window.hljs = hljs;
-      const { default: RQ } = await import("react-quill");
-  
-      return function ReactQuillHoc(props: CustomQuillProps) {
-        const { hookRef, ...rest } = props;
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        return <RQ ref={hookRef} {...{ ...rest }} />;
-      };
-    },
-    {
-      ssr: false,
-      //  loading: () => <div>hi</div>
-    }
-  );
 
 export default function BlogForm({
   onHandleSubmit,
@@ -86,7 +60,7 @@ export default function BlogForm({
   const [isPending, startTransition] = useTransition();
   const [isPreview, setPreview] = useState(false);
   const user = useUser((state) => state.user);
-  // const [content, setContent] = useState<string>('');
+  const [editorResetKey, setEditorResetKey] = useState(0);
 
   const form = useForm<BlogFormSchemaType>({
     mode: "all",
@@ -112,6 +86,12 @@ export default function BlogForm({
     });
   };
 
+
+  const onChangeValue = (value: string) => {
+    form.setValue("content", value);
+  };
+
+
   useEffect(() => {
     if (form.getValues().title && user?.id) {
       const slug = slugify(form.getValues().title, { lower: true }) + user?.id;
@@ -126,35 +106,7 @@ export default function BlogForm({
     }
   }, [form.getValues().title, user?.id]);
 
-  const toolbarOptions = [
-    ["bold", "italic", "underline", "strike"], // toggled buttons
-    ["blockquote", "code-block"],
-    ["link", "image", "video", "formula"],
 
-    [{ header: 1 }, { header: 2 }], // custom button values
-    [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-    [{ script: "sub" }, { script: "super" }], // superscript/subscript
-    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-    [{ direction: "rtl" }], // text direction
-
-    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-    [{ font: [] }],
-    [{ align: [] }],
-
-    ["clean"], // remove formatting button
-  ];
-  const modules = {
-    syntax: true,
-    // Equivalent to { toolbar: { container: '#toolbar' }}
-    toolbar: toolbarOptions,
-  };
-  useEffect(() => {
-    // Initialize highlight.js
-    hljs.initHighlightingOnLoad();
-  }, []);
 
   return (
     <Form {...form}>
@@ -199,9 +151,6 @@ export default function BlogForm({
             Save
           </button>
         </div>
-
-
-
         {!isPreview ? (
           <div className="mx-[300px]">
             <FormField
@@ -256,20 +205,14 @@ export default function BlogForm({
             />
             <div className=" p-2 gap-2">
               <div className=" contentclass">
-              <MyReactQuill
-               hookRef={(ref) => console.log(ref)} theme="bubble" 
-                value={form.getValues().content}
-                modules={modules}
-                placeholder="Blog content"
-           onChange={(value : '') => form.setValue("content", value)} />
-                {/* <ReactQuill
-                  theme="bubble"
-                  value={form.getValues().content}
-                  onChange={(value) => form.setValue("content", value)}
-                  modules={modules}
-                  placeholder="Blog content"
-                  className="my-custom-class"
-                /> */}
+
+
+
+              <NiwiTextEditor
+       onChangeValue={onChangeValue} key={editorResetKey}
+        
+
+      />
               </div>
             </div>
           </div>
@@ -345,7 +288,6 @@ export default function BlogForm({
                     <button className="hello"
       >
         <span className="material-icons">
-          {/* <PlayCircle onClick="pass" /> */}
         </span>
       </button>
       
@@ -465,12 +407,10 @@ export default function BlogForm({
                   sizes="(max-width: 300px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
-              <div
-  className="font-[20px]  mb-[20px] contentclass"
-  dangerouslySetInnerHTML={{
-    __html: form.getValues().content || "",
-  }}
-/>
+
+              {!form.getValues().content && (
+            <NiwiInitializeHtmlPlugin contentJson={form.getValues().content} />
+          )}
             </div>
           </div>
           </div>

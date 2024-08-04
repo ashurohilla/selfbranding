@@ -3,9 +3,6 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { IBlog, IModule } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
 import { BlogFormSchema, BlogFormSchemaType, Chapterformschematype } from "../../app/dashboard/blog/schema";
-import { contents } from "cheerio/lib/api/traversing";
-import { SiNginx } from "react-icons/si";
-
 const DASHBOARD = "/dashboard/blog";
 
 export async function createBlog(data: {
@@ -217,6 +214,12 @@ export async function readBlogDeatailById(id : string) {
 		.select("*")
 		.eq("slug", id)
 		.single();
+}
+
+
+export async function getallimages() {
+	const supabase = await createSupabaseServerClient();
+	return await supabase.storage.from("images").list('images');
 }
 
 export async function readBlogContent(blogId: string) {

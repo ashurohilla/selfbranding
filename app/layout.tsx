@@ -1,9 +1,22 @@
-import { GeistSans } from 'geist/font/sans'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import Sessioprovider from '@/components/session-provider'
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react"
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-code.css"
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-embedded.css";
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-emoji.css";
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-image.css";
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-line-break.css";
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-splash-image.css";
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-tool.css";
+import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor.css";
+import "../components/styles/niwi-blog.css"
+import "../components/styles/niwi.css"
+
+
+import ReactQueryProvider from './dashboard/blog/components/query-client-provider/query-client-provider';
+
 import { SpeedInsights } from "@vercel/speed-insights/next"
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -39,12 +52,15 @@ export default function RootLayout({
 
       </head>
       <body>
+        <ReactQueryProvider>
         <ThemeProvider
             attribute="class"
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
+
+          
             <main className='w-full mx-4'>
               <Analytics/>
               <SpeedInsights/>
@@ -53,6 +69,7 @@ export default function RootLayout({
           </ThemeProvider>
           <Toaster />
           <Sessioprovider/>
+          </ReactQueryProvider>
       </body>
     </html>
   )

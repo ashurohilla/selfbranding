@@ -1,5 +1,4 @@
 "use client";
-import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { createBrowserClient } from "@supabase/ssr";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -15,7 +14,6 @@ import { PlayCircle, Speaker, TwitterIcon } from "lucide-react";
 import { IoShare } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
-import CopyButton from "@/components/markdown/CopyButton";
 import dynamic from 'next/dynamic'
 // import "react-quill/dist/quill.snow.css"
   import "highlight.js/styles/atom-one-dark.min.css";
@@ -40,20 +38,20 @@ export default function Content({ chapter, author }: Props) {
   const blogUrl = `https://${SITE_URL}/chapter/${chapter?.slug}`;
   const [isSpeaking, setIsSpeaking] = useState(false); // Track if speaking is active
 
-  const handleSpeak = () => {
-    if (isSpeaking) {
-      // If already speaking, stop speaking
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    } else {
-      const speech = new SpeechSynthesisUtterance(chapter?.content || " ");
-      const voices = window.speechSynthesis.getVoices();
-      console.log(voices)
-      speech.voice = voices[5]; // Change this to the desired voice
-      window.speechSynthesis.speak(speech);
-      setIsSpeaking(true);
-    }
-  };
+  // const handleSpeak = () => {
+  //   if (isSpeaking) {
+  //     // If already speaking, stop speaking
+  //     window.speechSynthesis.cancel();
+  //     setIsSpeaking(false);
+  //   } else {
+  //     const speech = new SpeechSynthesisUtterance(chapter?.content || " ");
+  //     const voices = window.speechSynthesis.getVoices();
+  //     console.log(voices)
+  //     speech.voice = voices[5]; // Change this to the desired voice
+  //     window.speechSynthesis.speak(speech);
+  //     setIsSpeaking(true);
+  //   }
+  // };
 
 
 
@@ -136,7 +134,7 @@ export default function Content({ chapter, author }: Props) {
               </div>
               <div className="flex items-center space-x-4">
               <button
-  onClick={handleSpeak}
+  // onClick={handleSpeak}
   className={`text-gray-600 rounded-full hover:text-gray-800 transition animate-pulse ${
     isSpeaking ? 'bg-orange-500' : ''
   }`}
@@ -167,7 +165,7 @@ export default function Content({ chapter, author }: Props) {
                           <span className="flex ml-2 pt-1 ">Copy link</span>
                           <span className="ml-1">
                             {" "}
-                            <CopyButton id={blogUrl} />
+                            {/* <CopyButton id={blogUrl} /> */}
                           </span>
                         </button>
 

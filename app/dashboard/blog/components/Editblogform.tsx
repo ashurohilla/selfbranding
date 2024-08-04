@@ -37,8 +37,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import slugify from "slugify";

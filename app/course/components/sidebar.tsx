@@ -57,13 +57,13 @@ function Sidebar({ modules, onChapterClick }: SidebarProps) {
   <AccordionItem value="item-1">
     <AccordionTrigger className='w-[400px]'>{module.module_name}</AccordionTrigger>
 
-    {chapterData[module.slug] && chapterData[module.slug].map((chapter, idx) => (
-         <AccordionContent key={idx}>
-                <button onClick={() => onChapterClick(chapter.slug)}>
-                    {chapter.chapter_name}
-                  </button>
-         </AccordionContent>  
-                            ))}
+    {chapterData[module.slug] && chapterData[module.slug]!.map((chapter, idx) => (
+  <AccordionContent key={idx}>
+    <button onClick={() => onChapterClick(chapter.slug)}>
+      {chapter.chapter_name}
+    </button>
+  </AccordionContent>
+))}
    
   </AccordionItem>
 </Accordion>
