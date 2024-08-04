@@ -2,18 +2,15 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/store/user";
-import { BsGithub } from "react-icons/bs";
-import { BsInstagram } from "react-icons/bs";
+import { BsGithub, BsInstagram, BsTwitter, BsSave, BsThreeDotsVertical } from "react-icons/bs";
 import { PiLinkedinLogo } from "react-icons/pi";
-import { BsTwitter } from "react-icons/bs";
 import { AiOutlineComment } from "react-icons/ai";
 import { PlayCircle, Speaker, TwitterIcon } from "lucide-react";
 import { IoShare } from "react-icons/io5";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
 import NiwiTextEditor from "./niwi-text-editor/niwi-text-editor";
-// import 'highlight.js/styles/github.css'; // or any other style you prefer
-import NiwiInitializeHtmlPlugin from "./niwi-text-editor/plugins/NiwiInitializeHtmlPlugin/NiwiInitializeHtmlPlugin";
+import NiwiHtmlView from "@/app/(home)/blog/[id]/components/niwi-html-view";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -33,22 +30,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
- import Image from "next/image";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import slugify from "slugify";
-import {
-  EyeOpenIcon,
-  Pencil1Icon,
-  RocketIcon,
-  StarIcon,
-} from "@radix-ui/react-icons";
+import { EyeOpenIcon, Pencil1Icon, RocketIcon, StarIcon } from "@radix-ui/react-icons";
 import { ReactNode, useRef, useTransition } from "react";
 import { IBlogDetial, IBlogForm } from "@/lib/types";
-import { BsSave } from "react-icons/bs";
 import { BlogFormSchemaType } from "../schema";
 import Link from "next/link";
-import logo from "../../../image.png"
-
+import logo from "../../../image.png";
 
 export default function BlogForm({
   onHandleSubmit,
@@ -86,11 +76,9 @@ export default function BlogForm({
     });
   };
 
-
   const onChangeValue = (value: string) => {
     form.setValue("content", value);
   };
-
 
   useEffect(() => {
     if (form.getValues().title && user?.id) {
@@ -106,15 +94,11 @@ export default function BlogForm({
     }
   }, [form.getValues().title, user?.id]);
 
-
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full pt-[50px] border pb-5 rounded-md"
-      >
-        <div className="border-b p-5 flex items-center sm:justify-between flex-wrap  gap-2">
+    
+      
+        <div className="border-b p-5 flex items-center sm:justify-between flex-wrap gap-2">
           <div className="flex items-center flex-wrap gap-5">
             <span
               onClick={() => {
@@ -138,18 +122,22 @@ export default function BlogForm({
             </span>
           </div>
 
-          <button
+          <Button
+            variant="outline"
+            onClick={form.handleSubmit(onSubmit)}
+            
             type="submit"
             role="button"
             className={cn(
-              "flex gap-2 text-white items-center border px-3 py-2 rounded-md border-green-500 disabled:border-gray-800  bg-zinc-800 transition-all group text-sm disabled:bg-gray-900",
+              "flex gap-2 text-white items-center border px-3 py-2 rounded-md border-green-500 disabled:border-gray-800 bg-zinc-800 transition-all group text-sm disabled:bg-gray-900",
               { "animate-spin": isPending }
             )}
             disabled={!form.formState.isValid}
           >
-            <BsSave className="animate-bounce group-disabled:animate-none" />
+            <BsSave
+             className="animate-bounce group-disabled:animate-none" />
             Save
-          </button>
+          </Button>
         </div>
         {!isPreview ? (
           <div className="mx-[300px]">
@@ -159,22 +147,21 @@ export default function BlogForm({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="w-full  break-words p-2 gap-2">
+                    <div className="w-full break-words p-2 gap-2">
                       <Input
                         placeholder="Blog title"
                         {...field}
                         autoFocus
-                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full "
+                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full"
                       />
                     </div>
                   </FormControl>
 
-                  {form.getFieldState("title").invalid &&
-                    form.getValues().title && (
-                      <div className="px-2">
-                        <FormMessage />
-                      </div>
-                    )}
+                  {form.getFieldState("title").invalid && form.getValues().title && (
+                    <div className="px-2">
+                      <FormMessage />
+                    </div>
+                  )}
                 </FormItem>
               )}
             />
@@ -182,40 +169,33 @@ export default function BlogForm({
             <FormField
               control={form.control}
               name="image"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <div className="w-full flex divide-x p-2 gap-2 items-center">
-                        <Input
-                          placeholder="🔗 Image url"
-                          {...field}
-                          className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full "
-                          type="url"
-                        />
-                      </div>
-                    </FormControl>
-
-                    <div className="px-3">
-                      <FormMessage />
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="w-full flex divide-x p-2 gap-2 items-center">
+                      <Input
+                        placeholder="🔗 Image url"
+                        {...field}
+                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full"
+                        type="url"
+                      />
                     </div>
-                  </FormItem>
-                );
-              }}
+                  </FormControl>
+
+                  <div className="px-3">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
             />
-            <div className=" p-2 gap-2">
-              <div className=" contentclass">
 
-
-
-              <NiwiTextEditor
-       onChangeValue={onChangeValue} key={editorResetKey}
-        
-
-      />
+            <div className="p-2 gap-2">
+              <div className="contentclass">
+                <NiwiTextEditor onChangeValue={onChangeValue} key={editorResetKey} />
               </div>
             </div>
           </div>
+          
         ) : (
 
             <div className="">
@@ -268,31 +248,31 @@ export default function BlogForm({
       
                   <div className="flex items-center justify-between mb-4 pt-2">
                     <div className="flex items-center space-x-4">
-                      <button
+                      <Button
+                               variant="outline"
+
                         className="ml-[60px] flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition"
                       >
                         <span>
                           <AiOutlineComment />{" "}
                         </span>
-                      </button>
-      
-      
-      
-      
-      
-      
-      
+                      </Button>
       
                     </div>
                     <div className="flex items-center space-x-4">
-                    <button className="hello"
+                    <Button
+                             variant="outline"
+                    className="hello"
       >
         <span className="material-icons">
         </span>
-      </button>
+      </Button>
       
       
-                      <button className="text-gray-600 font-medium text-xl hover:text-gray-800 transition">
+                      <Button
+                               variant="outline"
+                                className="text-gray-600 font-medium text-xl hover:text-gray-800 transition">
+                        
                         <DropdownMenu>
                           <DropdownMenuTrigger>
                             {" "}
@@ -305,7 +285,7 @@ export default function BlogForm({
       
       
       
-                              <button className="flex pl-3 px-2">
+                              <Button className="flex pl-3 px-2">
                                 <span className=" py-2">
                                   <Share1Icon />
                                 </span>
@@ -314,14 +294,14 @@ export default function BlogForm({
                                   {" "}
                                   {/* <CopyButton id={blogUrl} /> */}
                                 </span>
-                              </button>
+                              </Button>
       
       
       
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                              <button
+                              <Button
                   
                                 className="flex px-2 py-2 "
                               >
@@ -329,13 +309,14 @@ export default function BlogForm({
                                   <TwitterIcon />
                                 </span>
                                 <span className="flex ml-2  "> Share on twiter</span>
-                              </button>
+                              </Button>
       
       
       
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <button
+                              <Button
+                                       variant="outline"
                          
                                 className="flex px-2 py-2 "
                               >
@@ -343,7 +324,7 @@ export default function BlogForm({
                                   <BsInstagram />{" "}
                                 </span>
                                 <span className="flex ml-2  "> Share on threads</span>
-                              </button>
+                              </Button>
       
       
       
@@ -351,7 +332,8 @@ export default function BlogForm({
                             <DropdownMenuItem>
       
       
-                              <button
+                              <Button
+                                       variant="outline"
                              
                                 className="flex px-2 py-2 "
                               >
@@ -359,14 +341,14 @@ export default function BlogForm({
                                   <PiLinkedinLogo />{" "}
                                 </span>
                                 <span className="flex ml-2  ">Share on Linkdin</span>
-                              </button>
+                              </Button>
       
       
       
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
-                      </button>
+                      </Button>
       
                    <DropdownMenu>
                           <DropdownMenuTrigger>
@@ -408,14 +390,13 @@ export default function BlogForm({
                 />
               </div>
 
-              {!form.getValues().content && (
-            <NiwiInitializeHtmlPlugin contentJson={form.getValues().content} />
+              {form.getValues().content && (
+              <NiwiHtmlView htmlText={form.getValues().content || ""} />
           )}
             </div>
           </div>
           </div>
         )}
-      </form>
     </Form>
   );
 }

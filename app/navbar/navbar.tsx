@@ -35,7 +35,7 @@ navbar() {
       <div className=" w-full px-4 md:text-xl text-lg flex justify-between items-center">
         <div className="flex">
        
-          <Link className="flex md:text-2xl  text-sm text-[#c5aa6a]" href="/">
+          {/* <Link className="flex md:text-2xl  text-sm text-[#c5aa6a]" href="/"> */}
           <Image
          src={logo}
          alt="logo"
@@ -45,7 +45,7 @@ navbar() {
          >
 
          </Image>
-          </Link>
+          {/* </Link> */}
           <ul className="ml-10 flex md:mx-4 mx-2">
           <Link className="flex" href="/courses">
           <li className="md:mx-6 mx-1 md:text-2xl pt-2 font-bold  text-sm text-black ">courses</li>
