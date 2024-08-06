@@ -67,6 +67,21 @@ export async function savepdf(pdfFile: File) {
     return filedata;
 }
 
+
+export async function listallimages() {
+	const supabase = await createSupabaseServerClient();
+	const { data, error } = await supabase.storage
+    .from('images')
+    .list('uploads', { limit: 100, offset: 0, sortBy: { column: 'name', order: 'asc' } });
+
+  if (error) {
+    console.error('Error fetching images:', error);
+    return [];
+  }
+
+  return data;
+}
+
 export async function createModule(data: {
 	created_at?: string;
 	module_name: string;
@@ -215,6 +230,15 @@ export async function readBlogDeatailById(id : string) {
 		.eq("slug", id)
 		.single();
 }
+export async function readchapterdetailsbyid(id : string) {
+	const supabase = await createSupabaseServerClient();
+	return await supabase
+		.from("chapters")
+		.select("*")
+		.eq("slug", id)
+		.single();
+}
+
 
 
 export async function getallimages() {
@@ -222,15 +246,15 @@ export async function getallimages() {
 	return await supabase.storage.from("images").list('images');
 }
 
-export async function readBlogContent(blogId: string) {
-	unstable_noStore();
-	const supabase = await createSupabaseServerClient();
-	return await supabase
-		.from("blog_content")
-		.select("content")
-		.eq("blog_id", blogId)
-		.single();
-}
+// export async function readBlogContent(blogId: string) {
+// 	unstable_noStore();
+// 	const supabase = await createSupabaseServerClient();
+// 	return await supabase
+// 		.from("blog_content")
+// 		.select("content")
+// 		.eq("blog_id", blogId)
+// 		.single();
+// }
 
 export async function updateBlogById(blogId: string, data: IBlog) {
 	const supabase = await createSupabaseServerClient();
@@ -256,16 +280,23 @@ export async function updateBlogDetail(
 	}
 }
 
+
+
+
 export async function updatechapter(
-	id: string,
+	id: number,
 	data: Chapterformschematype
 ) {
 	const supabase = await createSupabaseServerClient();
 	const resultchapter = await supabase
-		.from("chapter")
+		.from("chapters")
 		.update(data)
 		.eq("id", id);
+		console.log(data);
+
+	
 	if (resultchapter) {
+		console.log(resultchapter);
 		return (resultchapter);
 	} else {
 		revalidatePath(DASHBOARD);

@@ -14,16 +14,21 @@ import ModuleTable from "../../compoennts/NewModuleTable";
         <div className="w-full pt-[90px] mx-auto min-h-screen space-y-10">
             <div>
       <div className="flex">
-        <p className="text-4xl ">
+     <div>
+     <p className="text-4xl  ">
           You are building {course?.Name} course
-          <p className="text-xl  flex  font-medium  dark:text-gray-400">
+        
+        </p>
+        <p className="text-ss  pt-4  font-medium  dark:text-gray-400">
             {course?.Description}
           </p>
-        </p>
+     </div>
 
-        <p className="text-xl ml-[600px] font-medium  dark:text-gray-400">
+    <div className="absolute">
+    <p className="text-xl ml-[600px] font-medium mr-4  dark:text-gray-400">
           {new Date(course?.created_at!).toDateString()}
         </p>
+    </div>
       </div>
         <div className="border-2 rounded-md  border-black">
           <ModuleTable id={course.slug}/>

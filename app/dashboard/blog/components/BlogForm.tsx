@@ -11,6 +11,7 @@ import { Share1Icon } from "@radix-ui/react-icons";
 import NiwiTextEditor from "./niwi-text-editor/niwi-text-editor";
 import NiwiHtmlView from "@/app/(home)/blog/[id]/components/niwi-html-view";
 import { Button } from "@/components/ui/button";
+import {useCallback} from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -76,9 +77,17 @@ export default function BlogForm({
     });
   };
 
-  const onChangeValue = (value: string) => {
-    form.setValue("content", value);
-  };
+  // const onChangeValue = (value: string) => {
+  //   form.setValue("content", value);
+  // };
+
+  const onChangeValue = useCallback(
+    (html: string, json: string, text: string) => {
+      form.setValue("content", html);
+      form.setValue("meta_description", json);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (form.getValues().title && user?.id) {
@@ -87,7 +96,6 @@ export default function BlogForm({
       const meta_description = form.getValues().content;
       form.setValue("slug", slug);
       form.setValue("meta_title", meta_title);
-      form.setValue("meta_description", meta_description);
       console.log(slug);
       form.setValue("author", user?.id);
       form.setValue("created_at", new Date().toISOString().slice(0, 16));

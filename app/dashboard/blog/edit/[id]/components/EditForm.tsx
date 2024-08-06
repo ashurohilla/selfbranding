@@ -36,5 +36,5 @@ export default function EditForm({ blog }: { blog: IBlogDetial }) {
 		}
 	};
 
-	return <Editblogform onblogsubmit={onblogsubmit} defaultBlog={blog} />;
+	return  <Editblogform onblogsubmit={onblogsubmit} defaultBlog={blog} />;
 }

@@ -2,9 +2,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/store/user";
-import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
-import dynamic from "next/dynamic";
 import { BsGithub } from "react-icons/bs";
 import { BsInstagram } from "react-icons/bs";
 import { PiLinkedinLogo } from "react-icons/pi";
@@ -14,9 +11,8 @@ import { PlayCircle, Speaker, TwitterIcon } from "lucide-react";
 import { IoShare } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
-import hljs from 'highlight.js';
-// import 'highlight.js/styles/github.css'; // or any other style you prefer
-import "highlight.js/styles/atom-one-dark.min.css";
+import NiwiTextEditor from "../../blog/components/niwi-text-editor/niwi-text-editor";
+import { useCallback } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,10 +24,8 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -41,57 +35,28 @@ import slugify from "slugify";
 import {
   EyeOpenIcon,
   Pencil1Icon,
-  RocketIcon,
-  StarIcon,
 } from "@radix-ui/react-icons";
-import { ReactNode, useRef, useTransition } from "react";
-import { IchapterDetails, IBlogForm } from "@/lib/types";
-import { Switch } from "@/components/ui/switch";
+import { useTransition } from "react";
+import { IchapterDetails } from "@/lib/types";
 import { BsSave } from "react-icons/bs";
 import { Chapterformschematype } from "../../blog/schema";
 import Link from "next/link";
 import logo from "../../../image.png"
-import ReactQuill from "react-quill";
 import { Catagories, IModule } from "@/lib/types";
 import { readCatogries , readmodulescourse } from "@/lib/actions/blog";
 import { Button } from "@/components/ui/button";
 
 
-interface CustomQuillProps extends ReactQuill.ReactQuillProps {
-    hookRef: (ref: ReactQuill | null) => void; 
-  }
-  const MyReactQuill = dynamic(
-    async () => {
-      // @ts-ignore
-      window.hljs = hljs;
-      const { default: RQ } = await import("react-quill");
-  
-      return function ReactQuillHoc(props: CustomQuillProps) {
-        const { hookRef, ...rest } = props;
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        return <RQ ref={hookRef} {...{ ...rest }} />;
-      };
-    },
-    {
-      ssr: false,
-      //  loading: () => <div>hi</div>
-    }
-  );
-
 export default function Editchapterform({
-  id,
-  onHandleSubmit,
+  onchaptersubmit,
   defaultlesson,
 }: {
-  id: string;
   defaultlesson: IchapterDetails;
-  onHandleSubmit: (data: Chapterformschematype) => void;
+  onchaptersubmit: (data: Chapterformschematype) => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isPreview, setPreview] = useState(false);
   const [categories, setCategories] = useState<Catagories[]>([]);
-  const [modulescourse, setModulecourse] = useState<IModule>();
-
 
   const user = useUser((state) => state.user);
   // const [content, setContent] = useState<string>('');
@@ -114,16 +79,12 @@ export default function Editchapterform({
   });
 
   const onSubmit = (data: Chapterformschematype) => {
-    console.log(data);
-    console.log("button pressed");
-    startTransition(() => {
-      onHandleSubmit(data);
-    });
+    onchaptersubmit(data);
   };
   useEffect(() => {
     // Fetch categories from Supabase backend
     fetchCategories();
-    fetchmodulecourse();
+    // fetchmodulecourse();
   }, []);
 
   const fetchCategories = async () => {
@@ -137,67 +98,24 @@ export default function Editchapterform({
   };
 };
 
-const fetchmodulecourse = async () => {
-  try {
-    const { data: modulescourse } = await readmodulescourse(id);
-    if (modulescourse) {
-      setModulecourse(modulescourse);
-    } } 
-    catch (error) {
-      console.log(error);
-};
-};
-console.log(modulescourse);
-
   useEffect(() => {
   if (form.getValues().chapter_name && user?.id) {
       const slug = slugify(form.getValues().chapter_name, { lower: true }) + user?.id;
-      const course_id = modulescourse?.course_id || "";
       form.setValue("slug", slug);
       form.setValue("instructor", user?.id);
       form.setValue("created_at", new Date().toISOString().slice(0, 16));
-      form.setValue("module_id", id );
-      form.setValue("course_id",  course_id )
-
     }
   }, [form.getValues().chapter_name, user?.id]);
 
-  const toolbarOptions = [
-    ["bold", "italic", "underline", "strike"], // toggled buttons
-    ["blockquote", "code-block"],
-    ["link", "image", "video", "formula"],
-
-    [{ header: 1 }, { header: 2 }], // custom button values
-    [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-    [{ script: "sub" }, { script: "super" }], // superscript/subscript
-    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-    [{ direction: "rtl" }], // text direction
-
-    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-    [{ font: [] }],
-    [{ align: [] }],
-
-    ["clean"], // remove formatting button
-  ];
-  const modules = {
-    syntax: true,
-    // Equivalent to { toolbar: { container: '#toolbar' }}
-    toolbar: toolbarOptions,
-  };
-  useEffect(() => {
-    // Initialize highlight.js
-    hljs.initHighlightingOnLoad();
-  }, []);
-
+  const onChangeValue = useCallback(
+    (html: string, json: string, text: string) => {
+      form.setValue("content", html);
+      form.setValue("description", json);
+    },
+    [],
+  );
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full pt-[50px] border pb-5 rounded-md"
-      >
         <div className="border-b p-5 flex items-center sm:justify-between flex-wrap  gap-2">
           <div className="flex items-center flex-wrap gap-5">
             <span
@@ -224,6 +142,7 @@ console.log(modulescourse);
 
           <Button
             type="submit"
+            onClick={form.handleSubmit(onSubmit)}
             role="button"
             className={cn(
               "flex gap-2 text-white items-center border px-3 py-2 rounded-md border-green-500 disabled:border-gray-800  bg-zinc-800 transition-all group text-sm disabled:bg-gray-900",
@@ -235,9 +154,6 @@ console.log(modulescourse);
             Save
           </Button>
         </div>
-
-
-
         {!isPreview ? (
           <div className="mx-[300px]">
             <FormField
@@ -291,32 +207,6 @@ console.log(modulescourse);
               }}
             />
 
-
-<FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="w-full  break-words p-2 gap-2">
-                      <Input
-                        placeholder="chapter description "
-                        {...field}
-                        autoFocus
-                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full "
-                      />
-                    </div>
-                  </FormControl>
-
-                  {form.getFieldState("description").invalid &&
-                    form.getValues().description && (
-                      <div className="px-2">
-                        <FormMessage />
-                      </div>
-                    )}
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="chapterno"
@@ -377,47 +267,16 @@ console.log(modulescourse);
     </FormItem>
   )}
 />
-            {/* <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <div className="w-full flex divide-x p-2 gap-2 items-center">
-                        <Input
-                          placeholder="🔗 Image url"
-                          {...field}
-                          className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full "
-                          type="url"
-                        />
-                      </div>
-                    </FormControl>
-
-                    <div className="px-3">
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                );
-              }}
-            /> */}
             <div className=" p-2 gap-2">
-              <div className=" contentclass">
-              <MyReactQuill
-               hookRef={(ref) => console.log(ref)} theme="bubble" 
-                value={form.getValues().content}
-                modules={modules}
-                placeholder="chapter content"
-           onChange={(value : '') => form.setValue("content", value)} />
-                {/* <ReactQuill
-                  theme="bubble"
-                  value={form.getValues().content}
-                  onChange={(value) => form.setValue("content", value)}
-                  modules={modules}
-                  placeholder="Blog content"
-                  className="my-custom-class"
-                /> */}
-              </div>
+
+            <div className=" contentclass">
+
+<NiwiTextEditor
+onChangeValue={onChangeValue}
+initializeData={form.getValues().description}
+/>
+</div>
+              
             </div>
           </div>
         ) : (
@@ -622,7 +481,6 @@ console.log(modulescourse);
           </div>
           </div>
         )}
-      </form>
     </Form>
   );
 }

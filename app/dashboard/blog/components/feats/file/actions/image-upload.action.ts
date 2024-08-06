@@ -1,5 +1,4 @@
 "use server";
-
 import {
   responseError,
   responseSuccess,
@@ -7,15 +6,12 @@ import {
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { imageUploadSchema } from "../validation/image-upload.validation";
-import supabase from "@/utils/supabase/supabase";
-
-// // Initialize Supabase client
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
-// const supabase = createClient(supabaseUrl, supabaseKey);
+import { createSupabaseServerClient } from "@/lib/supabase";
 
 export const onUploadImageAction = async (form: FormData) => {
   const image = form.get("image") as File | null;
+
+  console.log(image);
 
   if (!image) {
     throw new Error("No file uploaded");
@@ -40,6 +36,7 @@ export const onUploadImageAction = async (form: FormData) => {
   const fileBuffer = Buffer.from(await image.arrayBuffer());
 
   // Upload the image to Supabase Storage
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.storage
     .from('images')
     .upload(`uploads/${imageName}`, fileBuffer, {
@@ -47,7 +44,7 @@ export const onUploadImageAction = async (form: FormData) => {
       upsert: false,
       contentType: image.type,
     });
-
+ 
   if (error) {
     return responseError("Failed to upload image to Supabase");
   }

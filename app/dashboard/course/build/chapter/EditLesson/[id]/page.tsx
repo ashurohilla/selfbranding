@@ -1,11 +1,11 @@
-"use client"
+import React from "react";
+import Updatechapterform from "../ChapterEditform";
 
-import React from 'react'
+import { IchapterDetails } from "@/lib/types";
+import { readchapterdetailsbyid } from "@/lib/actions/blog";
 
-function page() {
-  return (
-    <div>page</div>
-  )
+export default async function Edit({ params }: { params: { id: string } }) {
+	const { data: chapter } = await readchapterdetailsbyid(params.id);
+
+	return <Updatechapterform chapter={chapter as IchapterDetails} />;
 }
-
-export default page
