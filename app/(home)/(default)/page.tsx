@@ -6,6 +6,7 @@ import Navbar from "../../navbar/navbar";
 import Hero from "../../../components/Hero";
 import { SITE_URL } from "@/app/config";
 import image from "../../../public/hardware.png"
+import { images } from "@/next.config";
 
 
 export async function generateMetadata() {
@@ -15,7 +16,7 @@ export async function generateMetadata() {
           title: "Hardware Garage",
           url: SITE_URL,
           siteName: "Hardware Garage",
-          image: {image},
+          images: [image],
           type: "website",
         },
         keywords: ["mechatronics", "arduino", "Raspberry pi"],
