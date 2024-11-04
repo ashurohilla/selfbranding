@@ -13,6 +13,7 @@ import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-tool.css
 import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor.css";
 import "../components/styles/niwi-blog.css"
 import "../components/styles/niwi.css"
+import image from "../public/hardware.png"
 
 
 import ReactQueryProvider from './dashboard/blog/components/query-client-provider/query-client-provider';
@@ -25,6 +26,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Hardware garage',
+  Image:  image,
   description: 'The fastest way to learn hardware and mechatronics',
 }
 
