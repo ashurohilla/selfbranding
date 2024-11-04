@@ -19,7 +19,7 @@ export async function generateMetadata() {
           images: [image],
           type: "website",
         },
-        keywords: ["mechatronics", "arduino", "Raspberry pi"],
+        keywords: ["mechatronics", "arduino", "Raspberry pi","Robotics"],
       };
     }
 
