@@ -4,6 +4,23 @@ import Image from "next/image";
 import { readBlog } from "@/lib/actions/blog";
 import Navbar from "../../navbar/navbar";
 import Hero from "../../../components/Hero";
+import { SITE_URL } from "@/app/config";
+import image from "../../../public/hardware.png"
+
+
+export async function generateMetadata() {
+      return {
+        title: "Hardware Garage",
+        openGraph: {
+          title: "Hardware Garage",
+          url: SITE_URL,
+          siteName: "Hardware Garage",
+          images: image,
+          type: "website",
+        },
+        keywords: ["mechatronics", "arduino", "Raspberry pi"],
+      };
+    }
 
 export default async function Home() {
 	let { data: blogs } = await readBlog();

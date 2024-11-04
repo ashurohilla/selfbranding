@@ -19,6 +19,8 @@ import image from "../public/hardware.png"
 import ReactQueryProvider from './dashboard/blog/components/query-client-provider/query-client-provider';
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { images } from '@/next.config';
+
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : 'http://localhost:3000'
@@ -26,7 +28,6 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Hardware garage',
-  Image:  image,
   description: 'The fastest way to learn hardware and mechatronics',
 }
 
