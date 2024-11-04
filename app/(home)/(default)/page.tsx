@@ -15,7 +15,7 @@ export async function generateMetadata() {
           title: "Hardware Garage",
           url: SITE_URL,
           siteName: "Hardware Garage",
-          images: image,
+          image: {image},
           type: "website",
         },
         keywords: ["mechatronics", "arduino", "Raspberry pi"],
