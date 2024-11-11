@@ -16,7 +16,14 @@ module.exports = {
       },
     },
     extend: {
-      
+      fontFamily: {
+        gilroy: ['Gilroy', 'sans-serif'],
+        gilroy_bold: ['GilroyBold', 'sans-serif'],
+        gilroy_medium: ['GilroyMedium', 'sans-serif'],
+        gilroy_light: ['GilroyLight', 'sans-serif'],	
+        charter_regular:['CharterSerif',  ],
+        KievitSerif:['KievitSerif'],
+        },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

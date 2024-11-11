@@ -172,3 +172,34 @@ li {
   }
 } */
 
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./fonts/Gilroy-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'GilroyBold';
+  src: url('./fonts/Gilroy-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GilroyMedium';
+  src: url('./fonts/Gilroy-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GilroyLight';
+  src: url('./fonts/Gilroy-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'CharterSerif';
+  src: url('./fonts/CharterRegular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'KievitSerif';
+  src: url('./fonts/KievitSerif-Book.ttf') format('truetype');
+}
+

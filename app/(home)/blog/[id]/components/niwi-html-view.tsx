@@ -7,7 +7,7 @@ function NiwiHtmlView({ htmlText }: { htmlText: string }) {
   return (
     <div className="editor-container" ref={containerRef}>
       <div className="editor-inner">
-        <HtmlRenderer htmlString={htmlText} className="editor-input" />
+        <HtmlRenderer  htmlString={htmlText} className="font-charter_regular leading-relaxed editor-input" />
       </div>
     </div>
   );
