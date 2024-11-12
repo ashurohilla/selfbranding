@@ -75,7 +75,7 @@ export default function Content({ blog, author }: Props) {
     <div className="md:mx-2 mx-4 text-md md:text-xl bg-white  sm:mx-4 ">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
         <div className="sm:mx-2 mx-0 space-y-5">
-          <h1 className="md:text-6xl text-2xl font-bold dark:text-gray-200">
+          <h1 className="md:text-[40px] text-[20px]  font-gilroy_bold text-[#242424]">
             {blog?.title}
           </h1>
           <div className=" flex justify-between px-1 py-2 mx-0 sm:mx-2 font-lg">
@@ -94,7 +94,7 @@ export default function Content({ blog, author }: Props) {
                 <p className="text-lg font-medium  dark:text-gray-400">
                   {author?.Name}
                 </p>
-                <p className="text-sm   font-medium  dark:text-gray-400">
+                <p className="text-sm font-hevelticneu  text-[#6B6B6B]">
                   {new Date(blog?.created_at!).toDateString()}
                 </p>
               </div>

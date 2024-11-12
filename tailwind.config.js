@@ -23,6 +23,8 @@ module.exports = {
         gilroy_light: ['GilroyLight', 'sans-serif'],	
         charter_regular:['CharterSerif',  ],
         KievitSerif:['KievitSerif'],
+        hevelticneu:['hevelticneu', 'sans-serif',],
+        arial:['arial', 'san-serif'],
         },
       colors: {
         border: "hsl(var(--border))",

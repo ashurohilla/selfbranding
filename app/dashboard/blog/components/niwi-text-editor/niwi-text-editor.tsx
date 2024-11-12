@@ -90,7 +90,7 @@ function NiwiTextEditor({
         <NiwiFloatingToolBarPlugin />
         <NiwiFloatingLeftSidePlugin />
 
-        <div className="editor-inner">
+        <div className="editor-inner font-charter_regular leading-relaxed  text-[#242424] ">
           <RichTextPlugin
             placeholder={placeholder}
             contentEditable={contentEditable}

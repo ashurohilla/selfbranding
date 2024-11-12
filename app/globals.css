@@ -203,3 +203,15 @@ li {
   src: url('./fonts/KievitSerif-Book.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'hevelticneu';
+  src: url('./fonts/helvetica-neue-5/HelveticaNeueThin.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'arial';
+  src: url('./fonts/arial/ARIAL.TTF') format('truetype');
+}
+
+
+

@@ -21,7 +21,6 @@ export default async function Index() {
     }
   }
   const isSupabaseConnected = canInitSupabaseClient()
-
   return (
     <div>
      <Navbar/>
