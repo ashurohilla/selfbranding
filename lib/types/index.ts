@@ -43,6 +43,11 @@ export type IchapterDetails = {
 	slug: string 
 	pdffiles:string
 };
+export type IchapterModules = {
+	chapter_name: string | null
+	chapterno:string 
+	slug: string 
+	module_id: string};
 
 export type IModule = {
    id: number

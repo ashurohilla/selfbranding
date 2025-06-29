@@ -46,7 +46,6 @@ import { Catagories, IModule } from "@/lib/types";
 import { readCatogries , readmodulescourse } from "@/lib/actions/blog";
 import { Button } from "@/components/ui/button";
 
-
 export default function ChapterForm({
   id,
   onHandleSubmit,
@@ -73,7 +72,7 @@ export default function ChapterForm({
       content: defaultlesson?.content || "",
       course_id: defaultlesson?.course_id || "",
       created_at: defaultlesson?.created_at || "",
-      description: defaultlesson?.description || "",
+      description: defaultlesson?.content || "",
       instructor: defaultlesson?.instructor || "",
       module_id: defaultlesson?.module_id || "",
       chapterno: defaultlesson?.chapterno || "",
@@ -96,9 +95,7 @@ export default function ChapterForm({
 
   const onChangeValue = useCallback(
     (html: string, json: string, text: string) => {
-      form.setValue("content", html);
-      form.setValue("description", json);
-    },
+      form.setValue("content", html);    },
     [],
   );
 

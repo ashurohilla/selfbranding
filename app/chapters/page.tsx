@@ -30,14 +30,14 @@ export default async function page() {
 						key={index}
 					>
 						<div className="w-full h-72 sm:w-full  md:h-64 xl:h-96  relative">
-							{/* <Image
+							<Image
 								priority
-								src={blog.image}
+								src={chapter.image}
 								alt="cover"
 								fill
 								className=" rounded-md object-cover object-center"
 								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-							/> */}
+							/>
 						</div>
 						<div className="space-y-2">
 							<p className="text-sm dark:text-gray-400">

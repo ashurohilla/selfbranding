@@ -10,7 +10,7 @@ import { PlusIcon } from "@radix-ui/react-icons";
 
 
 interface Props {
-    id: string;
+    id: string[];
   }
   
 export default async function Modulechaptertable( {id}: Props) {

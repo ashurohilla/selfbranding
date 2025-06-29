@@ -10,10 +10,11 @@ import { PlusIcon } from "@radix-ui/react-icons";
 
 
 interface Props {
-    id: string;
+    id: any;
   }
   
 export default async function 
+
 ChapterTable( {id}: Props) {
 
     const { data: chapters } = await readchaptersbymodule(id);
@@ -41,9 +42,9 @@ ChapterTable( {id}: Props) {
 									<h1 className="dark:text-gray-200 col-span-2 font-lg font-medium">
 										{chapter.chapter_name}
 									</h1>
-                                    <h4 className="dark:text-gray-200 col-span-2 text-sm font-sm">
+                                    {/* <h4 className="dark:text-gray-200 col-span-2 text-sm font-sm">
 										{chapter.chapterno}
-									</h4>
+									</h4> */}
                                     </div>
 
 									<Actions id={chapter.id } slug={chapter.slug} />

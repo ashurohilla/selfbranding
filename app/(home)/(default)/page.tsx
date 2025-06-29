@@ -330,15 +330,15 @@ useEffect(() => {
         {selected === "about" && (
           <Card className="bg-yellow-900/10 border-yellow-700 max-w-xl mx-auto">
             <CardContent className="p-6">
-              <h2 className="text-xl mb-2">🧠 Who is Ashish?</h2>
-              <p>
+              <h2 className="text-xl  mb-2">🧠 Who is Ashish?</h2>
+              <p className="text-yellow-300">
                 A Code Jedi from India — fluent in JavaScript, C++, Python, and
                 GoLang. Tinkers with cloud systems (AWS, DevOps) and hardware
                 (Arduino, Teensy, Raspberry Pi). Loves turning silly ideas into
                 working droids.
               </p>
 
-              <div className="mt-6 space-y-2">
+              <div className="mt-6 space-y-2 text-yellow-300">
                 <div>
                   <label>JavaScript</label>
                   <div className="w-full h-2 bg-yellow-700 rounded-full">

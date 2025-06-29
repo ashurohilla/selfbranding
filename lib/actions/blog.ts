@@ -340,19 +340,28 @@ export async function deletechapterbyid(chapter_id: number) {
 
 
 export async function readmodulesbycourseId(courseId: string) {
-	await new Promise((resolve) => setTimeout(resolve, 2000));
+	await new Promise((resolve) => setTimeout(resolve, 1000));
 	const supabase = await createSupabaseServerClient();
 	return supabase.from("modules").select("*").eq("course_id", courseId).order("module_number", { ascending: true });
 
 }
-export async function readchaptersbymodule(courseId: string) {
-	await new Promise((resolve) => setTimeout(resolve, 2000));
+
+export async function readchaptersbymodule(module_id: string[]) {
 	const supabase = await createSupabaseServerClient();
-	return supabase.from("chapters").select("*").eq("module_id", courseId).order("chapterno", { ascending: true });
-
+	return supabase
+		.from("chapters")
+		.select("*")
+		.in("module_id", module_id)
+		.order("chapterno", { ascending: true });
 }
-
-
+export async function readchaptersbymodules(moduleIds: string[]) {
+	const supabase = await createSupabaseServerClient();
+	return supabase
+		.from("chapters")
+		.select("module_id, chapter_name, slug, id, chapterno")
+		.in("module_id", moduleIds)
+		.order("chapterno", { ascending: true });
+}
 export async function updatemodulebyid(id: number, data: IModule) {
 	await new Promise((resolve) => setTimeout(resolve, 2000));
 	const supabase = await createSupabaseServerClient();
