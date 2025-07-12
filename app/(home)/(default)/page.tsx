@@ -1,5 +1,5 @@
 "use client"
-import { Github, Mail, Phone, ExternalLink, MapPin, Calendar, Briefcase, GraduationCap, Code, Award, ShoppingBag, BookOpen, Menu, X, Linkedin } from 'lucide-react';
+import { Github, Mail, Phone, ExternalLink, MapPin, Calendar, Briefcase, GraduationCap, Code, Award, ShoppingBag, BookOpen, Menu, X, Linkedin, CarTaxiFront, ShoppingBagIcon } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -41,18 +41,21 @@ export default function Page() {
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-slate-200 pt-4">
-              <div className="flex flex-col space-y-4">
-                <a href="#products" className="text-slate-600 hover:text-blue-600 transition-colors">Products</a>
-                <Link href={"blogs"}>
-                <Button variant={"default"} className="text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-2">
+            <div className="md:hidden mt-4 pb-4 flex justify-end  border-t border-slate-200 pt-4">
+              <div className="grid grid-cols-1 grid-flow-row   space-y-4">
+                 <Link href={"products"}>
+                <Button variant={"outline"} className="text-slate-600 hover:text-blue-600 transition-colors flex justify-end gap-2">
+                  <  ShoppingBagIcon  className="w-4 h-4" />
+                  Products
+                </Button>
+                </Link>
+                <Link className='flex justify-end' href={"blogs"}>
+                <Button variant={"outline"} className="text-slate-600 hover:text-blue-600 transition-colors flex justify-end gap-2">
                   <BookOpen className="w-4 h-4" />
                   Blog
                 </Button>
                 </Link>
-                <a href="#contact" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center">
-                  Contact
-                </a>
+           
               </div>
             </div>
           )}

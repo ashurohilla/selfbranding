@@ -46,13 +46,13 @@ navbar() {
 
          </Image>
           {/* </Link> */}
-          <ul className="ml-10 flex md:mx-4 mx-2">
+          <ul className="ml-10 flex items-center md:mx-4 mx-2">
           <Link className="flex" href="/courses">
-          <li className="md:mx-6 mx-1 md:text-2xl pt-2 font-bold  text-sm text-black ">courses</li>
+          <li className="md:mx-6 mx-1 md:text-2xl pt-2  text-sm text-black ">Courses</li>
 
           </Link>
           <Link className="flex" href="/blogs">
-          <li className="md:mx-6  md:text-2xl  font-bold pt-2 text-sm text-black mx-1">Blogs</li>
+          <li className="md:mx-6  md:text-2xl   pt-2 text-sm text-black mx-1">Blogs</li>
 
           </Link>
           </ul>
