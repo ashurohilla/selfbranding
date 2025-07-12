@@ -1,561 +1,378 @@
-"use client";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import Link from "next/link";
-import {
-  Star,
-  Volume2,
-  VolumeX,
-  Github,
-  Linkedin,
-  Mail,
-  Terminal,
-  Code,
-  Cpu,
-  BookAIcon,
-} from "lucide-react";
-import { useRef } from "react";
-
-
+"use client"
+import { Github, Mail, Phone, ExternalLink, MapPin, Calendar, Briefcase, GraduationCap, Code, Award, ShoppingBag, BookOpen, Menu, X, Linkedin } from 'lucide-react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 export default function Page() {
-  const [selected, setSelected] = useState<
-    "home" | "projects" | "about" | "contact"
-  >("home");
-  const [soundOn, setSoundOn] = useState(false);
-  const [typedText, setTypedText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const fullText =
-    "Welcome to the digital realm of Ashish — Code Jedi, Hardware Tinkerer, and Master of Digital Sorcery. Navigate through the holocrons to discover projects that blend creativity with technology.";
-useEffect(() => {
-  const handleUserInteraction = () => {
-    if (audioRef.current && !soundOn) {
-      audioRef.current.play().then(() => {
-        setSoundOn(true);
-        console.log("Auto-play after user interaction");
-      }).catch(err => console.warn("Autoplay failed:", err));
-    }
-    document.removeEventListener("click", handleUserInteraction);
-    document.removeEventListener("keydown", handleUserInteraction);
-  };
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  document.addEventListener("click", handleUserInteraction);
-  document.addEventListener("keydown", handleUserInteraction);
-
-  return () => {
-    document.removeEventListener("click", handleUserInteraction);
-    document.removeEventListener("keydown", handleUserInteraction);
-  };
-}, []);
-  useEffect(() => {
-    if (selected === "home" && currentIndex < fullText.length) {
-      const timer = setTimeout(() => {
-        setTypedText(fullText.slice(0, currentIndex + 1));
-        setCurrentIndex(currentIndex + 1);
-      }, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, selected, fullText]);
-
-  useEffect(() => {
-    if (selected === "home") {
-      setCurrentIndex(0);
-      setTypedText("");
-    }
-  }, [selected]);
 
   return (
-    <div className="bg-black text-yellow-400 min-h-screen font-mono relative overflow-hidden">
-      {/* Animated Starfield background */}
-      <div className="absolute top-0 left-0 w-full h-full z-0">
-        <div className=" w-full h-full opacity-20 animate-pulse"></div>
-        {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-yellow-400 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-            }}
-          />
+     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/50 ">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="text-xl font-light text-slate-900">Ashish Rohilla</div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+   <Link href={"products"}>
+                <Button variant={"outline"} className="text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  Products
+                </Button>
+                </Link>            <Link href={"blogs"}>
+                <Button variant={"outline"} className="text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  Blog
+                </Button>
+                </Link>
+             
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t border-slate-200 pt-4">
+              <div className="flex flex-col space-y-4">
+                <a href="#products" className="text-slate-600 hover:text-blue-600 transition-colors">Products</a>
+                <Link href={"blogs"}>
+                <Button variant={"default"} className="text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  Blog
+                </Button>
+                </Link>
+                <a href="#contact" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center">
+                  Contact
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+      {/* Subtle notebook binding */}
+      <div className="fixed  lg:left-[300px] left-6 top-0 bottom-0 w-px bg-red-500/30"></div>
+      <div className="fixed  lg:left-[308px] left-7 top-0 bottom-0 w-px bg-red-500/30"></div>
+      <div className="fixed lg:left-[270px] left-10 top-4 bottom-12">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div key={i} className="w-2 h-2 rounded-full bg-slate-500/40 mb-12 shadow-sm"></div>
         ))}
       </div>
 
-      {/* Scanning line effect */}
-      <div
-        className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse z-10"
-        style={{ animation: "scan 4s linear infinite" }}
-      ></div>
-
-      <header className="relative z-20 p-6 flex justify-between items-center border-b border-yellow-600 bg-black/80 backdrop-blur-sm">
-        <h1 className="text-3xl flex items-center gap-3 font-bold">
-          <div className="relative">
-            <Star className="animate-spin text-yellow-400" size={32} />
-            <div className="absolute inset-0 animate-ping">
-              <Star className="text-yellow-400/30" size={32} />
-            </div>
+      {/* Main content */}
+      <div className="pl-20 pr-8 mt-8 py-16 max-w-5xl mx-auto">
+        
+        {/* Header */}
+        <header className="mb-16">                                                                                                                                                              
+          <div className="relative">                                                                             
+            <h1 className="text-5xl font-extralight text-slate-900 mb-3 tracking-tight leading-tight">
+              Ashish Rohilla
+            </h1>
+            <div className="absolute -left-4 top-0 w-1 h-16 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
           </div>
-          <span className="bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">
-            Ashish's Digital Realm
-          </span>
-        </h1>
-        <nav className="flex items-center space-x-2">
-          {[
-            { key: "home", label: "Home", icon: Terminal },
-            { key: "projects", label: "Projects", icon: Code },
-            { key: "about", label: "About", icon: Cpu },
-            { key: "contact", label: "Contact", icon: Mail },
-          ].map(({ key, label, icon: Icon }) => (
-            <Button
-              key={key}
-              variant={selected === key ? "default" : "ghost"}
-              onClick={() => setSelected(key as any)}
-              className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 ${
-                selected === key
-                  ? "bg-yellow-600 text-black hover:bg-yellow-500"
-                  : "text-yellow-400 hover:text-yellow-200 hover:bg-yellow-900/20"
-              }`}
-            >
-              <Icon size={16} />
-              {label}
-            </Button>
-          ))}
-		  <Link target="blank" href={"/blogs"}>
-		  <Button
-		  variant={"ghost"}
-              className={`flex items-center gap-2 transition-all duration-300 hover:scale-105  text-yellow-400 hover:text-yellow-200 hover:bg-yellow-900/20`}
-			  >
-              <BookAIcon size={16} />
-              Blog
-            </Button>
-				</Link>
-				
-		  <Button
-			variant="ghost"
-			onClick={() => {
-			  setSoundOn(!soundOn);
-			  if (audioRef.current) {
-				if (!soundOn) {
-				  audioRef.current.play();
-				  console.log("Playing sound");
-				} else {
-				  audioRef.current.pause();
-				  audioRef.current.currentTime = 0;
-				}
-			  }
-			}}
-			className="text-yellow-400 hover:text-yellow-200 hover:bg-yellow-900/20 transition-all duration-300 hover:scale-105"
-		  >
-			{soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
-			{/* Hidden audio element */}
-			<audio
-			  ref={audioRef}
-			  src="/music.mp3"
-			  loop
-			  style={{ display: "none" }}
-			  onEnded={() => setSoundOn(false)}
-			/>
-		  </Button>
-        </nav>
-      </header>
+          <p className="text-2xl text-slate-600 mb-8 font-light">
+            Full Stack Developer & Devops Engineer                                          
+          </p>
+          
+          <div className="flex flex-wrap gap-8 text-slate-600">
+            <a href="mailto:ashishrohilla510@gmail.com" className="flex items-center gap-3 hover:text-blue-600 transition-colors group">
+              <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span className="text-sm">ashishrohilla510@gmail.com</span>
+            </a>
+            <div className="flex items-center gap-3">
+              <Phone className="w-5 h-5" />
+              <span className="text-sm">9588368052</span>
+            </div>
+            <a href="https://github.com/ashurohilla" className="flex items-center gap-3 hover:text-blue-600 transition-colors group">
+              <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span className="text-sm">github.com/ashurohilla</span>
+            </a>
+            <a href="https://www.linkedin.com/in/ashish-rohilla-3200011ba/" className="flex items-center gap-3 hover:text-blue-600 transition-colors group">
+              <Linkedin className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span className="text-sm">linkedin</span>
+            </a>
+          </div>
+        </header>
 
-      <main className="relative z-10 p-6">
-        {selected === "home" && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-12">
+            
+            {/* Experience */}
+            <section>
+              <div className="flex items-center gap-3 mb-8">
+                <Briefcase className="w-6 h-6 text-blue-500" />
+                <h2 className="text-3xl font-light text-slate-800">Experience</h2>
+              </div>
+              
+              <div className="space-y-8">
+                {/* Current Role */}
+                <div className="relative pl-8 border-l-2 border-blue-200">
+                  <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-500 rounded-full shadow-lg"></div>
+                  <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-blue-200/50">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-medium text-slate-900">Developer</h3>
+                        <p className="text-blue-600 font-medium">Decimal Technologies</p>
+                      </div>
+                      <div className="text-sm text-slate-500 mt-2 sm:mt-0 sm:text-right">
+                        <p className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          Dec 2024 – Present
+                        </p>
+                        <p className="flex items-center gap-1 mt-1">
+                          <MapPin className="w-4 h-4" />
+                          Gurugram
+                        </p>
+                      </div>
+                    </div>
+                    <ul className="space-y-3 text-slate-700 text-sm leading-relaxed">
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Developed and deployed innovative no-code solutions for banking fintech applications, reducing development time by 70%</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Designed and managed APIs for seamless banking system integration with enhanced reliability</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Streamlined workflows ensuring secure access to sensitive financial data</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Previous Role */}
+                <div className="relative pl-8 border-l-2 border-orange-200">
+                  <div className="absolute -left-2 top-0 w-4 h-4 bg-orange-400 rounded-full"></div>
+                  <div className="bg-white/50 p-6 rounded-xl border border-orange-200/50">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-medium text-slate-900">DevOps & Full-Stack Intern</h3>
+                        <p className="text-slate-600 font-medium">Diana Advance Tech Academy</p>
+                      </div>
+                      <div className="text-sm text-slate-500 mt-2 sm:mt-0 sm:text-right">
+                        <p className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          May 2023 – Aug 2023
+                        </p>
+                        <p className="flex items-center gap-1 mt-1">
+                          <MapPin className="w-4 h-4" />
+                          Remote, London
+                        </p>
+                      </div>
+                    </div>
+                    <ul className="space-y-2 text-slate-700 text-sm leading-relaxed">
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Deployed microservices using Django REST framework and Docker for horizontal scaling</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Implemented CI/CD pipelines with GitLab for automated testing and deployment</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Developed cross-platform desktop app with Electron.js for employee activity tracking</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Optimized PostgreSQL queries, reducing API latency by 15%</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Projects */}
+            <section>
+              <div className="flex items-center gap-3 mb-8">
+                <Code className="w-6 h-6 text-purple-500" />
+                <h2 className="text-3xl font-light text-slate-800">Featured Projects</h2>
+              </div>
+              
+              <div className="grid gap-6">
+                
+                <div className="group bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-slate-200/50 hover:shadow-lg hover:border-slate-300/50 transition-all duration-300">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-xl font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">Hardware Garage</h3>
+                    <Link  href={"/blogs"}>
+                    <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {['Django', 'Next.js', 'PostgreSQL', 'Tailwind', 'Docker'].map((tech) => (
+                      <span key={tech} className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li>• Full-stack hardware blogging platform with modern architecture</li>
+                    <li>• Automated image handling with Supabase APIs</li>
+                    <li>• Dockerized deployment with GitHub Actions CI/CD</li>
+                  </ul>
+                </div>
+
+                <div className="group bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-slate-200/50 hover:shadow-lg hover:border-slate-300/50 transition-all duration-300">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-xl font-semibold text-slate-900 group-hover:text-purple-600 transition-colors">Microservices Infrastructure</h3>
+                    <Link target='_blank' href={"https://github.com/ashurohilla/ArchEngineInfra"}>
+                    <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-purple-500 transition-colors" />
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {['Go', 'Kubernetes', 'Docker', 'RabbitMQ', 'Next.js'].map((tech) => (
+                      <span key={tech} className="px-3 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li>• AI agent generator with PDF/URL support</li>
+                    <li>• Container orchestration with Kubernetes</li>
+                    <li>• Async messaging with RabbitMQ</li>
+                  </ul>
+                </div>
+
+                <div className="group bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-slate-200/50 hover:shadow-lg hover:border-slate-300/50 transition-all duration-300">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-xl font-semibold text-slate-900 group-hover:text-green-600 transition-colors">AWS EKS 3-Tier Deployment</h3>
+                    <Link href={"https://github.com/ashurohilla/devopsinfra_ci_cd"} target='_blank'>
+                    <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-green-500 transition-colors" />
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {['AWS EKS', 'Terraform', 'Ansible', 'Prometheus', 'Grafana'].map((tech) => (
+                      <span key={tech} className="px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li>• Production-ready 3-tier application on AWS</li>
+                    <li>• Infrastructure as Code with Terraform</li>
+                    <li>• Real-time monitoring and alerting</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Right Sidebar */}
           <div className="space-y-8">
-            {/* Hero Section */}
-            <div className="text-center py-16">
-              <div className="mb-8">
-                <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-400 bg-clip-text text-transparent animate-pulse">
-                  ASHISH
-                </h1>
-                <h2 className="text-2xl text-yellow-300 mb-2">
-                  Code Jedi & Digital Architect
-                </h2>
-                <div className="text-yellow-500 text-sm tracking-widest">
-                  SYSTEM ONLINE • STATUS: ACTIVE
+            
+            {/* Education */}
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <GraduationCap className="w-5 h-5 text-green-500" />
+                <h2 className="text-2xl font-light text-slate-800">Education</h2>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-slate-200/50">
+                <h3 className="font-semibold text-slate-900 mb-2">B.Tech in AI & ML</h3>
+              <p className="text-slate-600 text-sm mb-2">Panipat Institute of Engineering and Technology</p>
+                <div className="flex items-center justify-between text-sm text-slate-500">
+                  <span>CGPA: 8.13/10.00</span>
+                  <span>June 2024</span>
                 </div>
               </div>
+            </section>
 
-              {/* Typing Animation */}
-              <Card className="bg-black/60 border-yellow-600 shadow-2xl backdrop-blur-sm max-w-4xl mx-auto">
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-4">
-                    <Terminal
-                      className="text-yellow-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    <div className="text-left">
-                      <div className="text-yellow-300 text-lg leading-relaxed">
-                        {typedText}
-                        <span className="animate-pulse text-yellow-400">|</span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
-                <Card className="bg-yellow-900/20 border-yellow-700 hover:bg-yellow-900/30 transition-all duration-300 hover:scale-105">
-                  <CardContent className="p-6 text-center">
-                    <Code className="mx-auto mb-3 text-yellow-400" size={32} />
-                    <h3 className="text-xl font-bold text-yellow-200">50+</h3>
-                    <p className="text-yellow-400">Projects Completed</p>
-                  </CardContent>
-                </Card>
-                <Card className="bg-yellow-900/20 border-yellow-700 hover:bg-yellow-900/30 transition-all duration-300 hover:scale-105">
-                  <CardContent className="p-6 text-center">
-                    <Cpu className="mx-auto mb-3 text-yellow-400" size={32} />
-                    <h3 className="text-xl font-bold text-yellow-200">10+</h3>
-                    <p className="text-yellow-400">Technologies Mastered</p>
-                  </CardContent>
-                </Card>
-                <Card className="bg-yellow-900/20 border-yellow-700 hover:bg-yellow-900/30 transition-all duration-300 hover:scale-105">
-                  <CardContent className="p-6 text-center">
-                    <Star className="mx-auto mb-3 text-yellow-400" size={32} />
-                    <h3 className="text-xl font-bold text-yellow-200">∞</h3>
-                    <p className="text-yellow-400">Lines of Code</p>
-                  </CardContent>
-                </Card>
+            {/* Certifications */}
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <Award className="w-5 h-5 text-orange-500" />
+                <h2 className="text-2xl font-light text-slate-800">Certifications</h2>
               </div>
-            </div>
-          </div>
-        )}
 
-        {selected === "projects" && (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold text-yellow-400 mb-2">
-                Project Holocrons
-              </h2>
-              <p className="text-yellow-300">
-                Discover the digital artifacts of innovation
-              </p>
-            </div>
+              <div className="space-y-4">
+              <Link href={"https://www.udacity.com/certificate/e/42318d36-5a07-11ed-8b9b-c3420296beff"} target="_blank">
+                <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-slate-200/50">
+                  <p className="text-sm font-medium text-slate-900 mb-1">AWS AI Programming with Python</p>
+                  <p className="text-xs text-slate-500">Udacity • AWS Sponsored</p>
+                </div>
+                </Link>
+                <Link href={"https://www.udacity.com/certificate/e/f6ba5bf8-ee8f-11ed-8aeb-a7de405c1e0c"} target="_blank">
+                <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-slate-200/50">
+                  <p className="text-sm font-medium text-slate-900 mb-1">Machine Learning Fundamentals</p>
+                  <p className="text-xs text-slate-500">Udacity • AWS Sponsored</p>
+                </div>
+                </Link>
+              </div>
+            </section>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[
-                {
-                  title: "Matka RC Droid",
-                  description:
-                    "Powered by Raspberry Pi & Teensy — voice module + scary LEDs.",
-                  tech: ["Raspberry Pi", "Teensy", "Python", "C++"],
-                  status: "ACTIVE",
-                },
-                {
-                  title: "Meme Alarm System",
-                  description:
-                    "Plays random memes using YouTube API as a funny wake-up routine.",
-                  tech: ["YouTube API", "Python", "JavaScript"],
-                  status: "DEPLOYED",
-                },
-                {
-                  title: "Full Memory Scanner",
-                  description:
-                    "Scans local game memory for values, reverse engineering style.",
-                  tech: ["C++", "Assembly", "Windows API"],
-                  status: "RESEARCH",
-                },
-                {
-                  title: "Cloud Infrastructure",
-                  description:
-                    "Scalable AWS deployments with Kubernetes orchestration.",
-                  tech: ["AWS", "Kubernetes", "Docker", "Terraform"],
-                  status: "PRODUCTION",
-                },
-                {
-                  title: "IoT Weather Station",
-                  description:
-                    "Real-time weather monitoring with Arduino sensors.",
-                  tech: ["Arduino", "ESP32", "MQTT", "React"],
-                  status: "ACTIVE",
-                },
-                {
-                  title: "AI Chat Assistant",
-                  description:
-                    "Intelligent conversational AI with natural language processing.",
-                  tech: ["Python", "TensorFlow", "FastAPI", "React"],
-                  status: "BETA",
-                },
-              ].map((project, index) => (
-                <Card
-                  key={index}
-                  className="bg-yellow-900/10 border-yellow-700 hover:bg-yellow-900/20 transition-all duration-300 hover:scale-105 group cursor-pointer"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-xl font-bold text-yellow-200 group-hover:text-yellow-100">
-                        {project.title}
-                      </h3>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          project.status === "ACTIVE"
-                            ? "bg-green-900/50 text-green-400"
-                            : project.status === "DEPLOYED"
-                              ? "bg-blue-900/50 text-blue-400"
-                              : project.status === "PRODUCTION"
-                                ? "bg-purple-900/50 text-purple-400"
-                                : project.status === "BETA"
-                                  ? "bg-orange-900/50 text-orange-400"
-                                  : "bg-yellow-900/50 text-yellow-400"
-                        }`}
-                      >
-                        {project.status}
+            {/* Skills */}
+            <section>
+              <h2 className="text-2xl font-light text-slate-800 mb-6">Technical Skills</h2>
+              <div className="space-y-6">
+                
+                <div>
+                  <h4 className="font-medium text-slate-700 mb-3 text-sm uppercase tracking-wide">Languages</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {['Go', 'Python', 'JavaScript', 'TypeScript', 'C++'].map((skill) => (
+                      <span key={skill} className="px-3 py-1 text-xs bg-slate-100 text-slate-700 rounded-full border">
+                        {skill}
                       </span>
-                    </div>
-                    <p className="text-yellow-300 mb-4 text-sm leading-relaxed">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech, techIndex) => (
-                        <span
-                          key={techIndex}
-                          className="text-xs bg-yellow-800/30 text-yellow-300 px-2 py-1 rounded border border-yellow-700"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {selected === "about" && (
-          <Card className="bg-yellow-900/10 border-yellow-700 max-w-xl mx-auto">
-            <CardContent className="p-6">
-              <h2 className="text-xl  mb-2">🧠 Who is Ashish?</h2>
-              <p className="text-yellow-300">
-                A Code Jedi from India — fluent in JavaScript, C++, Python, and
-                GoLang. Tinkers with cloud systems (AWS, DevOps) and hardware
-                (Arduino, Teensy, Raspberry Pi). Loves turning silly ideas into
-                working droids.
-              </p>
-
-              <div className="mt-6 space-y-2 text-yellow-300">
-                <div>
-                  <label>JavaScript</label>
-                  <div className="w-full h-2 bg-yellow-700 rounded-full">
-                    <div className="h-full bg-yellow-300 w-[90%] rounded-full"></div>
+                    ))}
                   </div>
                 </div>
-                <div>
-                  <label>Python</label>
-                  <div className="w-full h-2 bg-yellow-700 rounded-full">
-                    <div className="h-full bg-yellow-300 w-[85%] rounded-full"></div>
-                  </div>
-                </div>
-                <div>
-                  <label>GoLang</label>
-                  <div className="w-full h-2 bg-yellow-700 rounded-full">
-                    <div className="h-full bg-yellow-300 w-[70%] rounded-full"></div>
-                  </div>
-                </div>
-                <div>
-                  <label>Arduino / Hardware</label>
-                  <div className="w-full h-2 bg-yellow-700 rounded-full">
-                    <div className="h-full bg-yellow-300 w-[95%] rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
-        {selected === "contact" && (
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold text-yellow-400 mb-2">
-                Establish Communication
-              </h2>
-              <p className="text-yellow-300">
-                Ready to collaborate on the next digital adventure?
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="bg-yellow-900/10 border-yellow-700 hover:bg-yellow-900/20 transition-all duration-300">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-yellow-200 mb-6">
-                    Direct Channels
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4 p-3 rounded-lg bg-yellow-900/20 hover:bg-yellow-900/30 transition-colors cursor-pointer">
-                      <Mail className="text-yellow-400" size={24} />
-                      <div>
-                        <p className="text-yellow-200 font-semibold">Email</p>
-                        <p className="text-yellow-300 text-sm">
-                         ashishrohilla510@gmail.com
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 rounded-lg bg-yellow-900/20 hover:bg-yellow-900/30 transition-colors cursor-pointer">
-                      <Github className="text-yellow-400" size={24} />
-                      <div>
-                        <p className="text-yellow-200 font-semibold">GitHub</p>
-                        <p className="text-yellow-300 text-sm">
-                          github.com/ashurohilla
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 rounded-lg bg-yellow-900/20 hover:bg-yellow-900/30 transition-colors cursor-pointer">
-                      <Linkedin className="text-yellow-400" size={24} />
-                      <div>
-                        <p className="text-yellow-200 font-semibold">
-                          LinkedIn
-                        </p>
-                        <p className="text-yellow-300 text-sm">
-                          linkedin.com/in/ashish-jedi
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-yellow-900/10 border-yellow-700">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-yellow-200 mb-6">
-                    System Status
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-yellow-300">Availability</span>
-                      <span className="text-green-400 flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        ONLINE
+                <div>
+                  <h4 className="font-medium text-slate-700 mb-3 text-sm uppercase tracking-wide">Frameworks</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {['React', 'Next.js', 'Django', 'Flask', 'TensorFlow', 'PyTorch'].map((skill) => (
+                      <span key={skill} className="px-3 py-1 text-xs bg-blue-50 text-blue-700 rounded-full border border-blue-200">
+                        {skill}
                       </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-yellow-300">Response Time</span>
-                      <span className="text-yellow-400">&lt; 24 hours</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-yellow-300">Time Zone</span>
-                      <span className="text-yellow-400">IST (UTC+5:30)</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-yellow-300">Preferred Contact</span>
-                      <span className="text-yellow-400">Email</span>
-                    </div>
+                    ))}
                   </div>
-
-                  <div className="mt-6 p-4 bg-yellow-900/20 rounded-lg border border-yellow-700">
-                    <p className="text-yellow-300 text-sm">
-                      <Terminal className="inline mr-2" size={16} />
-                      Ready to discuss projects, collaborations, or just chat
-                      about technology!
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        )}
-      </main>
-	       <footer className="relative z-10 border-t border-yellow-600 bg-black/80 backdrop-blur-sm mt-16">
-        <div className="p-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Brand Section */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <Star className="animate-spin text-yellow-400" size={24} />
-                    <div className="absolute inset-0 animate-ping">
-                      <Star className="text-yellow-400/30" size={24} />
-                    </div>
-                  </div>
-                  <span className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">
-                    Code Jedi
-                  </span>
                 </div>
-                <p className="text-yellow-300 text-sm leading-relaxed">
-                  Crafting digital experiences with the power of code and
-                  creativity. May the source be with you.
-                </p>
-              </div>
 
-              {/* Quick Links */}
-              <div className="space-y-4">
-                <h3 className="text-yellow-200 font-semibold text-lg">
-                  Navigation
-                </h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { key: "home", label: "Home" },
-                    { key: "projects", label: "Projects" },
-                    { key: "about", label: "About" },
-                    { key: "contact", label: "Contact" },
-                  ].map(({ key, label }) => (
-                    <button
-                      key={key}
-                      onClick={() => setSelected(key as any)}
-                      className="text-yellow-400 hover:text-yellow-200 text-sm text-left transition-colors duration-200"
-                    >
-                      {label}
-                    </button>
-                  ))}
+                <div>
+                  <h4 className="font-medium text-slate-700 mb-3 text-sm uppercase tracking-wide">DevOps & Cloud</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {['AWS', 'Docker', 'Kubernetes', 'Terraform', 'Jenkins'].map((skill) => (
+                      <span key={skill} className="px-3 py-1 text-xs bg-green-50 text-green-700 rounded-full border border-green-200">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-slate-700 mb-3 text-sm uppercase tracking-wide">Databases</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {['PostgreSQL', 'MongoDB', 'Redis', 'MySQL'].map((skill) => (
+                      <span key={skill} className="px-3 py-1 text-xs bg-purple-50 text-purple-700 rounded-full border border-purple-200">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-
-              {/* Social Links */}
-              <div className="space-y-4">
-                <h3 className="text-yellow-200 font-semibold text-lg">
-                  Connect
-                </h3>
-                <div className="flex gap-4">
-                  <a
-                    href="mailto:ashish@jedi.codes"
-                    className="p-2 rounded-lg bg-yellow-900/20 hover:bg-yellow-900/40 text-yellow-400 hover:text-yellow-200 transition-all duration-300 hover:scale-110"
-                    title="Email"
-                  >
-                    <Mail size={20} />
-                  </a>
-                  <a
-                    href="https://github.com/ashish-jedi"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-yellow-900/20 hover:bg-yellow-900/40 text-yellow-400 hover:text-yellow-200 transition-all duration-300 hover:scale-110"
-                    title="GitHub"
-                  >
-                    <Github size={20} />
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/ashish-jedi"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-yellow-900/20 hover:bg-yellow-900/40 text-yellow-400 hover:text-yellow-200 transition-all duration-300 hover:scale-110"
-                    title="LinkedIn"
-                  >
-                    <Linkedin size={20} />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Bar */}
-            <div className="border-t border-yellow-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-2 text-yellow-400 text-sm">
-                <Terminal size={16} />
-                <span>
-                  © 2024 Ashish - Code Jedi. All systems operational.
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-yellow-500 text-xs">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span>SYSTEM STATUS: ONLINE</span>
-              </div>
-            </div>
+            </section>
           </div>
         </div>
-      </footer>
+
+        {/* Footer */}
+        <footer className="mt-20 pt-8 border-t border-slate-200/50 text-center">
+          <p className="text-sm text-slate-500 font-light">
+            Crafted with precision • Ashish Rohilla © 2024
+          </p>
+        </footer>
+      </div>
     </div>
+ 
   );
 }

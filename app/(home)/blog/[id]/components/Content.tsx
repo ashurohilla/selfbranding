@@ -134,7 +134,6 @@ export default function Content({ blog, author }: Props) {
               </div>
               <div className="flex items-center space-x-4">
               <button
-  // onClick={handleSpeak}
   className={`text-gray-600 rounded-full hover:text-gray-800 transition animate-pulse ${
     isSpeaking ? 'bg-orange-500' : ''
   }`}

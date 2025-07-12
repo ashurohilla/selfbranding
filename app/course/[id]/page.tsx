@@ -12,7 +12,7 @@ import { BlogContentLoading } from '@/app/(home)/blog/[id]/components/Skeleton';
 export default function Page({ params }: { params: { id: string } }) {
   const [modules, setModules] = useState<any[]>([]);
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true); // Define loading state
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchModules = async () => {
@@ -22,7 +22,7 @@ export default function Page({ params }: { params: { id: string } }) {
       } catch (error) {
         console.error("Error fetching modules:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching data
+        setLoading(false);
       }
     };
     console.log("started fetching modules for course ID:");
@@ -52,20 +52,21 @@ export default function Page({ params }: { params: { id: string } }) {
         <div className='w-4/5'>
           <div className='mx-2 flex'>
             <div className='overflow-y-auto max-h-screen'>
-              {/* Conditional rendering based on loading state */}
               {loading ? (
-                <BlogContentLoading /> // Render skeleton loading component
+              <BlogContentLoading />
+              ) : selectedChapter ? (
+                <div className='mx-4 ml-[10px] mr-[350px]'>
+                  <h2 className='text-6xl '>{selectedChapter.chapter_name}</h2>
+                  <img  className='w-[1200px] mt-6 rounded-md object-cover object-center  h-[500px]'	src={selectedChapter.image} alt="" />
+                  <div
+                    className="font-[20px] mt-6 mr-[300px] mb-[20px] contentclass"
+                    dangerouslySetInnerHTML={{ __html: selectedChapter.content || "" }}
+                  />
+                </div>
               ) : (
-                selectedChapter && (
-                  <div className='mx-4 ml-[10px] mr-[350px]'>
-                    <h2 className='text-6xl '>{selectedChapter.chapter_name}</h2>
-                    <img  className='w-[1200px] mt-6 rounded-md object-cover object-center  h-[500px]'	src={selectedChapter.image} alt="" />
-                    <div
-                      className="font-[20px] mt-6 mr-[300px] mb-[20px] contentclass"
-                      dangerouslySetInnerHTML={{ __html: selectedChapter.content || "" }}
-                    />
-                  </div>
-                )
+                <div className='mx-4 mt-10 text-xl text-gray-500'>
+                  Please select a chapter
+                </div>
               )}
             </div>
           </div>
