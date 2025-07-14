@@ -7,76 +7,102 @@ import { readmoreblog } from "@/lib/actions/blog";
 import Navbar from "../navbar/navbar";
 import { IBlog } from "@/lib/types";
 
-// Extract image URLs from HTML string
-function extractImageUrlsFromHtml(html: string): string[] {
+// Extract image URLs from markdown content
+function extractImageUrlsFromMarkdown(markdown: string): string[] {
 	const imageUrls: string[] = [];
-	const imgTagRegex = /<img[^>]+src="([^">]+)"/g;
+	
+	// Regex for markdown images: ![alt text](image-url)
+	const markdownImageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+	// Regex for HTML images in markdown: <img src="..." />
+	const htmlImageRegex = /<img[^>]+src="([^">]+)"/g;
+	
 	let match: RegExpExecArray | null;
-
-	while ((match = imgTagRegex.exec(html))) {
+	
+	// Extract markdown format images
+	while ((match = markdownImageRegex.exec(markdown))) {
+		const src = match[2];
+		if (src) {
+			imageUrls.push(src);
+		}
+	}
+	
+	// Extract HTML format images (in case markdown contains HTML)
+	while ((match = htmlImageRegex.exec(markdown))) {
 		const src = match[1];
 		if (src) {
 			imageUrls.push(src);
 		}
 	}
-
+	
 	return imageUrls;
 }
 
+// Random placeholder images for fallback
+const placeholderImages = [
+	"https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&h=300&fit=crop",
+	"https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=600&h=300&fit=crop",
+	"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=300&fit=crop",
+	"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=300&fit=crop",
+	"https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=600&h=300&fit=crop"
+];
+
 export default function Home() {
-	const [blogs, setBlogs] = useState<any>([]);
+	const [blogs, setBlogs] = useState<IBlog[]>([]);
 
 	useEffect(() => {
 		const fetchBlogs = async () => {
-			const { data } = await readmoreblog();
-			if (data && data.length > 0) {
-				setBlogs(data);
+			try {
+				const { data } = await readmoreblog();
+				if (data && data.length > 0) {
+					setBlogs(data as IBlog[]);
+				}
+			} catch (error) {
+				console.error("Error fetching blogs:", error);
 			}
 		};
 		fetchBlogs();
 	}, []);
 
 	return (
-		<div className="">
+		<div>
 			<Navbar />
-
-			<div className="pt-[100px]">
-				<div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 p-5 xl:p-0">
-					{blogs.map((blog: { content: string; slug: any; created_at: string | number | Date; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; }, index: React.Key | null | undefined) => {
-						const images = extractImageUrlsFromHtml(blog.content);
-						const randomImage =
-							images[Math.floor(Math.random() * images.length)];
+			<div className="container mx-auto px-4 py-8">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{blogs.map((blog, index) => {
+						const images = extractImageUrlsFromMarkdown(blog.content);
+						
+						// Use first image from content, or random placeholder if no images found
+						const displayImage = images.length > 0 
+							? images[0] 
+							: placeholderImages[index % placeholderImages.length];
 
 						return (
-							<Link
-								href={`/blog/${blog.slug}`}
-								className="w-full border rounded-md dark:bg-graident-dark p-5 hover:ring-2 ring-green-500 transition-all cursor-pointer space-y-5 first:lg:col-span-2 first:md:col-span-3"
-								key={index}
-							>
-								<div className="w-full h-72 sm:w-full md:h-64 xl:h-96 relative">
-									{randomImage ? (
-										<Image
-											priority
-											src={randomImage}
-											alt="cover"
-											fill
-											className="rounded-md object-cover object-center"
-											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-										/>
-									) : (
-										<div className="w-full h-full bg-gray-300 rounded-md flex items-center justify-center text-sm text-gray-700">
-											No Image Found
+							<Link key={blog.slug || index} href={`/blog/${blog.slug}`}>
+								<div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+									<div className="relative h-48 w-full">
+										{displayImage ? (
+											<Image
+												src={displayImage}
+												alt={blog.title ? String(blog.title) : "Blog post image"}
+												fill
+												className="object-cover"
+												sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+											/>
+										) : (
+											<div className="h-full w-full bg-gray-200 flex items-center justify-center">
+												<span className="text-gray-500">No Image Found</span>
+											</div>
+										)}
+									</div>
+									
+									<div className="p-4">
+										<div className="text-sm text-gray-500 mb-2">
+											{new Date(blog.created_at).toDateString()}
 										</div>
-									)}
-								</div>
-
-								<div className="space-y-2">
-									<p className="text-sm dark:text-gray-400">
-										{new Date(blog.created_at).toDateString()}
-									</p>
-									<h1 className="text-xl font-bold dark:text-gray-300">
-										{blog.title}
-									</h1>
+										<h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
+											{blog.title}
+										</h3>
+									</div>
 								</div>
 							</Link>
 						);

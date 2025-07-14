@@ -54,6 +54,7 @@ export default function CreateForm() {
 			onHandleSubmit={onHandleSubmit}
 			defaultBlog={defaultBlog}
 			/>
+
 			</div>
 	);
 
