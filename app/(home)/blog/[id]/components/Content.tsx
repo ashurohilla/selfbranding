@@ -217,7 +217,7 @@ export default function Content({ blog, author }: Props) {
         </div>
 
         {/* Blog Content */}
-        <div className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 ${
+        <div className={`bg-white overflow-hidden transition-all duration-300 ${
           isCommentSectionOpen ? "mr-80" : ""
         }`}>
           <div className="p-8 md:p-12">
