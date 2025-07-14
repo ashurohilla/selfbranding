@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         <div>
           <Navbar/>
          <article className="pt-8">
-        <div className="max-w-[900px] pt-[60px] mx-auto min-h-screen space-y-10">
+        <div className="max-w-[1100px] pt-[60px] mx-auto min-h-screen space-y-10">
           <Content  blog={blog} author={authorData} />
         </div>
          </article>

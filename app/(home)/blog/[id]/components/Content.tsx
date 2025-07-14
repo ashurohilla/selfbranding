@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SITE_URL } from "@/app/config";
+import { toast } from "@/components/ui/use-toast";
 
 const Comments = dynamic(() => import('./coments/coments'), { ssr: false });
 
@@ -29,7 +30,7 @@ interface Props {
 export default function Content({ blog, author }: Props) {
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const blogUrl = `https://${SITE_URL}/blog/${blog?.slug}`;
+  const blogUrl = `https://${SITE_URL}blog/${blog?.slug}`;
 
   const shareOnTwitter = () => {
     window.open(`https://twitter.com/intent/tweet?url=${blogUrl}&text=${encodeURIComponent(blog?.title || '')}`, "_blank");
@@ -46,7 +47,7 @@ export default function Content({ blog, author }: Props) {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(blogUrl);
-      // You can add a toast notification here
+      toast({ description: "Link copied to clipboard!" });
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -96,7 +97,7 @@ export default function Content({ blog, author }: Props) {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-6 -mt-8 relative z-10">
+      <div className="max-w-5xl mx-auto px-6 -mt-8 relative z-10">
         {/* Author Card */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex items-center justify-between">
