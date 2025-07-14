@@ -77,10 +77,6 @@ export default function BlogForm({
     });
   };
 
-  // const onChangeValue = (value: string) => {
-  //   form.setValue("content", value);
-  // };
-
   const onChangeValue = useCallback(
     (html: string, json: string, text: string) => {
       form.setValue("content", html);
@@ -104,9 +100,7 @@ export default function BlogForm({
 
   return (
     <Form {...form}>
-    
-      
-        <div className="border-b p-5 flex items-center sm:justify-between flex-wrap gap-2">
+        <div className="border-b  p-5 flex items-center sm:justify-between flex-wrap gap-2">
           <div className="flex items-center flex-wrap gap-5">
             <span
               onClick={() => {
@@ -170,29 +164,6 @@ export default function BlogForm({
                       <FormMessage />
                     </div>
                   )}
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="w-full flex divide-x p-2 gap-2 items-center">
-                      <Input
-                        placeholder="🔗 Image url"
-                        {...field}
-                        className="border-none text-lg font-medium leading-relaxed focus:ring-1 ring-green-500 w-full"
-                        type="url"
-                      />
-                    </div>
-                  </FormControl>
-
-                  <div className="px-3">
-                    <FormMessage />
-                  </div>
                 </FormItem>
               )}
             />

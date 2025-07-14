@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Image from "next/image";
 import { IAuthor, IBlog } from "@/lib/types";
 import { BsGithub } from "react-icons/bs";
@@ -14,6 +14,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Share1Icon } from "@radix-ui/react-icons";
 import dynamic from 'next/dynamic'
 import NiwiHtmlView from "./niwi-html-view";
+import Navbar from "@/app/navbar/navbar";
+
 
 
 // import "highlight.js/styles/intellij-light.css";
@@ -37,21 +39,8 @@ export default function Content({ blog, author }: Props) {
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
   const blogUrl = `https://${SITE_URL}/blog/${blog?.slug}`;
   const [isSpeaking, setIsSpeaking] = useState(false); // Track if speaking is active
+ 
 
-  // const handleSpeak = () => {
-  //   if (isSpeaking) {
-  //     // If already speaking, stop speaking
-  //     window.speechSynthesis.cancel();
-  //     setIsSpeaking(false);
-  //   } else {
-  //     const speech = new SpeechSynthesisUtterance(blog?.content || " ");
-  //     const voices = window.speechSynthesis.getVoices();
-  //     console.log(voices)
-  //     speech.voice = voices[5]; // Change this to the desired voice
-  //     window.speechSynthesis.speak(speech);
-  //     setIsSpeaking(true);
-  //   }
-  // };
 
 
 
@@ -72,7 +61,9 @@ export default function Content({ blog, author }: Props) {
     setIsCommentSectionOpen(!isCommentSectionOpen);
   };
   return (
-    <div className="md:mx-2 mx-4 text-md md:text-xl bg-white  sm:mx-4 ">
+    <div>
+      
+      <div className="md:mx-2 mx-4 text-md md:text-xl bg-white  sm:mx-4 ">
       <div className={`backdrop-filter backdrop-blur-lg ${isCommentSectionOpen ? "opacity-60 " : ""}`}>
         <div className="sm:mx-2 mx-0 space-y-5">
           <h1 className="md:text-[40px] text-[20px]  font-gilroy_bold text-[#242424]">
@@ -81,13 +72,15 @@ export default function Content({ blog, author }: Props) {
           <div className=" flex justify-between px-1 py-2 mx-0 sm:mx-2 font-lg">
             <div className="flex gap-2 ">
               <div className="">
+                <Link href={author?.linkdin} target="_blank">
                 <Image
                   className="rounded-full px-1 py-1 "
                   width={60}
                   height={60}
                   alt="profile"
                   src={author?.profile}
-                />
+                  />
+                  </Link>
               </div>
 
               <div className="pt-2">
@@ -249,7 +242,7 @@ export default function Content({ blog, author }: Props) {
           </div>
         </div>
 
-        <div className="w-full px-8  mt-6 md:h-96 h-48 relative">
+        {/* <div className="w-full px-8  mt-6 md:h-96 h-48 relative">
           <Image
             priority
             src={blog?.image!}
@@ -258,7 +251,7 @@ export default function Content({ blog, author }: Props) {
             className=" object-cover object-center rounded-md border-[0.5px] border-zinc-600"
             sizes="(max-width: 300px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-        </div>
+        </div> */}
 
         <NiwiHtmlView htmlText={blog?.content || ""} />
       </div>
@@ -270,6 +263,7 @@ export default function Content({ blog, author }: Props) {
         >
           <Coments id={blog?.slug} toggleCommentSection={toggleCommentSection} />
         </div>
+    </div>
     </div>
   );
 }
