@@ -12,9 +12,9 @@ export default function Footer() {
 			<div className="max-w-7xl py-10 px-5 md:p-0 space-y-5  mx-auto flex justify-between md:items-end flex-col md:flex-row">
 				<div className="space-y-10">
 					<div className="space-y-2 w-full sm:w-96">
-						<h1 className="text-3xl font-bold">Hardware Garage</h1>
+						<h1 className="text-3xl font-bold">Ashish Rohilla</h1>
 						<p className="">
-						get the knowledge of  mechatronics 	and robotics
+						get the knowledge of  Software World and Devops
 						</p>
 					</div>
 					<div className="flex items-center gap-2">
@@ -37,6 +37,10 @@ export default function Footer() {
 				</Link><Link
 				href="/aboutus">
 				<h1>About us </h1>
+				</Link>
+				<Link
+				href="/">
+				<h1>Hire Me </h1>
 				</Link>
 			</div>
 		</footer>

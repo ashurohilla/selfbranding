@@ -66,8 +66,8 @@ export default function Home() {
 	return (
 		<div>
 			<Navbar />
-			<div className="container mx-auto px-4 py-8">
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div className="container  mx-auto px-4 py-8">
+				<div className="grid grid-cols-1 mt-[100px] md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{blogs.map((blog, index) => {
 						const images = extractImageUrlsFromMarkdown(blog.content);
 						

@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import React, { useState } from "react";
 import Image from "next/image";
 import { IAuthor, IBlog } from "@/lib/types";
@@ -9,6 +8,8 @@ import { AiOutlineComment, AiOutlineHeart, AiOutlineEye } from "react-icons/ai";
 import { LinkedinIcon, InstagramIcon, TwitterIcon, ShareIcon, CopyIcon, Clock, Calendar } from "lucide-react";
 import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import Footer from "@/components/Footer";
+import BlogBody from "@/components/editor/BlogBody";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +30,6 @@ interface Props {
 
 export default function Content({ blog, author }: Props) {
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const blogUrl = `https://${SITE_URL}blog/${blog?.slug}`;
 
   const shareOnTwitter = () => {
@@ -57,10 +57,6 @@ export default function Content({ blog, author }: Props) {
     setIsCommentSectionOpen(!isCommentSectionOpen);
   };
 
-  const toggleLike = () => {
-    setIsLiked(!isLiked);
-  };
-
   const estimatedReadTime = Math.ceil((blog?.content?.length || 0) / 200); // Rough estimate
 
   return (
@@ -73,11 +69,6 @@ export default function Content({ blog, author }: Props) {
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight font-gilroy_bold">
               {blog?.title}
             </h1>
-            {blog?.meta_description && (
-              <p className="text-lg md:text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed">
-                {blog.meta_description}
-              </p>
-            )}
             <div className="flex items-center justify-center gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
@@ -113,7 +104,7 @@ export default function Content({ blog, author }: Props) {
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
               </Link>
               <div>
-                <h3 className="font-bold text-lg text-gray-900 font-gilroy_bold">{author?.Name}</h3>
+                <h3 className="font-bold text-lg text-gray-900 font-gilroy_medium">{author?.Name}</h3>
                 <p className="text-gray-600 text-sm">Software Engineer & Writer</p>
               </div>
             </div>
@@ -139,14 +130,10 @@ export default function Content({ blog, author }: Props) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <button
-                onClick={toggleLike}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
-                  isLiked 
-                    ? 'bg-red-100 text-red-600' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200  'bg-gray-100 text-gray-600 hover:bg-gray-200" 
+                  
               >
-                <AiOutlineHeart className={isLiked ? 'fill-current' : ''} />
+                <AiOutlineHeart className= "fill-current " />
                 <span className="text-sm font-medium">Like</span>
               </button>
               <button
@@ -223,7 +210,8 @@ export default function Content({ blog, author }: Props) {
           <div className="p-8 md:p-12">
             {/* Medium-style content styling */}
             <div className="max-w-none">
-              <MDXRemote 
+              <BlogBody source={blog?.content || ""} />
+              {/* <MDXRemote 
                 source={blog?.content || ""} 
                 components={{
                   h1: ({ children }) => (
@@ -247,12 +235,12 @@ export default function Content({ blog, author }: Props) {
                     </p>
                   ),
                   code: ({ children }) => (
-                    <code className=" text-white px-2 py-1 rounded font-mono text-sm">
+                    <code className=" text-gray-700 px-2 py-1 rounded font-mono text-sm">
                       {children}
                     </code>
                   ),
                   pre: ({ children }) => (
-                    <pre className="bg-gray-900 text-gray-100 p-6 rounded-lg my-8 overflow-x-auto border border-gray-200 font-mono text-sm">
+                    <pre className="bg-gray-100 text-gray-400 p-6 rounded-lg my-8 overflow-x-auto border border-gray-200 font-mono text-sm">
                       {children}
                     </pre>
                   ),
@@ -302,7 +290,7 @@ export default function Content({ blog, author }: Props) {
                     />
                   ),
                 }}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -324,6 +312,9 @@ export default function Content({ blog, author }: Props) {
           onClick={toggleCommentSection}
         />
       )}
+
+
+   <Footer />
     </div>
   );
 }
