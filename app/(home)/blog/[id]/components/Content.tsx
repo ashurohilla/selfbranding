@@ -227,6 +227,7 @@ export default function Content({ blog, author }: Props) {
           onClick={toggleCommentSection}
         />
       )}
+      {/* Footer */}
     </div>
   );
 }
