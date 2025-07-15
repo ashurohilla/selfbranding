@@ -4,11 +4,12 @@ import Content from "./components/Content"
 import { SITE_URL } from "@/app/config";
 import { createServerClient } from "@supabase/ssr";
 import { createBrowserClient } from "@supabase/ssr";
-import Comments from "./components/coments/coments";
 import supabase from "@/utils/supabase/supabase";
 import { IAuthor } from "@/lib/types";
 import "react-quill/dist/quill.snow.css";
 import Navbar from "@/app/navbar/navbar";
+import BlogBody from "@/components/editor/BlogBody";
+import Footer from "@/components/Footer";
 
 export async function generateStaticParams() {
   const { data: blogs, error } = await supabase
@@ -103,10 +104,14 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         <div>
           <Navbar/>
          <article className="pt-8">
-        <div className="max-w-[1100px] pt-[60px] mx-auto min-h-screen space-y-10">
+        <div className="max-w-[1100px] pt-[80px] mx-auto  ">
           <Content  blog={blog} author={authorData} />
         </div>
+        <div className="max-w-[900px] mx-auto">
+          <BlogBody source={blog?.content || ""} />
+        </div>
          </article>
+         <Footer />
         </div>
       );
     }

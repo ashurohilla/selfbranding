@@ -7,21 +7,18 @@ import { BsGithub, BsInstagram, BsLinkedin, BsTwitter, BsThreeDotsVertical } fro
 import { AiOutlineComment, AiOutlineHeart, AiOutlineEye } from "react-icons/ai";
 import { LinkedinIcon, InstagramIcon, TwitterIcon, ShareIcon, CopyIcon, Clock, Calendar } from "lucide-react";
 import dynamic from 'next/dynamic';
-import { MDXRemote } from 'next-mdx-remote/rsc'
 import Footer from "@/components/Footer";
-import BlogBody from "@/components/editor/BlogBody";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SITE_URL } from "@/app/config";
 import { toast } from "@/components/ui/use-toast";
 
-const Comments = dynamic(() => import('./coments/coments'), { ssr: false });
+const Comments = dynamic(() => import('./Coments/Coments'), { ssr: false });
 
 interface Props {
   blog: IBlog;
@@ -60,7 +57,7 @@ export default function Content({ blog, author }: Props) {
   const estimatedReadTime = Math.ceil((blog?.content?.length || 0) / 200); // Rough estimate
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="bg-gradient-to-br from-gray-50 to-white">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
@@ -88,7 +85,7 @@ export default function Content({ blog, author }: Props) {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 -mt-8 relative z-10">
+      <div className="max-w-5xl mx-auto px-6 mt-8 relative z-10">
         {/* Author Card */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex items-center justify-between">
@@ -207,98 +204,16 @@ export default function Content({ blog, author }: Props) {
         <div className={`bg-white overflow-hidden transition-all duration-300 ${
           isCommentSectionOpen ? "mr-80" : ""
         }`}>
-          <div className="p-8 md:p-12">
+          <div>
             {/* Medium-style content styling */}
-            <div className="max-w-none">
-              <BlogBody source={blog?.content || ""} />
-              {/* <MDXRemote 
-                source={blog?.content || ""} 
-                components={{
-                  h1: ({ children }) => (
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-8 mt-12 font-serif">
-                      {children}
-                    </h1>
-                  ),
-                  h2: ({ children }) => (
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-6 mt-12 font-serif">
-                      {children}
-                    </h2>
-                  ),
-                  h3: ({ children }) => (
-                    <h3 className="text-xl md:text-2xl font-semibold text-gray-900 leading-tight mb-4 mt-8 font-serif">
-                      {children}
-                    </h3>
-                  ),
-                  p: ({ children }) => (
-                    <p className="text-gray-800 text-lg leading-relaxed mb-6 font-serif">
-                      {children}
-                    </p>
-                  ),
-                  code: ({ children }) => (
-                    <code className=" text-gray-700 px-2 py-1 rounded font-mono text-sm">
-                      {children}
-                    </code>
-                  ),
-                  pre: ({ children }) => (
-                    <pre className="bg-gray-100 text-gray-400 p-6 rounded-lg my-8 overflow-x-auto border border-gray-200 font-mono text-sm">
-                      {children}
-                    </pre>
-                  ),
-                  blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-gray-300 bg-gray-50 p-6 my-8 rounded-r-lg italic text-gray-700 text-lg font-serif">
-                      {children}
-                    </blockquote>
-                  ),
-                  ul: ({ children }) => (
-                    <ul className="my-6 space-y-3 text-gray-800 text-lg font-serif">
-                      {children}
-                    </ul>
-                  ),
-                  ol: ({ children }) => (
-                    <ol className="my-6 space-y-3 text-gray-800 text-lg font-serif">
-                      {children}
-                    </ol>
-                  ),
-                  li: ({ children }) => (
-                    <li className="text-gray-800 leading-relaxed ml-6 list-disc">
-                      {children}
-                    </li>
-                  ),
-                  a: ({ children, href }) => (
-                    <a 
-                      href={href} 
-                      className="text-blue-600 hover:text-blue-800 underline decoration-2 underline-offset-2 transition-colors"
-                    >
-                      {children}
-                    </a>
-                  ),
-                  strong: ({ children }) => (
-                    <strong className="text-gray-900 font-semibold">
-                      {children}
-                    </strong>
-                  ),
-                  em: ({ children }) => (
-                    <em className="text-gray-700 italic">
-                      {children}
-                    </em>
-                  ),
-                  img: ({ src, alt }) => (
-                    <img 
-                      src={src} 
-                      alt={alt} 
-                      className="w-full rounded-lg shadow-lg my-8 border border-gray-200"
-                    />
-                  ),
-                }}
-              /> */}
-            </div>
+         
           </div>
         </div>
       </div>
 
       {/* Comments Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-80 bg-white shadow-2xl transform transition-transform duration-300 ${
+        className={`fixed inset-y-0 right-0 z-50 w-[370px] bg-white shadow-2xl transform transition-transform duration-300 ${
           isCommentSectionOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -312,9 +227,6 @@ export default function Content({ blog, author }: Props) {
           onClick={toggleCommentSection}
         />
       )}
-
-
-   <Footer />
     </div>
   );
 }

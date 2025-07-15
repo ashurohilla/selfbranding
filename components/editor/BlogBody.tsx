@@ -12,7 +12,7 @@ export default function BlogBody({ source }: Props) {
         source={source} 
        components={{
                   h1: ({ children }) => (
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-8 mt-12 font-serif">
+                    <h1 className="text-4xl md:text-5xl font-medium text-gray-800 leading-tight mb-8 mt-12 font-serif">
                       {children}
                     </h1>
                   ),

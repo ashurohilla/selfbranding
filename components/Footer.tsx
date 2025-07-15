@@ -1,7 +1,6 @@
 import React from "react";
 import {
 	GitHubLogoIcon,
-	DiscIcon,
 	LinkedInLogoIcon,
 	DiscordLogoIcon,
 } from "@radix-ui/react-icons";
