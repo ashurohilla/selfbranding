@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -9,8 +8,6 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Cross1Icon, ChatBubbleIcon, PersonIcon } from "@radix-ui/react-icons";
-import { defaultcoment } from "@/lib/data";
-
 interface CommentData {
   coment: string;
   coment_id: string;
