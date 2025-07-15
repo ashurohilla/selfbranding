@@ -18,7 +18,7 @@ import {
 import { SITE_URL } from "@/app/config";
 import { toast } from "@/components/ui/use-toast";
 
-const Comments = dynamic(() => import('./Coments/Coments'), { ssr: false });
+const Comments = dynamic(() => import('./coments/Coments'), { ssr: false });
 
 interface Props {
   blog: IBlog;
