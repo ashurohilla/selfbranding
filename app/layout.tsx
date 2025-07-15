@@ -13,14 +13,10 @@ import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-tool.css
 import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor.css";
 import "../components/styles/niwi-blog.css"
 import "../components/styles/niwi.css"
-import image from "../public/hardware.png"
-
 
 import ReactQueryProvider from './dashboard/blog/components/query-client-provider/query-client-provider';
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { images } from '@/next.config';
-
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : 'http://localhost:3000'

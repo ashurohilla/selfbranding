@@ -126,13 +126,13 @@ export default function Content({ blog, author }: Props) {
         <div className="bg-white rounded-2xl shadow-lg p-4 mb-8 border border-gray-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <button
+              {/* <button
                 className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200  'bg-gray-100 text-gray-600 hover:bg-gray-200" 
                   
               >
                 <AiOutlineHeart className= "fill-current " />
                 <span className="text-sm font-medium">Like</span>
-              </button>
+              </button> */}
               <button
                 onClick={toggleCommentSection}
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200"
@@ -181,21 +181,10 @@ export default function Content({ blog, author }: Props) {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              <DropdownMenu>
-                <DropdownMenuTrigger className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                  <BsThreeDotsVertical className="w-4 h-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Link className="font-medium text-green-600 hover:text-green-700" target="_blank" href={author?.twiter}>
-                      Follow Author
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="font-medium text-red-600 hover:text-red-700">
-                    Report Article
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            
+              
+            
+          
             </div>
           </div>
         </div>

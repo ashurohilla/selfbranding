@@ -7,7 +7,7 @@ interface Props {
 
 export default function BlogBody({ source }: Props) {
   return (
-    <div className="max-w-none">
+    <div className="max-w-none md:mx-2 mx-4">
       <MDXRemote 
         source={source} 
        components={{
