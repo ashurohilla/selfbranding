@@ -6,7 +6,7 @@ import Profile from "./profile";
 import Logout from "@/components/logout";
 import { Button } from "@/components/ui/button";
 import { usePathname } from 'next/navigation'
-import logo from "../../public/logonew.png";
+import logo from "../../public/logoashish.png";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import {
@@ -97,7 +97,7 @@ export default function Navbar() {
                   alt="logo"
                   height={120}
                   width={120}
-                  className="h-10 w-15 md:h-14 md:w-28"
+                  className="h-14 invert w-16 md:h-14 md:w-28"
                 />
               </Link>
             </div>
