@@ -104,7 +104,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         <div>
           <Navbar/>
          <article className="pt-8">
-        <div className="max-w-[1100px] pt-[80px] mx-auto  ">
+        <div className="max-w-[1100px] md:pt-[80px] pt-[30px] mx-auto  ">
           <Content  blog={blog} author={authorData} />
         </div>
         <div className="max-w-[900px] mx-auto">
@@ -112,6 +112,6 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         </div>
          </article>
          <Footer />
-        </div>
+      </div>
       );
     }

@@ -12,9 +12,9 @@ export default function profile() {
    <Image
    src={user?.user_metadata.avatar_url}
    alt ={user?.user_metadata.user_name}
-   width={50}
-   height={50}
-   className='rounded-full ring-2 mr-2 md:mr-10 ring-slate-500'
+   width={60}
+   height={60}
+   className='rounded-full flex ring-2 justify-center items-center md:mr-10 ring-slate-500'
    />
   )
 }

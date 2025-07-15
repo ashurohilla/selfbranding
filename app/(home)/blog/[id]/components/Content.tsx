@@ -180,12 +180,7 @@ export default function Content({ blog, author }: Props) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              
-            
-              
-            
-          
-            </div>
+              </div>
           </div>
         </div>
 
