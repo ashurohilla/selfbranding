@@ -52,7 +52,7 @@ function ModuleForm( { id , module }: Props) {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
     console.log(updatedFormData.module_name);
-    const slugifiedName = slugify(`${updatedFormData.module_name}-${module.course_id}`); // Use updated module name here
+    const slugifiedName = slugify(`${updatedFormData.module_name}`); // Use updated module name here
     console.log(slugifiedName);
     const date = new Date().toDateString().slice(0,16);
     setFormData({

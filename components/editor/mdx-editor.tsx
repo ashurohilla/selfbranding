@@ -16,7 +16,7 @@ export default function MdxEditor({ defaultValue = "", onChange }: MdxEditorProp
 
   return (
     <textarea
-      className="w-full h-[400px] bg-zinc-900 text-white p-4 rounded-md font-mono"
+      className="w-full h-[900px] bg-zinc-900 text-white p-4 rounded-md font-mono"
       value={markdown}
       onChange={handleChange}
       placeholder="Write your blog in markdown..."

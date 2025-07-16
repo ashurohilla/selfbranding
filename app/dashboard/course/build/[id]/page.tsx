@@ -31,7 +31,7 @@ import ModuleTable from "../../compoennts/NewModuleTable";
     </div>
       </div>
         <div className="border-2 rounded-md  border-black">
-          <ModuleTable id={course.slug}/>
+          <ModuleTable id={course?.slug}/>
         </div>
     </div>
           {/* <CourseDashboard  id={params.id}  course={course} /> */}

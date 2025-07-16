@@ -12,26 +12,22 @@ import { BlogFormSchemaType } from "../schema";
 import { Switch } from "@/components/ui/switch";
 import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
+import  Footer from "@/components/Footer";
 import remarkGfm from "remark-gfm";
 
 const MdxEditor = dynamic(() => import("@/components/editor/mdx-editor"), { ssr: false });
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import logo from "../../../image.png";
 import { 
-  Terminal, 
-  Code, 
-  Eye, 
   Edit3, 
+  Eye, 
   Save, 
   FileText, 
   User, 
   Calendar,
   Hash,
-  Globe,
   MessageCircle,
-  Image as ImageIcon,
   CheckCircle,
   XCircle,
   Loader2,
@@ -40,7 +36,9 @@ import {
   Twitter,
   Linkedin,
   Share2,
-  MoreVertical
+  MoreVertical,
+  Clock,
+  BookOpen
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -78,7 +76,7 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
     },
   });
 
-  // Update time every second for terminal feel
+  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -105,401 +103,346 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
     }
   }, [form.getValues().title, user?.id, form]);
 
-  const formStatus = form.formState.isValid ? "READY" : "INVALID";
+  const formStatus = form.formState.isValid ? "Ready" : "Invalid";
   const wordCount = form.getValues().content?.length || 0;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-green-400 font-mono">
-      {/* Terminal Header */}
-      <div className="bg-gray-800 border-b border-green-500/30 p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Terminal className="w-5 h-5 text-green-400" />
-            <span className="text-green-400 font-bold">BLOG_EDITOR_EDIT v2.1.0</span>
-            <div className="flex gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-xl font-semibold text-gray-900">Blog Editor</h1>
+            <div className="flex items-center space-x-2">
+              <div className={`w-2 h-2 rounded-full ${
+                formStatus === "Ready" ? "bg-green-500" : "bg-red-500"
+              }`}></div>
+              <span className="text-sm text-gray-600">{formStatus}</span>
             </div>
           </div>
-          <div className="text-sm text-green-300">
-            {currentTime.toLocaleTimeString()} | USER: {user?.email || "GUEST"}
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4" />
+              <span>{currentTime.toLocaleTimeString()}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <User className="w-4 h-4" />
+              <span>{user?.email || "Guest"}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Status Bar */}
-      <div className="bg-gray-800 border-b border-green-500/20 p-3 text-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-green-300">STATUS:</span>
-              <span className={`font-bold ${formStatus === "READY" ? "text-green-400" : "text-red-400"}`}>
-                {formStatus}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-300">MODE:</span>
-              <span className="text-yellow-400 font-bold">
-                {isPreview ? "PREVIEW" : "EDIT"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-300">WORDS:</span>
-              <span className="text-blue-400 font-bold">{wordCount}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-            <span className="text-green-300">
-              {isPending ? "SAVING..." : "IDLE"}
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* Toolbar */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center space-x-4">
+            <Button
+              type="button"
+              onClick={() => setPreview(!isPreview && !form.getFieldState("image").invalid)}
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              {isPreview ? (
+                <>
+                  <Edit3 className="w-4 h-4" />
+                  <span>Edit</span>
+                </>
+              ) : (
+                <>
+                  <Eye className="w-4 h-4" />
+                  <span>Preview</span>
+                </>
+              )}
+            </Button>
 
-      <Form {...form}>
-        {/* Control Panel */}
-        <div className="bg-gray-800 border-b border-green-500/20 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                type="button"
-                onClick={() => setPreview(!isPreview && !form.getFieldState("image").invalid)}
-                className="bg-gray-700 hover:bg-gray-600 border border-green-500/30 text-green-400 font-mono"
-              >
-                {isPreview ? (
-                  <>
-                    <Edit3 className="w-4 h-4 mr-2" />
-                    [E]dit
-                  </>
-                ) : (
-                  <>
-                    <Eye className="w-4 h-4 mr-2" />
-                    [P]review
-                  </>
-                )}
-              </Button>
-
-              {/* Settings Toggle */}
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Switch
-                    checked={form.getValues().status}
-                    onCheckedChange={(checked) => form.setValue("status", checked)}
-                  />
-                  <span className="text-green-300 text-sm">PUBLISHED</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Switch
-                    checked={form.getValues().coments_enabled}
-                    onCheckedChange={(checked) => form.setValue("coments_enabled", checked)}
-                  />
-                  <span className="text-green-300 text-sm">COMMENTS</span>
-                </div>
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={form.getValues().status}
+                  onCheckedChange={(checked) => form.setValue("status", checked)}
+                />
+                <span className="text-sm text-gray-700">Published</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={form.getValues().coments_enabled}
+                  onCheckedChange={(checked) => form.setValue("coments_enabled", checked)}
+                />
+                <span className="text-sm text-gray-700">Comments</span>
               </div>
             </div>
-            
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <BookOpen className="w-4 h-4" />
+              <span>{wordCount} characters</span>
+            </div>
             <Button
               onClick={form.handleSubmit(onSubmit)}
               disabled={!form.formState.isValid || isPending}
-              className="bg-green-600 hover:bg-green-700 text-gray-900 font-mono font-bold"
+              className="bg-gray-900 hover:bg-gray-800 text-white"
             >
               {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  SAVING...
+                  Saving...
                 </>
               ) : (
                 <>
                   <Save className="w-4 h-4 mr-2" />
-                  [S]ave
+                  Save
                 </>
               )}
             </Button>
           </div>
         </div>
+      </div>
 
+      <Form {...form}>
         {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-6xl mx-auto space-y-6">
-            {!isPreview ? (
-              <>
-                {/* Title Input */}
-                <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <FileText className="w-4 h-4 text-green-400" />
-                    <span className="text-green-300 font-bold">BLOG.TITLE</span>
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter blog title..."
-                            {...field}
-                            autoFocus
-                            className="bg-gray-900 border-green-500/30 text-green-400 placeholder-green-600 font-mono focus:border-green-400 text-lg"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-400" />
-                      </FormItem>
-                    )}
-                  />
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          {!isPreview ? (
+            <div className="space-y-6">
+              {/* Title Input */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center space-x-2 mb-4">
+                  <FileText className="w-5 h-5 text-gray-400" />
+                  <h2 className="text-lg font-medium text-gray-900">Blog Title</h2>
                 </div>
-
-                {/* Image Input */}
-                <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <ImageIcon className="w-4 h-4 text-green-400" />
-                    <span className="text-green-300 font-bold">COVER.IMAGE</span>
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="🔗 Image URL..."
-                            {...field}
-                            type="url"
-                            className="bg-gray-900 border-green-500/30 text-green-400 placeholder-green-600 font-mono focus:border-green-400"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-400" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Metadata Panel */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Hash className="w-4 h-4 text-green-400" />
-                      <span className="text-green-300 text-sm">SLUG</span>
-                    </div>
-                    <div className="text-yellow-400 text-sm font-mono break-all">
-                      {form.getValues().slug || "auto-generated"}
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <User className="w-4 h-4 text-green-400" />
-                      <span className="text-green-300 text-sm">AUTHOR</span>
-                    </div>
-                    <div className="text-blue-400 text-sm font-mono">
-                      {user?.email || "Unknown"}
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="w-4 h-4 text-green-400" />
-                      <span className="text-green-300 text-sm">CREATED</span>
-                    </div>
-                    <div className="text-purple-400 text-sm font-mono">
-                      {form.getValues().created_at ? 
-                        new Date(form.getValues().created_at).toLocaleDateString() : 
-                        "Now"
-                      }
-                    </div>
-                  </div>
-                </div>
-
-                {/* Editor Panel */}
-                <div className="bg-gray-800 border border-green-500/30 rounded-lg overflow-hidden">
-                  <div className="bg-gray-700 px-4 py-3 border-b border-green-500/20">
-                    <div className="flex items-center gap-3">
-                      <Code className="w-4 h-4 text-green-400" />
-                      <span className="text-green-300 font-bold">EDITOR.MDX</span>
-                      <div className="flex items-center gap-2 ml-auto">
-                        <div className={`w-2 h-2 rounded-full ${
-                          wordCount > 0 ? 'bg-green-400' : 'bg-red-400'
-                        }`}></div>
-                        <span className="text-xs text-green-300">
-                          {wordCount > 0 ? 'ACTIVE' : 'EMPTY'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4">
-                    <div className="min-h-[500px]">
-                      <MdxEditor
-                        key="editor"
-                        defaultValue={form.getValues().content || ""}
-                        onChange={onChangeValue}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              /* Preview Mode */
-              <div className="bg-gray-800 border border-green-500/30 rounded-lg overflow-hidden">
-                <div className="bg-gray-700 px-4 py-3 border-b border-green-500/20">
-                  <div className="flex items-center gap-3">
-                    <Eye className="w-4 h-4 text-green-400" />
-                    <span className="text-green-300 font-bold">PREVIEW.LIVE</span>
-                  </div>
-                </div>
-
-                <div className="p-6 bg-gray-900">
-                  <div className="max-w-4xl mx-auto">
-                    {/* Blog Header */}
-                    <div className="space-y-6 mb-8">
-                      <h1 className="text-5xl font-bold text-green-400 leading-tight">
-                        {form.getValues().title || "Untitled Blog"}
-                      </h1>
-                      
-                      {/* Author Info */}
-                      <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-green-500/20">
-                        <div className="flex items-center gap-4">
-                          <Image
-                            className="rounded-full border-2 border-green-500/30"
-                            width={50}
-                            height={50}
-                            alt="profile"
-                            src={logo}
-                          />
-                          <div>
-                            <p className="text-green-300 font-medium">Author</p>
-                            <p className="text-green-600 text-sm">
-                              {form.getValues().created_at ? 
-                                new Date(form.getValues().created_at).toLocaleDateString() : 
-                                "Today"
-                              }
-                            </p>
-                          </div>
-                        </div>
-                        
-                        {/* Social Links */}
-                        <div className="flex items-center gap-3">
-                          <Link href="#" className="text-green-400 hover:text-green-300 transition-colors">
-                            <Github className="w-5 h-5" />
-                          </Link>
-                          <Link href="#" className="text-green-400 hover:text-green-300 transition-colors">
-                            <Instagram className="w-5 h-5" />
-                          </Link>
-                          <Link href="#" className="text-green-400 hover:text-green-300 transition-colors">
-                            <Twitter className="w-5 h-5" />
-                          </Link>
-                          <Link href="#" className="text-green-400 hover:text-green-300 transition-colors">
-                            <Linkedin className="w-5 h-5" />
-                          </Link>
-                        </div>
-                      </div>
-
-                      {/* Action Bar */}
-                      <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-green-500/20">
-                        <div className="flex items-center gap-4">
-                          <button className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
-                            <MessageCircle className="w-4 h-4" />
-                            <span className="text-sm">Comments</span>
-                          </button>
-                        </div>
-                        
-                        <div className="flex items-center gap-3">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger className="text-green-400 hover:text-green-300 transition-colors">
-                              <Share2 className="w-4 h-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-gray-800 border-green-500/30">
-                              <DropdownMenuLabel className="text-green-300">Share Article</DropdownMenuLabel>
-                              <DropdownMenuSeparator className="bg-green-500/20" />
-                              <DropdownMenuItem className="text-green-400 hover:bg-gray-700">
-                                <Share2 className="w-4 h-4 mr-2" />
-                                Copy Link
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-green-400 hover:bg-gray-700">
-                                <Twitter className="w-4 h-4 mr-2" />
-                                Share on Twitter
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-green-400 hover:bg-gray-700">
-                                <Linkedin className="w-4 h-4 mr-2" />
-                                Share on LinkedIn
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                          
-                          <DropdownMenu>
-                            <DropdownMenuTrigger className="text-green-400 hover:text-green-300 transition-colors">
-                              <MoreVertical className="w-4 h-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-gray-800 border-green-500/30">
-                              <DropdownMenuLabel className="text-green-300">Options</DropdownMenuLabel>
-                              <DropdownMenuSeparator className="bg-green-500/20" />
-                              <DropdownMenuItem className="text-green-400 hover:bg-gray-700">
-                                Follow Author
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-400 hover:bg-gray-700">
-                                Report Article
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Cover Image */}
-                    {form.getValues().image && (
-                      <div className="relative w-full h-96 mb-8 rounded-lg overflow-hidden border border-green-500/20">
-                        <Image
-                          priority
-                          src={form.getValues().image}
-                          alt="cover"
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your blog title..."
+                          {...field}
+                          autoFocus
+                          className="text-2xl font-bold border-0 px-0 py-3 focus:ring-0 placeholder-gray-400"
                         />
-                      </div>
-                    )}
+                      </FormControl>
+                      <FormMessage className="text-red-500" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                    {/* Content */}
-                    <div className="prose prose-invert max-w-none
-                      prose-headings:text-green-400 prose-headings:font-mono
-                      prose-p:text-green-300 prose-p:leading-relaxed
-                      prose-code:bg-gray-800 prose-code:text-yellow-400
-                      prose-pre:bg-gray-800 prose-pre:border prose-pre:border-green-500/30
-                      prose-blockquote:border-l-green-500 prose-blockquote:bg-gray-800/50
-                      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-                      prose-strong:text-green-400 prose-em:text-yellow-400
-                      prose-li:text-green-300
-                    ">
-                      {form.getValues().content ? (
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {form.getValues().content}
-                        </ReactMarkdown>
-                      ) : (
-                        <div className="text-green-600 text-center py-8">
-                          // No content available
-                        </div>
-                      )}
+              {/* Metadata */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Hash className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-700">Slug</span>
+                  </div>
+                  <p className="text-sm text-gray-500 font-mono break-all">
+                    {form.getValues().slug || "Auto-generated"}
+                  </p>
+                </div>
+                
+                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <User className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-700">Author</span>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    {user?.email || "Unknown"}
+                  </p>
+                </div>
+                
+                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-700">Created</span>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    {form.getValues().created_at ? 
+                      new Date(form.getValues().created_at).toLocaleDateString() : 
+                      "Now"
+                    }
+                  </p>
+                </div>
+              </div>
+
+              {/* Editor */}
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900">Content Editor</h3>
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-2 h-2 rounded-full ${
+                        wordCount > 0 ? 'bg-green-500' : 'bg-gray-400'
+                      }`}></div>
+                      <span className="text-sm text-gray-600">
+                        {wordCount > 0 ? 'Content available' : 'No content'}
+                      </span>
                     </div>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="min-h-[500px]">
+                    <MdxEditor
+                      key="editor"
+                      defaultValue={form.getValues().content || ""}
+                      onChange={onChangeValue}
+                    />
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            /* Preview Mode */
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center space-x-2">
+                  <Eye className="w-5 h-5 text-gray-400" />
+                  <h3 className="text-lg font-medium text-gray-900">Live Preview</h3>
+                </div>
+              </div>
+
+              <div className="p-8">
+                <div className="max-w-4xl mx-auto">
+                  {/* Blog Header */}
+                  <div className="space-y-6 mb-8">
+                    <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+                      {form.getValues().title || "Untitled Blog"}
+                    </h1>
+                    
+                    {/* Author Info */}
+                    <div className="flex items-center justify-between py-6 border-b border-gray-200">
+                      <div className="flex items-center space-x-4">
+                        <Image
+                          className="rounded-full border-2 border-gray-200"
+                          width={50}
+                          height={50}
+                          alt="profile"
+                          src={logo}
+                        />
+                        <div>
+                          <p className="font-medium text-gray-900">Author</p>
+                          <p className="text-sm text-gray-500">
+                            {form.getValues().created_at ? 
+                              new Date(form.getValues().created_at).toLocaleDateString() : 
+                              "Today"
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Social Links */}
+                      <div className="flex items-center space-x-4">
+                        <Link href="#" className="text-gray-400 hover:text-gray-600 transition-colors">
+                          <Github className="w-5 h-5" />
+                        </Link>
+                        <Link href="#" className="text-gray-400 hover:text-gray-600 transition-colors">
+                          <Instagram className="w-5 h-5" />
+                        </Link>
+                        <Link href="#" className="text-gray-400 hover:text-gray-600 transition-colors">
+                          <Twitter className="w-5 h-5" />
+                        </Link>
+                        <Link href="#" className="text-gray-400 hover:text-gray-600 transition-colors">
+                          <Linkedin className="w-5 h-5" />
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Action Bar */}
+                    <div className="flex items-center justify-between py-4 border-b border-gray-200">
+                      <div className="flex items-center space-x-4">
+                        <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors">
+                          <MessageCircle className="w-4 h-4" />
+                          <span className="text-sm">Comments</span>
+                        </button>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger className="text-gray-600 hover:text-gray-900 transition-colors">
+                            <Share2 className="w-4 h-4" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="bg-white border-gray-200">
+                            <DropdownMenuLabel className="text-gray-700">Share Article</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-gray-200" />
+                            <DropdownMenuItem className="text-gray-600 hover:bg-gray-50">
+                              <Share2 className="w-4 h-4 mr-2" />
+                              Copy Link
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-gray-600 hover:bg-gray-50">
+                              <Twitter className="w-4 h-4 mr-2" />
+                              Share on Twitter
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-gray-600 hover:bg-gray-50">
+                              <Linkedin className="w-4 h-4 mr-2" />
+                              Share on LinkedIn
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        
+                        <DropdownMenu>
+                          <DropdownMenuTrigger className="text-gray-600 hover:text-gray-900 transition-colors">
+                            <MoreVertical className="w-4 h-4" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="bg-white border-gray-200">
+                            <DropdownMenuLabel className="text-gray-700">Options</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-gray-200" />
+                            <DropdownMenuItem className="text-gray-600 hover:bg-gray-50">
+                              Follow Author
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600 hover:bg-gray-50">
+                              Report Article
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cover Image */}
+                  {form.getValues().image && (
+                    <div className="relative w-full h-96 mb-8 rounded-lg overflow-hidden border border-gray-200">
+                      <Image
+                        priority
+                        src={form.getValues().image}
+                        alt="cover"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
+                  )}
+
+                  {/* Content */}
+                  <div className="prose prose-gray max-w-none
+                    prose-headings:text-gray-900
+                    prose-p:text-gray-700 prose-p:leading-relaxed
+                    prose-code:bg-gray-100 prose-code:text-gray-800
+                    prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200
+                    prose-blockquote:border-l-gray-300 prose-blockquote:bg-gray-50
+                    prose-a:text-gray-900 prose-a:underline hover:prose-a:no-underline
+                    prose-strong:text-gray-900 prose-em:text-gray-700
+                    prose-li:text-gray-700
+                  ">
+                    {form.getValues().content ? (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {form.getValues().content}
+                      </ReactMarkdown>
+                    ) : (
+                      <div className="text-gray-400 text-center py-8">
+                        No content available
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </Form>
-
       {/* Footer */}
-      <div className="bg-gray-800 border-t border-green-500/30 p-3 text-xs text-green-600">
-        <div className="flex items-center justify-between">
-          <div>
-            Press [P] for Preview | [E] for Edit | [S] to Save | [Ctrl+S] Quick Save
-          </div>
-          <div>
-            Terminal Blog Editor © 2024 | EDIT MODE
-          </div>
-        </div>
-      </div>
+      <Footer/>
     </div>
   );
 }

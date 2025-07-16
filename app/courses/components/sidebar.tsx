@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { IModules, IchapterDetails,IchapterModules } from '@/lib/types';
+import { useRouter } from 'next/navigation';
+import { IModules, IchapterModules } from '@/lib/types';
 import { readchaptersbymodules } from '@/lib/actions/blog';
+import Link from 'next/link';
 import Loading from './loader';
 import {
   Accordion,
@@ -12,11 +14,12 @@ import {
 } from "@/components/ui/accordion";
 
 interface SidebarProps {
-  modules: IModules; // <-- Make sure it's an array!
-  onChapterClick: (chapterId: string) => void;
+  modules: IModules;
+  courseId: string;
 }
 
-function Sidebar({ modules, onChapterClick }: SidebarProps) {
+function Sidebar({ modules, courseId }: SidebarProps) {
+  const router = useRouter();
   const [chapterData, setChapterData] = useState<{ [moduleId: string]: IchapterModules[] }>({});
   const [loader, setLoading] = useState<boolean>(true);
 
@@ -29,20 +32,19 @@ function Sidebar({ modules, onChapterClick }: SidebarProps) {
 
         if (response && Array.isArray(response.data)) {
           const groupedChapters: { [key: string]: IchapterModules[] } = {};
-          
           response.data.forEach((chapter: IchapterModules) => {
             const moduleId = chapter?.module_id;
             if (moduleId !== undefined && moduleId !== null) {
               if (!groupedChapters[moduleId]) {
                 groupedChapters[moduleId] = [];
               }
-              groupedChapters[moduleId]?.push(chapter);
+              // Fix: Use non-null assertion since we just checked above
+              groupedChapters[moduleId]!.push(chapter);
             }
           });
 
           setChapterData(groupedChapters);
         }
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching chapters:", error);
@@ -67,14 +69,16 @@ function Sidebar({ modules, onChapterClick }: SidebarProps) {
                 <AccordionTrigger className="w-[400px]">
                   {module.module_name}
                 </AccordionTrigger>
-                {chapterData[module.slug]?.map((chapter, idx) => (
+                {chapterData[module.slug]?.map((chapter) => (
                   <AccordionContent key={chapter.slug}>
+                    <Link href={`/courses/${courseId}/${chapter.slug}`} >
                     <button
-                      onClick={() => onChapterClick(chapter.slug)}
+                      // onClick={() => router.push(`/courses/${courseId}/${chapter.slug}`)}
                       className="text-left w-full hover:underline text-blue-600"
-                    >
+                      >
                       {chapter.chapter_name}
                     </button>
+                      </Link>
                   </AccordionContent>
                 ))}
               </AccordionItem>

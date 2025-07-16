@@ -230,6 +230,15 @@ export async function readBlogDeatailById(id : string) {
 		.eq("slug", id)
 		.single();
 }
+
+export async function readcoursebyid(id : string) {
+	const supabase = await createSupabaseServerClient();
+	return await supabase
+		.from("course")
+		.select("*")
+		.eq("slug", id)
+		.single();
+}
 export async function readchapterdetailsbyid(id : string) {
 	const supabase = await createSupabaseServerClient();
 	return await supabase

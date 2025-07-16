@@ -23,7 +23,7 @@ import Navbar from "../navbar/navbar";
 				return (
 				
 					<Link
-						href={"/course/"  + course.slug}
+						href={"/courses/"  + course.slug}
 						className="w-full  border rounded-md dark:bg-graident-dark p-5 hover:ring-2 ring-green-500 transition-all cursor-pointer space-y-5 first:lg:col-span-2 first:md:col-span-3"
 						key={index}
 					>

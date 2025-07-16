@@ -1,5 +1,4 @@
 "use client";
-
 import { useForm } from "react-hook-form";
 import { useEffect, useState, useCallback, useTransition } from "react";
 import { useUser } from "@/lib/store/user";
@@ -12,6 +11,7 @@ import { BlogFormSchemaType } from "../schema";
 import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Footer from "@/components/Footer";
 import { 
   Terminal, 
   Code, 
@@ -59,7 +59,7 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
     },
   });
 
-  // Update time every second for terminal feel
+  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -86,54 +86,49 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
     }
   }, [form.getValues().title, user?.id, form]);
 
-  const formStatus = form.formState.isValid ? "READY" : "INVALID";
+  const formStatus = form.formState.isValid ? "Ready" : "Invalid";
   const wordCount = form.getValues().content?.length || 0;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-green-400 font-mono">
-      {/* Terminal Header */}
-      <div className="bg-gray-800 border-b border-green-500/30 p-4">
+    <div className="min-h-screen bg-gray-50 text-gray-700">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Terminal className="w-5 h-5 text-green-400" />
-            <span className="text-green-400 font-bold">BLOG_EDITOR v2.1.0</span>
-            <div className="flex gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            </div>
+            <FileText className="w-5 h-5 text-gray-500" />
+            <span className="text-gray-800 font-medium">Blog Editor</span>
           </div>
-          <div className="text-sm text-green-300">
-            {currentTime.toLocaleTimeString()} | USER: {user?.email || "GUEST"}
+          <div className="text-sm text-gray-500">
+            {currentTime.toLocaleTimeString()} | {user?.email || "Guest"}
           </div>
         </div>
       </div>
 
       {/* Status Bar */}
-      <div className="bg-gray-800 border-b border-green-500/20 p-3 text-sm">
+      <div className="bg-gray-100 border-b border-gray-200 p-3 text-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <span className="text-green-300">STATUS:</span>
-              <span className={`font-bold ${formStatus === "READY" ? "text-green-400" : "text-red-400"}`}>
+              <span className="text-gray-600">Status:</span>
+              <span className={`${formStatus === "Ready" ? "text-green-600" : "text-orange-600"}`}>
                 {formStatus}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-green-300">MODE:</span>
-              <span className="text-yellow-400 font-bold">
-                {isPreview ? "PREVIEW" : "EDIT"}
+              <span className="text-gray-600">Mode:</span>
+              <span className="text-blue-600">
+                {isPreview ? "Preview" : "Edit"}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-green-300">WORDS:</span>
-              <span className="text-blue-400 font-bold">{wordCount}</span>
+              <span className="text-gray-600">Words:</span>
+              <span className="text-gray-700">{wordCount}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-            <span className="text-green-300">
-              {isPending ? "SAVING..." : "IDLE"}
+            {isPending && <Loader2 className="w-4 h-4 animate-spin text-gray-500" />}
+            <span className="text-gray-600">
+              {isPending ? "Saving..." : "Ready"}
             </span>
           </div>
         </div>
@@ -141,23 +136,24 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
 
       <Form {...form}>
         {/* Control Panel */}
-        <div className="bg-gray-800 border-b border-green-500/20 p-4">
+        <div className="bg-white border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Button
                 type="button"
                 onClick={() => setPreview(!isPreview)}
-                className="bg-gray-700 hover:bg-gray-600 border border-green-500/30 text-green-400 font-mono"
+                variant="outline"
+                className="text-gray-700 border-gray-300 hover:bg-gray-50"
               >
                 {isPreview ? (
                   <>
                     <Edit3 className="w-4 h-4 mr-2" />
-                    [E]dit
+                    Edit
                   </>
                 ) : (
                   <>
                     <Eye className="w-4 h-4 mr-2" />
-                    [P]review
+                    Preview
                   </>
                 )}
               </Button>
@@ -165,17 +161,17 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
             <Button
               onClick={form.handleSubmit(onSubmit)}
               disabled={!form.formState.isValid || isPending}
-              className="bg-green-600 hover:bg-green-700 text-gray-900 font-mono font-bold"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  SAVING...
+                  Saving...
                 </>
               ) : (
                 <>
                   <Save className="w-4 h-4 mr-2" />
-                  [S]ave
+                  Save
                 </>
               )}
             </Button>
@@ -186,10 +182,10 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
         <div className="flex-1 p-6">
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Title Input */}
-            <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
+            <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-3">
-                <FileText className="w-4 h-4 text-green-400" />
-                <span className="text-green-300 font-bold">BLOG.TITLE</span>
+                <FileText className="w-4 h-4 text-gray-500" />
+                <span className="text-gray-700 font-medium">Title</span>
               </div>
               <FormField
                 control={form.control}
@@ -200,10 +196,10 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
                       <Input
                         placeholder="Enter blog title..."
                         {...field}
-                        className="bg-gray-900 border-green-500/30 text-green-400 placeholder-green-600 font-mono focus:border-green-400"
+                        className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       />
                     </FormControl>
-                    <FormMessage className="text-red-400" />
+                    <FormMessage className="text-red-500" />
                   </FormItem>
                 )}
               />
@@ -211,32 +207,32 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
 
             {/* Metadata Panel */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
+              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Hash className="w-4 h-4 text-green-400" />
-                  <span className="text-green-300 text-sm">SLUG</span>
+                  <Hash className="w-4 h-4 text-gray-500" />
+                  <span className="text-gray-600 text-sm">Slug</span>
                 </div>
-                <div className="text-yellow-400 text-sm font-mono break-all">
+                <div className="text-gray-700 text-sm break-all">
                   {form.getValues().slug || "auto-generated"}
                 </div>
               </div>
               
-              <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
+              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
-                  <User className="w-4 h-4 text-green-400" />
-                  <span className="text-green-300 text-sm">AUTHOR</span>
+                  <User className="w-4 h-4 text-gray-500" />
+                  <span className="text-gray-600 text-sm">Author</span>
                 </div>
-                <div className="text-blue-400 text-sm font-mono">
+                <div className="text-gray-700 text-sm">
                   {user?.email || "Unknown"}
                 </div>
               </div>
               
-              <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
+              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-4 h-4 text-green-400" />
-                  <span className="text-green-300 text-sm">CREATED</span>
+                  <Calendar className="w-4 h-4 text-gray-500" />
+                  <span className="text-gray-600 text-sm">Created</span>
                 </div>
-                <div className="text-purple-400 text-sm font-mono">
+                <div className="text-gray-700 text-sm">
                   {form.getValues().created_at ? 
                     new Date(form.getValues().created_at).toLocaleDateString() : 
                     "Now"
@@ -246,19 +242,19 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
             </div>
 
             {/* Editor/Preview Panel */}
-            <div className="bg-gray-800 border border-green-500/30 rounded-lg overflow-hidden">
-              <div className="bg-gray-700 px-4 py-3 border-b border-green-500/20">
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
                 <div className="flex items-center gap-3">
-                  <Code className="w-4 h-4 text-green-400" />
-                  <span className="text-green-300 font-bold">
-                    {isPreview ? "PREVIEW.MD" : "EDITOR.MDX"}
+                  <Code className="w-4 h-4 text-gray-500" />
+                  <span className="text-gray-700 font-medium">
+                    {isPreview ? "Preview" : "Content"}
                   </span>
                   <div className="flex items-center gap-2 ml-auto">
                     <div className={`w-2 h-2 rounded-full ${
-                      wordCount > 0 ? 'bg-green-400' : 'bg-red-400'
+                      wordCount > 0 ? 'bg-green-500' : 'bg-gray-400'
                     }`}></div>
-                    <span className="text-xs text-green-300">
-                      {wordCount > 0 ? 'ACTIVE' : 'EMPTY'}
+                    <span className="text-xs text-gray-500">
+                      {wordCount > 0 ? 'Active' : 'Empty'}
                     </span>
                   </div>
                 </div>
@@ -266,7 +262,7 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
 
               <div className="p-4">
                 {!isPreview ? (
-                  <div className="min-h-[500px]">
+                  <div className="min-h-[900px]">
                     <MdxEditor
                       key="editor"
                       defaultValue={form.getValues().content || ""}
@@ -274,19 +270,19 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
                     />
                   </div>
                 ) : (
-                  <div className="min-h-[500px] bg-gray-900 border border-green-500/20 rounded p-4">
-                    <div className="prose prose-invert max-w-none
-                      prose-headings:text-green-400 prose-headings:font-mono
-                      prose-p:text-green-300 prose-p:leading-relaxed
-                      prose-code:bg-gray-800 prose-code:text-yellow-400
-                      prose-pre:bg-gray-800 prose-pre:border prose-pre:border-green-500/30
-                      prose-blockquote:border-l-green-500 prose-blockquote:bg-gray-800/50
-                      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-                      prose-strong:text-green-400 prose-em:text-yellow-400
-                      prose-li:text-green-300
+                  <div className="min-h-[500px] bg-gray-50 border border-gray-200 rounded p-4">
+                    <div className="prose prose-gray max-w-none
+                      prose-headings:text-gray-800
+                      prose-p:text-gray-700 prose-p:leading-relaxed
+                      prose-code:bg-gray-100 prose-code:text-gray-800
+                      prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200
+                      prose-blockquote:border-l-gray-400 prose-blockquote:bg-gray-50
+                      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                      prose-strong:text-gray-800 prose-em:text-gray-600
+                      prose-li:text-gray-700
                     ">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {form.getValues().content || "// No content available"}
+                        {form.getValues().content || "No content available"}
                       </ReactMarkdown>
                     </div>
                   </div>
@@ -295,37 +291,37 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
             </div>
 
             {/* Settings Panel */}
-            <div className="bg-gray-800 border border-green-500/30 rounded-lg p-4">
+            <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <Globe className="w-4 h-4 text-green-400" />
-                <span className="text-green-300 font-bold">SETTINGS</span>
+                <Globe className="w-4 h-4 text-gray-500" />
+                <span className="text-gray-700 font-medium">Settings</span>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-green-300">Status:</span>
+                  <span className="text-gray-600">Status:</span>
                   <div className="flex items-center gap-2">
                     {form.getValues().status ? (
-                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <CheckCircle className="w-4 h-4 text-green-500" />
                     ) : (
-                      <XCircle className="w-4 h-4 text-red-400" />
+                      <XCircle className="w-4 h-4 text-orange-500" />
                     )}
-                    <span className={form.getValues().status ? "text-green-400" : "text-red-400"}>
-                      {form.getValues().status ? "PUBLISHED" : "DRAFT"}
+                    <span className={form.getValues().status ? "text-green-600" : "text-orange-600"}>
+                      {form.getValues().status ? "Published" : "Draft"}
                     </span>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-green-300">Comments:</span>
+                  <span className="text-gray-600">Comments:</span>
                   <div className="flex items-center gap-2">
                     {form.getValues().coments_enabled ? (
-                      <MessageCircle className="w-4 h-4 text-green-400" />
+                      <MessageCircle className="w-4 h-4 text-green-500" />
                     ) : (
-                      <XCircle className="w-4 h-4 text-red-400" />
+                      <XCircle className="w-4 h-4 text-gray-400" />
                     )}
-                    <span className={form.getValues().coments_enabled ? "text-green-400" : "text-red-400"}>
-                      {form.getValues().coments_enabled ? "ENABLED" : "DISABLED"}
+                    <span className={form.getValues().coments_enabled ? "text-green-600" : "text-gray-500"}>
+                      {form.getValues().coments_enabled ? "Enabled" : "Disabled"}
                     </span>
                   </div>
                 </div>
@@ -336,16 +332,9 @@ export default function BlogForm({ onHandleSubmit, defaultBlog }: BlogFormProps)
       </Form>
 
       {/* Footer */}
-      <div className="bg-gray-800 border-t border-green-500/30 p-3 text-xs text-green-600">
-        <div className="flex items-center justify-between">
-          <div>
-            Press [P] for Preview | [E] for Edit | [S] to Save | [Ctrl+S] Quick Save
-          </div>
-          <div>
-            Terminal Blog Editor © 2024
-          </div>
-        </div>
-      </div>
+  
+         <Footer/>
+      
     </div>
   );
 }

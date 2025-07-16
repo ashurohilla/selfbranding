@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import supabase from "@/utils/supabase/supabase";
-import { IModule } from "@/lib/types";
 import slugify from "slugify";
 import { createModule } from "@/lib/actions/blog";
 import { useRouter } from "next/navigation";
@@ -37,7 +35,7 @@ function ModuleForm( { id  }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
-    const slugifiedName = slugify(`${updatedFormData.module_name}-${id}`);
+    const slugifiedName = slugify(`${updatedFormData.module_name}`);
     const date = new Date().toDateString().slice(0,16);
     setFormData({
       ...updatedFormData,
