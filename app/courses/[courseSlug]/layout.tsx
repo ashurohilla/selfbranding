@@ -16,9 +16,9 @@ export default async function CourseLayout({
   return (
     <div>
       <Navbar />
-      <div className="flex pt-[90px]">
+      <div className="flex md:pt-[90px] pt-[30px]">
         <Sidebar modules={modules} courseId={params.courseSlug} />
-        <div className="flex-grow px-8">{children}</div>
+        <div className="flex-grow px-2">{children}</div>
       </div>
     </div>
   );
