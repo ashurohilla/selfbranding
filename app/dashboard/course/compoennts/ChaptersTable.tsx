@@ -2,8 +2,6 @@ import React from "react";
 import { EyeOpenIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { IBlog } from "@/lib/types";
-import SwitchForm from "./SwitchForm";
 import DeleteAlert from "./DeleteAlertchapter";
 import { readchaptersbymodule } from "@/lib/actions/blog";
 import { PlusIcon } from "@radix-ui/react-icons";
@@ -18,6 +16,7 @@ export default async function
 ChapterTable( {id}: Props) {
 
     const { data: chapters } = await readchaptersbymodule(id);
+	console.log(chapters);
 	return (
 		<>
 			<div className="rounded-md bg-graident-dark border-[0.5px] overflow-y-scroll ">
@@ -69,7 +68,7 @@ const Actions = ({ id, slug }: { id: number; slug: string } ) => {
 					Edit
 				</Button>
 			</Link>
-			<Link href={`/chapter/${slug}`}>
+			<Link target="_blank" href={`/chapter/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<Pencil1Icon />
 					View

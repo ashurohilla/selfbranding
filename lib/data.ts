@@ -109,6 +109,7 @@ export const defaultlesson: IchapterDetails = {
 };
 
 export const defaultcourse :Icourse = {
+	id: "",
 	banner_image: "",
 	created_at: "",
 	Catogory_id: "",

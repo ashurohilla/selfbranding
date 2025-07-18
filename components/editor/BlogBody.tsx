@@ -36,6 +36,11 @@ export default function BlogBody({ source }: Props) {
                       {children}
                     </code>
                   ),
+                  CodeBlock: ({ children }) => (
+                    <pre className="bg-gray-100 text-gray-400 p-6 rounded-lg my-8 overflow-x-auto border border-gray-200 font-mono text-sm">
+                      {children}
+                    </pre>
+                  ),
                   pre: ({ children }) => (
                     <pre className="bg-gray-100 text-gray-400 p-6 rounded-lg my-8 overflow-x-auto border border-gray-200 font-mono text-sm">
                       {children}

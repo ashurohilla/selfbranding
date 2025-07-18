@@ -50,7 +50,7 @@ const Actions = ({ id, slug }: { id: string; slug: string } ) => {
 			</Link>
 		
 			<DeleteAlert id={id} />
-			<Link href={`/dashboard/course/edit/${id}`}>
+			<Link href={`/dashboard/course/edit/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<Pencil1Icon />
 					Edit

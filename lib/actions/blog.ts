@@ -2,7 +2,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { IBlog, IModule } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
-import { BlogFormSchema, BlogFormSchemaType, Chapterformschematype } from "../../app/dashboard/blog/schema";
+import { BlogFormSchema, BlogFormSchemaType, Chapterformschematype , CourseFormSchematype } from "../../app/dashboard/blog/schema";
 const DASHBOARD = "/dashboard/blog";
 
 export async function createBlog(data: {
@@ -248,6 +248,15 @@ export async function readchapterdetailsbyid(id : string) {
 		.single();
 }
 
+export async function coursedetailsbyid(id : string) {
+	const supabase = await createSupabaseServerClient();
+	return await supabase
+		.from("course")
+		.select("*")
+		.eq("slug", id)
+		.single();
+}
+
 
 
 export async function getallimages() {
@@ -312,6 +321,25 @@ export async function updatechapter(
 	}
 }
 
+export async function updateCoursebyid(
+	id: string,
+	data: CourseFormSchematype
+) {
+	const supabase = await createSupabaseServerClient();
+	const resultcourse = await supabase
+		.from("course")
+		.update(data)
+		.eq("id", id);
+	console.log(data);
+
+	if (resultcourse) {
+		console.log(resultcourse);
+		return (resultcourse);
+	} else {
+		revalidatePath(DASHBOARD);
+	}
+}
+
 export async function deleteBlogById(blogId: string) {
 	console.log("deleting blog post")
 	const supabase = await createSupabaseServerClient();
@@ -355,12 +383,12 @@ export async function readmodulesbycourseId(courseId: string) {
 
 }
 
-export async function readchaptersbymodule(module_id: string[]) {
+export async function readchaptersbymodule(module_id: string) {
 	const supabase = await createSupabaseServerClient();
 	return supabase
 		.from("chapters")
-		.select("*")
-		.in("module_id", module_id)
+		.select("module_id, chapter_name, slug, id, chapterno")
+		.eq("module_id", module_id)
 		.order("chapterno", { ascending: true });
 }
 export async function readchaptersbymodules(moduleIds: string[]) {

@@ -82,6 +82,7 @@ export type IAuthor = {
 	profile:string
 } ;
 export type Icourse ={
+	id: string;
 	banner_image: string;
 	Catogory_id: string;
 	created_at: string;

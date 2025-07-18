@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useEffect, useState, useCallback, useTransition } from "react";
+import { useEffect, useState, useCallback, useTransition, useMemo } from "react";
 import { useUser } from "@/lib/store/user";
 import { Button } from "@/components/ui/button";
 import slugify from "slugify";
@@ -12,10 +12,29 @@ import { BlogFormSchemaType } from "../schema";
 import { Switch } from "@/components/ui/switch";
 import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
-import  Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
 import remarkGfm from "remark-gfm";
+import ImageGallery from "./ImageGallery";
+import { Copy, Check, Upload, X, Plus } from 'lucide-react';
+import { onUploadImageAction } from "./feats/file/actions/image-upload.action";
+
+
 
 const MdxEditor = dynamic(() => import("@/components/editor/mdx-editor"), { ssr: false });
+
+// Add loading component for BlogBody
+const BlogBody = dynamic(() => import("@/components/editor/BlogBody"), { 
+  ssr: false,
+  loading: () => (
+    <div className="min-h-[500px] bg-gray-50 border border-gray-200 rounded p-4 flex items-center justify-center">
+      <div className="flex items-center gap-2 text-gray-500">
+        <Loader2 className="w-5 h-5 animate-spin" />
+        <span>Loading preview...</span>
+      </div>
+    </div>
+  )
+});
+
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../../image.png";
@@ -35,6 +54,7 @@ import {
   Instagram,
   Twitter,
   Linkedin,
+  Image as ImageIcon,
   Share2,
   MoreVertical,
   Clock,
@@ -58,6 +78,8 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
   const [isPreview, setPreview] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isClient, setIsClient] = useState(false);
+      const [showImageGallery, setShowImageGallery] = useState(false);
   const user = useUser((state) => state.user);
 
   const form = useForm<BlogFormSchemaType>({
@@ -75,6 +97,11 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
       coments_enabled: defaultBlog?.coments_enabled || false,
     },
   });
+
+  // Ensure component is mounted on client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Update time every second
   useEffect(() => {
@@ -105,6 +132,22 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
 
   const formStatus = form.formState.isValid ? "Ready" : "Invalid";
   const wordCount = form.getValues().content?.length || 0;
+
+  // Memoize the BlogBody component to prevent unnecessary re-renders
+  const memoizedBlogBody = useMemo(() => {
+    const content = form.getValues().content || '';
+    return <BlogBody source={content} />;
+  }, [form.watch("content")]);
+
+  // Memoize the ReactMarkdown component for fallback
+  const memoizedMarkdown = useMemo(() => {
+    const content = form.getValues().content || '';
+    return (
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {content}
+      </ReactMarkdown>
+    );
+  }, [form.watch("content")]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -179,6 +222,15 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
               <BookOpen className="w-4 h-4" />
               <span>{wordCount} characters</span>
             </div>
+              <Button
+              type="button"
+              onClick={() => setShowImageGallery(!showImageGallery)}
+              variant="outline"
+              className="text-gray-700 flex float-right border-gray-300 hover:bg-gray-50"
+            >
+              <ImageIcon className="w-4 h-4 float-right" />
+              {showImageGallery ? 'Hide Gallery' : 'Show Gallery'}
+            </Button>
             <Button
               onClick={form.handleSubmit(onSubmit)}
               disabled={!form.formState.isValid || isPending}
@@ -205,6 +257,36 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
         <div className="max-w-7xl mx-auto px-6 py-8">
           {!isPreview ? (
             <div className="space-y-6">
+                      {showImageGallery && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                              <div className="bg-white rounded-lg max-w-5xl max-h-[90vh] w-full overflow-hidden shadow-2xl">
+                                {/* Modal Header */}
+                                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <ImageIcon className="w-5 h-5 text-gray-600" />
+                                    <h2 className="text-lg font-semibold text-gray-800">Image Gallery</h2>
+                                    <span className="text-sm text-gray-500">
+                                      Manage your images for MDX editor
+                                    </span>
+                                  </div>
+                                  <button
+                                    onClick={() => setShowImageGallery(false)}
+                                    className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-200 rounded-full"
+                                  >
+                                    <X className="w-5 h-5" />
+                                  </button>
+                                </div>
+                                
+                                {/* Modal Content */}
+                                <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
+                                  <ImageGallery 
+                                    onUploadImageAction={onUploadImageAction}
+                                    className="border-0 shadow-none rounded-none"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
               {/* Title Input */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center space-x-2 mb-4">
@@ -400,20 +482,6 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
                     </div>
                   </div>
 
-                  {/* Cover Image */}
-                  {form.getValues().image && (
-                    <div className="relative w-full h-96 mb-8 rounded-lg overflow-hidden border border-gray-200">
-                      <Image
-                        priority
-                        src={form.getValues().image}
-                        alt="cover"
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
-                  )}
-
                   {/* Content */}
                   <div className="prose prose-gray max-w-none
                     prose-headings:text-gray-900
@@ -426,9 +494,16 @@ export default function BlogForm({ onblogsubmit, defaultBlog }: BlogFormProps) {
                     prose-li:text-gray-700
                   ">
                     {form.getValues().content ? (
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {form.getValues().content}
-                      </ReactMarkdown>
+                      isClient ? (
+                        memoizedBlogBody
+                      ) : (
+                        <div className="bg-gray-50 border border-gray-200 rounded p-4 flex items-center justify-center">
+                          <div className="flex items-center gap-2 text-gray-500">
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>Loading preview...</span>
+                          </div>
+                        </div>
+                      )
                     ) : (
                       <div className="text-gray-400 text-center py-8">
                         No content available

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { IModules, IchapterModules } from '@/lib/types';
 import { readchaptersbymodules } from '@/lib/actions/blog';
 import Link from 'next/link';
@@ -19,6 +19,7 @@ interface SidebarProps {
 
 function Sidebar({ modules, courseId }: SidebarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [chapterData, setChapterData] = useState<{ [moduleId: string]: IchapterModules[] }>({});
   const [loader, setLoading] = useState<boolean>(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -60,6 +61,11 @@ function Sidebar({ modules, courseId }: SidebarProps) {
   // Close mobile menu when clicking on a chapter link
   const handleChapterClick = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  // Check if current chapter is active
+  const isChapterActive = (chapterSlug: string) => {
+    return pathname === `/courses/${courseId}/${chapterSlug}`;
   };
 
   return (
@@ -149,7 +155,11 @@ function Sidebar({ modules, courseId }: SidebarProps) {
                         <Link href={`/courses/${courseId}/${chapter.slug}`}>
                           <button
                             onClick={handleChapterClick}
-                            className="text-left w-full hover:underline text-blue-600 py-1"
+                            className={`text-left w-full py-2 px-3 rounded-md transition-colors duration-200 ${
+                              isChapterActive(chapter.slug)
+                                ? 'bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-500'
+                                : 'hover:bg-gray-100 hover:text-blue-600 text-gray-700'
+                            }`}
                           >
                             {chapter.chapter_name}
                           </button>

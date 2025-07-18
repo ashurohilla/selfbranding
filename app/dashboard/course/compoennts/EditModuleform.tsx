@@ -2,15 +2,19 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import supabase from "@/utils/supabase/supabase";
 import { IModule } from "@/lib/types";
 import slugify from "slugify";
 import { updatemodulebyid } from "@/lib/actions/blog";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { Loader2, Save, ArrowLeft } from "lucide-react";
 
 interface FormData {
-  id : number;
+  id: number;
   created_at: string;
   module_name: string;
   module_description: string;
@@ -21,10 +25,12 @@ interface FormData {
 
 interface Props {
   id: string;
-  module: IModule
+  module: IModule;
 }
-function ModuleForm( { id , module }: Props) {
+
+function ModuleForm({ id, module }: Props) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     id: 0,
     created_at: "",
@@ -44,107 +50,200 @@ function ModuleForm( { id , module }: Props) {
         module_description: module.module_description,
         module_number: module.module_number,
         course_id: module.course_id,
-        slug: " ",
+        slug: module.slug || "",
       });
     }
-  }, []);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  }, [module]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
-    console.log(updatedFormData.module_name);
-    const slugifiedName = slugify(`${updatedFormData.module_name}`); // Use updated module name here
-    console.log(slugifiedName);
-    const date = new Date().toDateString().slice(0,16);
-    setFormData({
-      ...updatedFormData,
-      slug: slugifiedName,
-      created_at: date,
-    });
+    
+    // Auto-generate slug when module name changes
+    if (name === "module_name") {
+      const slugifiedName = slugify(value, { lower: true, strict: true });
+      updatedFormData.slug = slugifiedName;
+    }
+    
+    setFormData(updatedFormData);
   };
 
-  console.log(formData);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Check if any required field is empty
+    setIsLoading(true);
+    
+    // Validation
     if (
-      !formData.id ||
-      !formData.module_name ||
-      !formData.module_description ||
+      !formData.module_name.trim() ||
+      !formData.module_description.trim() ||
       !formData.module_number ||
-      !formData.course_id ||
-      !formData.slug ||
-      !formData.course_id 
+      !formData.course_id
     ) {
-      console.error("Please fill in all fields");
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      setIsLoading(false);
       return;
     }
-  
+
     try {
-      const result = await updatemodulebyid(module.id , formData);
-      console.log("Module added successfully:", result);
+      const result = await updatemodulebyid(module.id, formData);
+      
       toast({
-        title: "Successfully updated a post 🎉",
-        description: formData.module_name,
+        title: "Success! 🎉",
+        description: `Module "${formData.module_name}" has been updated successfully`,
       });
+      
       router.push(`/dashboard/course/build/${module.course_id}`);
-      // Clear the form fields after successful submission
-      setFormData({
-        id: 0,
-        module_name: "",
-        module_description: "",
-        module_number: 0,
-        course_id: "",
-        slug: "",
-        created_at: "",
-      });
     } catch (error) {
-      console.error("Error adding module:", error);
+      console.error("Error updating module:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update module. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleBack = () => {
+    router.push(`/dashboard/course/build/${module.course_id}`);
   };
 
   return (
-    <div className="bg-secondary rounded-md px-4 py-4">
-      <form className="relative w-[800px]" onSubmit={handleSubmit}>
-        <label htmlFor="module_name">
-          Module name
-          <Input
-            name="module_name"
-            type="text"
-            placeholder="Enter module name"
-            value={formData.module_name}
-            onChange={handleChange}
-          />
-        </label>
-        <label className="mt-6" htmlFor="module_description">
-          Description
-          <Input
-            className="mt-4"
-            name="module_description"
-            type="text"
-            placeholder="Module description"
-            value={formData.module_description}
-            onChange={handleChange}
-          />
-        </label>
-        <label className="mt-6" htmlFor="module_number">
-          Module No
-          <Input
-            className="mt-4"
-            name="module_number"
-            type="number"
-            placeholder="Module No"
-            value={formData.module_number}
-            onChange={handleChange}
-          />
-        </label>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="mb-6">
         <Button
-          className="flex mt-10 justify-center item-center px-2 py-2"
-          variant="outline"
-          type="submit"
+          variant="ghost"
+          onClick={handleBack}
+          className="mb-4 hover:bg-gray-100"
         >
-          Add Module
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Course
         </Button>
-      </form>
+        
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">Edit Module</h1>
+          <p className="text-muted-foreground">
+            Update the module details below. All fields marked with * are required.
+          </p>
+        </div>
+      </div>
+
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-xl">Module Information</CardTitle>
+          <CardDescription>
+            Modify the module details and settings
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="module_name" className="text-sm font-medium">
+                  Module Name *
+                </Label>
+                <Input
+                  id="module_name"
+                  name="module_name"
+                  type="text"
+                  placeholder="e.g., Introduction to React"
+                  value={formData.module_name}
+                  onChange={handleChange}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+                  disabled={isLoading}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="module_number" className="text-sm font-medium">
+                  Module Number *
+                </Label>
+                <Input
+                  id="module_number"
+                  name="module_number"
+                  type="number"
+                  placeholder="1"
+                  value={formData.module_number}
+                  onChange={handleChange}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+                  disabled={isLoading}
+                  min="1"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="module_description" className="text-sm font-medium">
+                Description *
+              </Label>
+              <Textarea
+                id="module_description"
+                name="module_description"
+                placeholder="Provide a detailed description of what students will learn in this module..."
+                value={formData.module_description}
+                onChange={handleChange}
+                className="min-h-[120px] resize-none transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="slug" className="text-sm font-medium">
+                URL Slug
+              </Label>
+              <Input
+                id="slug"
+                name="slug"
+                type="text"
+                placeholder="auto-generated-from-module-name"
+                value={formData.slug}
+                onChange={handleChange}
+                className="transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+                disabled={isLoading}
+              />
+              <p className="text-xs text-muted-foreground">
+                This will be automatically generated from the module name
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-6">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="flex items-center justify-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Update Module
+                  </>
+                )}
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                disabled={isLoading}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

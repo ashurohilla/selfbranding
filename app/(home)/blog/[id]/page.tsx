@@ -1,4 +1,5 @@
 import React from "react";
+import { IBlog } from "@/lib/types";
 import Content from "./components/Content"
 import { SITE_URL } from "@/app/config";
 import supabase from "@/utils/supabase/supabase";import "react-quill/dist/quill.snow.css";

@@ -46,7 +46,7 @@ export default function CreateForm() {
 		}
 	};
 	return (
-		<div className="mb-[400px]">
+		<div className="">
 	{/* <NewBlogForm/> */}
 
 
