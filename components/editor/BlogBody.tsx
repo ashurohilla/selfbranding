@@ -91,6 +91,38 @@ export default function BlogBody({ source }: Props) {
                       className="w-full rounded-lg shadow-lg my-8 border border-gray-200"
                     />
                   ),
+                  table: ({ children }) => (
+      <div className="overflow-x-auto my-8">
+        <table className="w-full border border-gray-300 rounded-lg text-left text-gray-800 font-serif text-base">
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children }) => (
+      <thead className="bg-gray-100 text-gray-700 font-semibold">
+        {children}
+      </thead>
+    ),
+    tbody: ({ children }) => (
+      <tbody className="divide-y divide-gray-200">
+        {children}
+      </tbody>
+    ),
+    tr: ({ children }) => (
+      <tr className="border-b border-gray-200">
+        {children}
+      </tr>
+    ),
+    th: ({ children }) => (
+      <th className="px-4 py-3 border-b border-gray-300">
+        {children}
+      </th>
+    ),
+    td: ({ children }) => (
+      <td className="px-4 py-3">
+        {children}
+      </td>
+    ),
                 }}
       />
     </div>
