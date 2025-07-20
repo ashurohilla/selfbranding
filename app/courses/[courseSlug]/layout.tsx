@@ -80,9 +80,9 @@ export default function CourseLayout({
     <PrivateRoute fallback={courseFallback}>
             
 
-      <div className="flex  h-screen bg-gray-100">
+      <div className="flex h-screen bg-gray-100">
         {/* Sidebar */}
-        <div className="w-[350px] pt-[80px] bg-gray-100 shadow-lg">
+        <div className=" pt-[80px] bg-gray-100 shadow-lg">
           {loading ? (
             <div className="p-4">
               <div className="animate-pulse">

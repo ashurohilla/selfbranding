@@ -114,7 +114,7 @@ function Sidebar({ modules, courseId }: SidebarProps) {
           fixed md:relative
           top-0 left-0
           h-full md:h-auto
-          w-[300px] md:w-[300px]
+          w-[350px] md:w-[300px]
           bg-white md:bg-transparent
           border-r md:border-r-0
           shadow-lg md:shadow-none
