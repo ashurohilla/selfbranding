@@ -28,6 +28,39 @@ export async function createBlog(data: {
     return blogResult;
 }
 
+export async function adddidigitalproduct(data: {
+	product_title: string,
+	product_description: string,
+	category: string,
+	price: number,
+	discount_price: number,
+	product_type: string, // digital_download, service, consultation
+	delivery_method: string, // instant_download, email, scheduled_call
+	tags: string,
+	preview_images: string,
+	product_files: string, // For downloadable products
+	consultation_duration: string, // For consultation services
+	available_slots: string, // For services
+	skill_level: string, // beginner, intermediate, advanced
+	software_requirements: string,
+	file_formats: string,
+	license_type: string, // personal, commercial, extended
+	refund_policy: string, // no_refunds, 7_days, 30_days
+	status: string, // draft, active, inactive
+	featured: boolean,
+	user_id: string, // This would be populated from your auth system
+	
+}) {
+
+	const supabase = await createSupabaseServerClient();
+	const productResult = await supabase
+		.from("digital_products")
+		.insert(data)
+		.single();
+
+    return productResult;
+}
+
 export async function createlesson(data: {
 	catagory_id: number
 	chapter_name: string

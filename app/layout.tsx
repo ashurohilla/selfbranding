@@ -3,16 +3,6 @@ import { ThemeProvider } from '@/components/theme-provider'
 import Sessioprovider from '@/components/session-provider'
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react"
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-code.css"
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-embedded.css";
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-emoji.css";
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-image.css";
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-line-break.css";
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-splash-image.css";
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor-tool.css";
-import "./dashboard/blog/components/niwi-text-editor/styles/niwi-editor.css";
-import "../components/styles/niwi-blog.css"
-import "../components/styles/niwi.css"
 
 import ReactQueryProvider from './dashboard/blog/components/query-client-provider/query-client-provider';
 

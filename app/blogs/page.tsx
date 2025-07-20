@@ -79,14 +79,14 @@ export default function Home() {
 						return (
 							<Link key={blog.slug || index} href={`/blog/${blog.slug}`}>
 								<div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-									<div className="relative h-48 w-full">
+									<div className="relative h-[300px] w-full">
 										{displayImage ? (
 											<Image
 												src={displayImage}
 												alt={blog.title ? String(blog.title) : "Blog post image"}
 												fill
-												className="object-cover"
-												sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+												className=""
+												sizes="(max-width: 68px) 100vw, (max-width: 1200px) 50vw, 33vw"
 											/>
 										) : (
 											<div className="h-full w-full bg-gray-200 flex items-center justify-center">

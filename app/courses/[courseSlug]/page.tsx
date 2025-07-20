@@ -1,5 +1,6 @@
 import { readcoursebyid } from '@/lib/actions/blog';
 import { notFound } from 'next/navigation';
+import Navbar from '@/app/navbar/navbar';
 
 export default async function CourseOverviewPage({
   params,
