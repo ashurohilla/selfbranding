@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { toast } from "@/components/ui/use-toast";
-import { defaultcourse } from "@/lib/data";
+import { defaultcoursenew } from "@/lib/data";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import Courseform from "../compoennts/Courseform";
 import { createCourse } from "../../../../lib/actions/blog";
@@ -12,7 +12,6 @@ export default function CreateForm() {
 	const router = useRouter();
 
 	const onHandleSubmit = async (data: CourseFormSchematype) => {
-		console.log(" creater page butoon pressed")
 		try {
 			const result = await createCourse(data);	
 			if (!result) {
@@ -36,7 +35,7 @@ export default function CreateForm() {
 					title: "Successfully create a post 🎉",
 					description: data.Name,
 				});
-				router.push("/dashboard");
+				router.push("/dashboard/course");
 			}
 		} catch (error) {
 			console.error("Error occurred while handling submit:", error);
@@ -46,7 +45,7 @@ export default function CreateForm() {
 	return (
 		<Courseform
 		onHandleSubmit={onHandleSubmit}
-			defaultCourse={defaultcourse}
+			defaultCourse={defaultcoursenew}
 		/>
 	);
 }

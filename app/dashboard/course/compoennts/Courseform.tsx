@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/lib/store/user";
 import { useState } from "react";
-import { Icourse } from "@/lib/types";
+import { IcourseSubmit } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { BsSave } from "react-icons/bs";
 import { readCatogries } from "@/lib/actions/blog";
@@ -11,8 +11,8 @@ import { Catagories } from "@/lib/types";
 import slugify from "slugify";
 
 interface CourseFormProps {
-  onHandleSubmit: (data: Icourse) => void;
-  defaultCourse: Icourse;
+  onHandleSubmit: (data: IcourseSubmit) => void;
+  defaultCourse: IcourseSubmit;
 }
 
 export default function Courseform({
@@ -20,10 +20,10 @@ export default function Courseform({
   defaultCourse,
 }: CourseFormProps) {
   const user = useUser((state) => state.user);
-  const [formValues, setFormValues] = useState<Icourse>(defaultCourse);
+  const [formValues, setFormValues] = useState<IcourseSubmit>(defaultCourse);
   const [categories, setCategories] = useState<Catagories[]>([]);
 
-  const form = useForm<Icourse>({
+  const form = useForm<IcourseSubmit>({
     defaultValues: formValues,
   });
 
@@ -43,12 +43,13 @@ export default function Courseform({
     }
   };
 
-  const onSubmit = (data: Icourse) => {
+  const onSubmit = (data: IcourseSubmit) => {
     if (user?.id) {
       const instructor = user?.id;
       const slug = slugify(form.getValues().Name, { lower: true }) + instructor;
       const created_at = new Date().toISOString().slice(0, 16);
-      const newData = { ...data, instructor, created_at, slug };
+      const newData = { ...data, instructor,  created_at, slug };
+      console.log("this is data " , newData)
       onHandleSubmit(newData);
     }
   };
@@ -144,7 +145,7 @@ export default function Courseform({
                     Category <span className="text-red-500">*</span>
                   </label>
                   <select
-                    id="Category"
+                    id="catagory_id"
                     {...form.register("Catogory_id", { required: true })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
                   >

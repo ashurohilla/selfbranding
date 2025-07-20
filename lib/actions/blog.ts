@@ -1,6 +1,6 @@
 "use server";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { IBlog, IModule } from "@/lib/types";
+import { IBlog, Icourse, IModule } from "@/lib/types";
 import { revalidatePath, unstable_noStore } from "next/cache";
 import { BlogFormSchema, BlogFormSchemaType, Chapterformschematype , CourseFormSchematype } from "../../app/dashboard/blog/schema";
 const DASHBOARD = "/dashboard/blog";
@@ -136,17 +136,16 @@ export async function createModule(data: {
 
 export async function createCourse(data: {
 	banner_image: string;
-	Catogory_id: string;
 	created_at: string;
+	Catogory_id: string;
 	Description: string;
-	instructor: string;
+	instructor: string; 
 	Name: string;
 	price: string;
 	slug: string;
-	
 }) {
-
 	const supabase = await createSupabaseServerClient();
+	console.log("this is submitable data ", data);
 	const CourseResult = await supabase
 		.from("course")
 		.insert(data)

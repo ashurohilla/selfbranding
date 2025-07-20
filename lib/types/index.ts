@@ -92,6 +92,16 @@ export type Icourse ={
 	price: string;
 	slug:string;
 } ;
+export type IcourseSubmit ={
+	banner_image: string;
+	Catogory_id: string;
+	created_at: string;
+	Description: string;
+	instructor: string;
+	Name: string;
+	price: string;
+	slug:string;
+} ;
 export type Coments ={
 	coment: string;
     created_at: string;
