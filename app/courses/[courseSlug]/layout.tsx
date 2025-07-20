@@ -82,7 +82,7 @@ export default function CourseLayout({
 
       <div className="flex h-screen bg-gray-100">
         {/* Sidebar */}
-        <div className=" pt-[80px] bg-gray-100 shadow-lg">
+        <div className=" md:pt-[40px] bg-gray-100 shadow-lg">
           {loading ? (
             <div className="p-4">
               <div className="animate-pulse">
@@ -96,10 +96,10 @@ export default function CourseLayout({
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 flex flex-col overflow-hidden">         
+        <div className="flex-1 flex flex-col md:mt-6 overflow-hidden">         
           
           {/* Course content */}
-          <main className="flex-1 overflow-y-auto p-6">
+          <main className="flex-1 overflow-y-auto p-8">
             {children}
           </main>
         </div>
@@ -107,7 +107,7 @@ export default function CourseLayout({
         {/* Floating Coffee Donation Button */}
         <div className="fixed bottom-6 right-6 group z-50">
           <Link
-            href="https://www.buymeacoffee.com/your-username"
+            href="https://www.buymeacoffee.com/ashishrohilla"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-yellow-400 hover:bg-yellow-500 text-black p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center"

@@ -39,7 +39,8 @@ export default function EditCourseForm({ course }: EditCourseFormProps) {
 
     // Auto-generate slug when Name changes
     if (name === "Name") {
-      updatedForm.slug = slugify(value, { lower: true, strict: true });
+      const slugnew = slugify(value, { lower: true }) + course.instructor;
+      updatedForm.slug = slugnew;
     }
 
     setFormData(updatedForm);

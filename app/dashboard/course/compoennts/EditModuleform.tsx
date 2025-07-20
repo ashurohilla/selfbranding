@@ -24,11 +24,10 @@ interface FormData {
 }
 
 interface Props {
-  id: string;
   module: IModule;
 }
 
-function ModuleForm({ id, module }: Props) {
+function ModuleForm({ module }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -89,7 +88,9 @@ function ModuleForm({ id, module }: Props) {
     }
 
     try {
+      console.log("Submitting form data:", formData);
       const result = await updatemodulebyid(module.id, formData);
+      console.log("Update result:", result);
       
       toast({
         title: "Success! 🎉",

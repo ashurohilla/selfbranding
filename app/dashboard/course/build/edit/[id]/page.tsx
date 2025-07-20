@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="pt-16 pb-8">
-        <ModuleForm module={module} id={params.id} />
+        <ModuleForm module={module}  />
       </div>
     </div>
   );

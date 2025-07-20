@@ -1,5 +1,5 @@
 "use client"
-import { Github, Mail, Phone, ExternalLink, MapPin, Calendar, Briefcase, GraduationCap, Code, Award, ShoppingBag, BookOpen, Menu, X, Linkedin, CarTaxiFront, ShoppingBagIcon } from 'lucide-react';
+import { Github, Mail, Phone, Projector , ExternalLink, MapPin, Calendar, Briefcase, GraduationCap, Code, Award, ShoppingBag, BookOpen, Menu, X, Linkedin, CarTaxiFront, ShoppingBagIcon } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,16 @@ export default function Page() {
                   <BookOpen className="w-4 h-4" />
                   Products
                 </Button>
-                </Link>            <Link href={"blogs"}>
+                </Link>      
+                   <Link href={"projects"}>
+                <Button variant={"outline"} className="text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-2">
+                  <Projector className="w-4 h-4" />
+                  Projects
+                </Button>
+                </Link>
+                
+                
+                      <Link href={"blogs"}>
                 <Button variant={"outline"} className="text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-2">
                   <BookOpen className="w-4 h-4" />
                   Blog

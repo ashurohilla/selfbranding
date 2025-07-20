@@ -106,7 +106,7 @@ const Actions = ({ id, slug }: { id: number; slug: string }) => {
         </Button>
       </Link>
       
-      <Link href={`/dashboard/course/build/add/${slug}`}>
+      <Link href={`/dashboard/course/build/edit/${slug}`}>
         <Button size="sm" className="flex gap-2 items-center" variant="outline">
           <Pencil1Icon />
           Edit

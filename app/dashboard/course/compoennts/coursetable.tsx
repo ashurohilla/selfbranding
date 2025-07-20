@@ -40,7 +40,7 @@ export default async function CourseTable() {
 
 const Actions = ({ id, slug }: { id: string; slug: string } ) => {
 	return (
-		<div className="flex items-center gap-2 md:flex-wrap">
+		<div className="flex items-center px-4 gap-2 md:flex-wrap">
 			{/* TODO: change to id */}
 			<Link href={`/courses/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
