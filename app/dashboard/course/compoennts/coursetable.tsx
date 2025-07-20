@@ -42,7 +42,7 @@ const Actions = ({ id, slug }: { id: string; slug: string } ) => {
 	return (
 		<div className="flex items-center gap-2 md:flex-wrap">
 			{/* TODO: change to id */}
-			<Link href={`/course/${slug}`}>
+			<Link href={`/courses/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<EyeOpenIcon />
 					View
