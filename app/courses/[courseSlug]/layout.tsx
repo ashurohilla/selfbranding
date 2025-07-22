@@ -99,7 +99,7 @@ export default function CourseLayout({
         <div className="flex-1 flex flex-col md:mt-6 overflow-hidden">         
           
           {/* Course content */}
-          <main className="flex-1 overflow-y-auto p-8">
+          <main className="flex-1 overflow-y-auto pr-[300px] p-8">
             {children}
           </main>
         </div>
