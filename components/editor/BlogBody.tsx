@@ -1,5 +1,6 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import React from 'react';
+import YouTubeEmbed from './YouTubeEmbed';
 
 interface Props {
   source: string;
@@ -52,6 +53,7 @@ export default function BlogBody({ source }: Props) {
               {children}
             </h1>
           ),
+            YouTubeEmbed,
           h2: ({ children }) => (
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight mb-6 mt-12 font-serif">
               {children}
