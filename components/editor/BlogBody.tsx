@@ -8,29 +8,28 @@ interface Props {
 
 // Custom Table component with enhanced mobile responsiveness
 const Table = ({ headers, data }: { headers: string[], data: string[][] }) => (
-  <div className="my-12 w-full">
-    {/* Desktop Table */}
-    <div className="hidden md:block overflow-hidden rounded-xl border border-gray-200 shadow-sm">
-      <table className="w-full border-collapse bg-white">
-        <thead>
-          <tr className="bg-gray-50/80 backdrop-blur-sm">
+  <div className="overflow-x-auto my-4 sm:my-10 rounded-lg p-[2px] bg-gradient-to-r from-black via-yellow-400 via-pink-500 to-blue-500 shadow-lg">
+    <div className="rounded-lg bg-white">
+      <table className="w-full border-collapse bg-white rounded-lg overflow-hidden">
+        <thead className="bg-gray-50">
+          <tr>
             {headers.map((header, index) => (
               <th 
                 key={index}
-                className="text-left py-4 px-6 text-gray-700 font-medium text-sm tracking-wide border-b border-gray-200"
+                className="text-left py-2 px-2 sm:py-4 sm:px-6 text-gray-700 font-semibold text-xs sm:text-sm uppercase tracking-wide first:rounded-tl-lg last:rounded-tr-lg"
               >
                 {header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-100">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors duration-200">
+            <tr key={rowIndex} className="hover:bg-gray-50 transition-colors duration-150">
               {row.map((cell, cellIndex) => (
                 <td 
                   key={cellIndex}
-                  className="py-4 px-6 text-gray-800 text-base leading-relaxed"
+                  className="py-2 px-2 sm:py-4 sm:px-6 text-gray-800 font-serif text-sm sm:text-lg leading-relaxed whitespace-nowrap"
                 >
                   {cell}
                 </td>
@@ -40,30 +39,12 @@ const Table = ({ headers, data }: { headers: string[], data: string[][] }) => (
         </tbody>
       </table>
     </div>
-
-    {/* Mobile Cards */}
-    <div className="md:hidden space-y-4">
-      {data.map((row, rowIndex) => (
-        <div key={rowIndex} className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-          {row.map((cell, cellIndex) => (
-            <div key={cellIndex} className="mb-3 last:mb-0">
-              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
-                {headers[cellIndex]}
-              </div>
-              <div className="text-gray-800 text-base leading-relaxed">
-                {cell}
-              </div>
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
   </div>
 );
 
 export default function BlogBody({ source }: Props) {
   return (
-    <div className="max-w-none">
+    <div className="max-w-none mx-4 md:mx-2">
       <MDXRemote 
         source={source} 
         components={{
