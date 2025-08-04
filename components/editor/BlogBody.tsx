@@ -75,19 +75,32 @@ export default function BlogBody({ source }: Props) {
             </p>
           ),
           
-          // Code styling
+          // Enhanced code styling with vibrant colors
           code: ({ children }) => (
-            <code className="bg-gray-100 text-gray-800 px-2 py-1 rounded-md font-mono text-sm font-medium">
+            <code className="bg-gradient-to-r text-red-800 px-3 py-1.5 italic rounded-lg font-mono text-sm font-medium relative inline-block">
               {children}
             </code>
           ),
-          pre: ({ children }) => (
-            <div className="my-8 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-              <pre className="bg-gray-50 text-gray-800 p-6 overflow-x-auto font-mono text-sm leading-relaxed">
-                {children}
-              </pre>
-            </div>
-          ),
+         pre: ({ children }) => (
+  <div className="my-8 rounded-2xl overflow-hidden shadow-lg border border-gray-200/80 bg-white/50 backdrop-blur-sm">
+    {/* Code editor header bar */}
+    <div className="bg-gradient-to-r from-gray-50 to-gray-100/80 px-5 py-3.5 flex items-center space-x-2 border-b border-gray-200/60">
+      <div className="flex space-x-2.5">
+        <div className="w-3 h-3 rounded-full bg-red-400 shadow-sm hover:bg-red-500 transition-colors"></div>
+        <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-sm hover:bg-yellow-500 transition-colors"></div>
+        <div className="w-3 h-3 rounded-full bg-green-400 shadow-sm hover:bg-green-500 transition-colors"></div>
+      </div>
+      <div className="text-gray-500 text-xs ml-5 font-mono tracking-wide font-medium">$ashishMachine</div>
+    </div>
+    {/* Code content with clean light background */}
+    <pre className="bg-gradient-to-br from-gray-50 via-white to-gray-50/80 text-red-800 p-6 overflow-x-auto font-mono text-sm leading-relaxed relative">
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-purple-50/20 to-indigo-50/30 pointer-events-none"></div>
+      <div className="relative z-10 text-red-900">
+        {children}
+      </div>
+    </pre>
+  </div>
+),
           
           // Enhanced blockquote
           blockquote: ({ children }) => (
