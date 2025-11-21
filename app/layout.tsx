@@ -25,9 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en"  suppressHydrationWarning>
       <meta name="google-adsense-account" content="ca-pub-7557474007097933">
+    
       </meta>
-
-      <meta name="google-site-verification" content="frvHP0JeNOztqEzCjXqrTIlM492jh1yIYa2IZaNbBRg" />
+      
+        <meta name="google-site-verification" content="fHSavvDPZFfd4bkxslX8z-LAzm3GPWk6p2FsyJxDz5I" />
       <head>
         
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7557474007097933"
