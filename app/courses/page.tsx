@@ -3,7 +3,11 @@ import React from "react";
 import Image from "next/image";
 import { readcourse } from "@/lib/actions/blog";
 import Navbar from "../navbar/navbar";
-import { Terminal, Calendar, ArrowRight, Layers } from "lucide-react"; // Icons for tech feel
+import { Terminal, Calendar, ArrowRight, Layers, ArrowUpRight } from "lucide-react"; // Icons for tech feel
+
+
+
+
 
 export default async function Page() {
   let { data: Courses } = await readcourse();
@@ -39,15 +43,16 @@ export default async function Page() {
               const isFeatured = index === 0;
 
               return (
-                <Link
-                  href={"/courses/" + course.slug}
-                  key={index}
-                  className={`
+             <div    className={`
                     group relative overflow-hidden rounded-xl border border-zinc-800 
                     bg-zinc-900/50 transition-all duration-300 hover:border-green-500/50 
                     hover:shadow-2xl hover:shadow-green-500/10 hover:-translate-y-1
                     ${isFeatured ? "lg:col-span-2 md:col-span-3" : ""}
-                  `}
+                  `}>
+                 <Link
+                  href={"/courses/" + course.slug}
+                  key={index}
+               
                 >
                   {/* Image Container */}
                   <div className={`relative w-full overflow-hidden ${isFeatured ? "aspect-video md:h-[400px]" : "aspect-video"}`}>
@@ -83,12 +88,22 @@ export default async function Page() {
                     </h2>
 
                     {/* Fake CTA that appears on hover */}
-                    <div className="flex items-center text-sm font-medium text-green-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        <span>Start Learning</span>
-                        <ArrowRight size={16} className="ml-2" />
-                    </div>
+                  
                   </div>
                 </Link>
+                  <div className="flex items-center py-2 px-4 justify-between text-sm font-medium text-green-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                   <div className="flex">
+                         <span>Start Learning</span>
+                        <ArrowRight size={16} className="ml-2" />
+                   </div>
+                   <Link href={`/courses/roadmap/${course.slug}`} className="flex" >
+                       <div className="flex">
+                           <span>Roadmap</span>
+                        <ArrowUpRight size={16} className="ml-2" />
+                       </div>
+                   </Link>
+                    </div>
+             </div>
               );
             })}
           </div>

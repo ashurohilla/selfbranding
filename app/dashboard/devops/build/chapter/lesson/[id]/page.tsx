@@ -1,19 +1,20 @@
-"use client";
+"use client"
 import React from "react";
-import { toast } from "@/components/ui/use-toast";
-import { defaultcoursenew } from "@/lib/data";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import Courseform from "../compoennts/Courseform";
-import { createCourse } from "../../../../lib/actions/blog";
-import { useRouter } from "next/navigation";
-import {  CourseFormSchematype } from "../../blog/schema";
 
-export default function CreateForm() {
+import { toast } from "@/components/ui/use-toast";
+import { defaultlesson } from "@/lib/data";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { createlesson } from "@/lib/actions/blog";
+import { Chapterformschematype } from "@/app/dashboard/blog/schema";
+import { useRouter } from "next/navigation";
+import ChapterForm from "@/app/dashboard/course/compoennts/ChapterForm";
+export default function CreateForm({ params }: { params: { id : string } }) {
 	const router = useRouter();
 
-	const onHandleSubmit = async (data: CourseFormSchematype) => {
+	const onHandleSubmit = async (data: Chapterformschematype) => {
+		console.log("submit button pressed")
 		try {
-			const result = await createCourse(data);	
+			const result = await createlesson(data);	
 			if (!result) {
 				throw new Error("No response received from server.");
 			}
@@ -33,9 +34,9 @@ export default function CreateForm() {
 			} else {
 				toast({
 					title: "Successfully create a post 🎉",
-					description: data.Name,
+					description: data.chapter_name,
 				});
-				router.push("/dashboard/course");
+				router.push(`/dashboard/course/build/${data.course_id}`);
 			}
 		} catch (error) {
 			console.error("Error occurred while handling submit:", error);
@@ -43,9 +44,15 @@ export default function CreateForm() {
 		}
 	};
 	return (
-		<Courseform
-		onHandleSubmit={onHandleSubmit}
-			defaultCourse={defaultcoursenew}
-		/>
+		<div className="pt-[60px]">
+	{/* <NewBlogForm/> */}
+
+		<ChapterForm
+		    id={params.id}
+			onHandleSubmit={onHandleSubmit}
+			defaultlesson={defaultlesson}
+			/>
+			</div>
 	);
+
 }

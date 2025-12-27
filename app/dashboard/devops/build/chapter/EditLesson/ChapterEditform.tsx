@@ -1,22 +1,23 @@
-"use client";
+"use client"
 import React from "react";
 import { toast } from "@/components/ui/use-toast";
-import { defaultcoursenew } from "@/lib/data";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import Courseform from "../compoennts/Courseform";
-import { createCourse } from "../../../../lib/actions/blog";
+import { updatechapter } from "@/lib/actions/blog";
+import { Chapterformschematype } from "@/app/dashboard/blog/schema";
 import { useRouter } from "next/navigation";
-import {  CourseFormSchematype } from "../../blog/schema";
-
-export default function CreateForm() {
+import Editchapterform from "@/app/dashboard/course/compoennts/Editchapterform";
+import { IchapterDetails } from "@/lib/types";
+export default function updatechapterform({chapter} : {chapter: IchapterDetails} ) {
 	const router = useRouter();
 
-	const onHandleSubmit = async (data: CourseFormSchematype) => {
-		try {
-			const result = await createCourse(data);	
+	const onchaptersubmit = async (data: Chapterformschematype) => {
+				try {
+			const result = await updatechapter(chapter?.id!, data);	
+
+			console.log("updating process start")
 			if (!result) {
 				throw new Error("No response received from server.");
-			}
+			} 
 	
 			const parsedResult = result;
 	
@@ -33,9 +34,9 @@ export default function CreateForm() {
 			} else {
 				toast({
 					title: "Successfully create a post 🎉",
-					description: data.Name,
+					description: data.chapter_name,
 				});
-				router.push("/dashboard/course");
+				router.push(`/dashboard/course/build/${chapter.course_id}`);
 			}
 		} catch (error) {
 			console.error("Error occurred while handling submit:", error);
@@ -43,9 +44,14 @@ export default function CreateForm() {
 		}
 	};
 	return (
-		<Courseform
-		onHandleSubmit={onHandleSubmit}
-			defaultCourse={defaultcoursenew}
-		/>
+		<div className="pt-[60px]">
+	{/* <NewBlogForm/> */}
+
+		<Editchapterform
+			onchaptersubmit={onchaptersubmit}
+			defaultlesson={chapter}
+			/>
+			</div>
 	);
+
 }

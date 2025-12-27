@@ -438,3 +438,45 @@ export async function updatemodulebyid(id: number, data: IModule) {
 	revalidatePath(DASHBOARD);
 	return JSON.stringify(result);
 }
+
+export async function toggleChapterProgress(chapterId: string, courseId: string, isCompleted: boolean) {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { error: "User not authenticated" };
+
+  if (isCompleted) {
+    // Add record to mark as complete
+    const { error } = await supabase
+      .from("user_progress")
+      .upsert({ user_id: user.id, chapter_id: chapterId, course_id: courseId });
+    
+    if (error) return { error: error.message };
+  } else {
+    // Remove record to mark as incomplete
+    const { error } = await supabase
+      .from("user_progress")
+      .delete()
+      .match({ user_id: user.id, chapter_id: chapterId });
+
+    if (error) return { error: error.message };
+  }
+
+  revalidatePath(`/courses/${courseId}/roadmap`);
+  return { success: true };
+}
+
+export async function getUserProgress(courseId: string) {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { data: [] };
+
+  const { data } = await supabase
+    .from("user_progress")
+    .select("chapter_id")
+    .eq("user_id", user.id)
+    .eq("course_id", courseId);
+
+  return { data: data?.map(p => p.chapter_id) || [] };
+}
