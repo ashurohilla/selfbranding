@@ -5,6 +5,7 @@ import { IModules, IchapterModules } from '@/lib/types';
 import { readchaptersbymodules } from '@/lib/actions/blog';
 import Link from 'next/link';
 import Loading from './loader';
+import { ChevronRight, Folder, FileText, PlayCircle, Menu, X, BookOpen } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -39,11 +40,9 @@ function Sidebar({ modules, courseId }: SidebarProps) {
               if (!groupedChapters[moduleId]) {
                 groupedChapters[moduleId] = [];
               }
-              // Fix: Use non-null assertion since we just checked above
               groupedChapters[moduleId]!.push(chapter);
             }
           });
-
           setChapterData(groupedChapters);
         }
         setLoading(false);
@@ -58,121 +57,114 @@ function Sidebar({ modules, courseId }: SidebarProps) {
     }
   }, [modules]);
 
-  // Close mobile menu when clicking on a chapter link
-  const handleChapterClick = () => {
-    setIsMobileMenuOpen(false);
-  };
-
-  // Check if current chapter is active
-  const isChapterActive = (chapterSlug: string) => {
-    return pathname === `/courses/${courseId}/${chapterSlug}`;
-  };
+  const handleChapterClick = () => setIsMobileMenuOpen(false);
+  const isChapterActive = (chapterSlug: string) => pathname === `/courses/${courseId}/${chapterSlug}`;
 
   return (
     <>
-      {/* Mobile Menu Toggle Button */}
-      <button
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white border rounded-md shadow-md"
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        aria-label="Toggle menu"
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {/* Mobile Trigger */}
+      <div className="md:hidden fixed top-0 left-0 z-50 w-full bg-white border-b px-4 h-14 flex items-center shadow-sm">
+        <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 -ml-2 text-gray-600 hover:text-gray-900"
         >
-          {isMobileMenuOpen ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          )}
-        </svg>
-      </button>
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+        <span className="ml-2 font-semibold text-gray-800">Course Menu</span>
+      </div>
 
-      {/* Mobile Overlay */}
+      {/* Backdrop for mobile */}
       {isMobileMenuOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={() => setIsMobileMenuOpen(false)}
+        <div 
+            className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40" 
+            onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
-      <div
+      {/* Sidebar Container */}
+      <aside
         className={`
-          fixed md:relative
-          top-0 left-0
-          h-full md:h-auto
-          w-[350px] md:w-[300px]
-          bg-white md:bg-transparent
-          border-r md:border-r-0
-          shadow-lg md:shadow-none
-          transform transition-transform duration-300 ease-in-out
-          z-40 md:z-auto
-          mx-0 md:mx-4
-          overflow-y-auto
+          fixed md:relative top-0 left-0 h-full z-50 md:z-auto
+          w-[280px] lg:w-[380px] bg-white border-r border-gray-200
+          transition-transform duration-300 ease-in-out flex flex-col
           ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+          ${isMobileMenuOpen ? 'shadow-2xl' : ''}
         `}
       >
-        {/* Mobile header with close button */}
-        <div className="md:hidden flex justify-between items-center p-4 border-b">
-          <h2 className="text-lg font-semibold">Course Content</h2>
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        {/* Header Area */}
+        <div className="h-16 flex items-center px-6 border-b border-gray-100 bg-gray-50/50">
+            <div className="flex items-center gap-2 text-blue-600">
+                <BookOpen size={20} />
+                <span className="font-bold text-lg tracking-tight text-gray-900">Course Modules</span>
+            </div>
         </div>
 
-        {/* Sidebar Content */}
-        <div className="p-4 md:p-0">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
           {loader ? (
             <Loading />
           ) : (
-            <div>
+            <Accordion type="multiple" className="space-y-4" defaultValue={["item-0"]}>
               {modules.map((module, index) => (
-                <Accordion type="single" collapsible key={module.slug}>
-                  <AccordionItem value={`item-${index}`}>
-                    <AccordionTrigger className="w-full max-w-[250px] md:max-w-[400px]">
-                      {module.module_name}
-                    </AccordionTrigger>
-                    {chapterData[module.slug]?.map((chapter) => (
-                      <AccordionContent key={chapter.slug}>
-                        <Link href={`/courses/${courseId}/${chapter.slug}`}>
-                          <button
-                            onClick={handleChapterClick}
-                            className={`text-left w-full py-2 px-3 rounded-md transition-colors duration-200 ${
-                              isChapterActive(chapter.slug)
-                                ? 'bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-500'
-                                : 'hover:bg-gray-100 hover:text-blue-600 text-gray-700'
-                            }`}
-                          >
-                            {chapter.chapter_name}
-                          </button>
-                        </Link>
-                      </AccordionContent>
-                    ))}
-                  </AccordionItem>
-                </Accordion>
+                <AccordionItem 
+                    key={module.slug} 
+                    value={`item-${index}`} 
+                    className="border border-gray-100 rounded-lg overflow-hidden bg-white shadow-sm"
+                >
+                  <AccordionTrigger className="px-4 py-3 hover:bg-gray-50 hover:no-underline transition-colors group">
+                    <div className="flex items-center gap-3 text-left">
+                        <div className="bg-blue-50 text-blue-600 p-2 rounded-md group-hover:bg-blue-100 transition-colors">
+                            <Folder size={18} />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="font-semibold text-gray-800 text-sm">{module.module_name}</span>
+                            <span className="text-xs text-gray-400 font-normal">{chapterData[module.slug]?.length || 0} Chapters</span>
+                        </div>
+                    </div>
+                  </AccordionTrigger>
+                  
+                  <AccordionContent className="pt-0 pb-2 px-2 bg-gray-50/30">
+                    <div className="flex flex-col gap-1 mt-2">
+                        {chapterData[module.slug]?.map((chapter) => {
+                        const isActive = isChapterActive(chapter.slug);
+                        return (
+                            <Link 
+                                key={chapter.slug} 
+                                href={`/courses/${courseId}/${chapter.slug}`}
+                                onClick={handleChapterClick}
+                            >
+                            <div className={`
+                                group flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-all duration-200 border border-transparent
+                                ${isActive 
+                                    ? 'bg-white text-blue-600 font-medium shadow-sm border-gray-100 ring-1 ring-blue-500/10' 
+                                    : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm hover:border-gray-100'
+                                }
+                            `}>
+                                <span className={`
+                                    ${isActive ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500'}
+                                `}>
+                                    {isActive ? <PlayCircle size={16} /> : <FileText size={16} />}
+                                </span>
+                                <span className="line-clamp-2 leading-relaxed">
+                                    {chapter.chapter_name}
+                                </span>
+                            </div>
+                            </Link>
+                        );
+                        })}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
+            </Accordion>
           )}
         </div>
-      </div>
+        
+        {/* Footer Area (Optional progress or watermark) */}
+        <div className="p-4 border-t border-gray-100 bg-gray-50/50 text-xs text-center text-gray-400">
+             © 2024 scale saas
+        </div>
+      </aside>
     </>
   );
 }

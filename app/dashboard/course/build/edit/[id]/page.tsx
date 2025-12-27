@@ -1,7 +1,6 @@
 import React from "react";
 import { SITE_URL } from "@/app/config";
 import supabase from "@/utils/supabase/supabase";
-import "react-quill/dist/quill.snow.css";
 import ModuleForm from "../../../compoennts/EditModuleform";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";

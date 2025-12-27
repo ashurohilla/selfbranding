@@ -28,6 +28,13 @@ export default function Blog() {
 			href: "/dashboard/images",
 			buttonText: "ALL Images",
 			count: "248 files"
+		},
+			{
+			title: "Devops",
+			description: "My devops journey",
+			href: "/dashboard/devops",
+			buttonText: "My devops Devops",
+			count: "12 posts"
 		}
 	];
 

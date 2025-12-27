@@ -1,3 +1,4 @@
+// @ts-ignore
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import Sessioprovider from '@/components/session-provider'
@@ -27,7 +28,7 @@ export default function RootLayout({
       <meta name="google-adsense-account" content="ca-pub-7557474007097933">
     
       </meta>
-      
+
         <meta name="google-site-verification" content="fHSavvDPZFfd4bkxslX8z-LAzm3GPWk6p2FsyJxDz5I" />
       <head>
         

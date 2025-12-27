@@ -2,9 +2,7 @@ import React from "react";
 import Content from "../components/Content";
 import { SITE_URL } from "@/app/config";
 import supabase from "@/utils/supabase/supabase";
-import "react-quill/dist/quill.snow.css";
 import Navbar from "@/app/navbar/navbar";
-import "react-quill/dist/quill.bubble.css";
 import BlogBody from "@/components/editor/BlogBody";
 import Footer from "@/components/Footer";
 
