@@ -2,7 +2,8 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import React from 'react';
 import YouTubeEmbed from './YouTubeEmbed';
 import Diagram from './Diagram';
-import { Copy, Check, Terminal } from 'lucide-react'; 
+import { Copy, Check, TerminalIcon } from 'lucide-react'; 
+import Terminal from './Terminal';
 
 interface Props {
   source: string;
@@ -50,7 +51,7 @@ const CodeBlock = ({ children }: { children: React.ReactNode }) => (
                 <div className="w-3 h-3 rounded-full bg-green-400/80" />
             </div>
             <div className="ml-4 flex items-center gap-1.5 text-xs font-mono text-zinc-400">
-                <Terminal size={12} />
+                <TerminalIcon size={12} />
                 <span>terminal</span>
             </div>
         </div>
@@ -189,6 +190,7 @@ export default function BlogBody({ source }: Props) {
           YouTubeEmbed,
           Table: Table,
           Diagram, // <--- Added here
+          Terminal,
           
           // Callout Box (Optional Techy addition)
           Callout: ({ children, type = "info" }: { children: React.ReactNode, type?: "info" | "warn" }) => (
