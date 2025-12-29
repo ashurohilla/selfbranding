@@ -83,7 +83,7 @@ export default function CourseLayout({
         <main className="flex-1 flex flex-col relative z-0 h-full overflow-hidden bg-white">
           {/* Scrollable Container for Article Content */}
           <div className="flex-1 overflow-y-auto w-full md:mt-0 mt-14">
-            <div className="max-w-4xl mx-auto px-4 sm:px-8 py-8 md:py-12">
+            <div className="max-w-9xl mx-auto px-4 sm:px-8 py-8 md:py-12">
                 {children}
             </div>
           </div>

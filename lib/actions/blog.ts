@@ -480,3 +480,39 @@ export async function getUserProgress(courseId: string) {
 
   return { data: data?.map(p => p.chapter_id) || [] };
 }
+
+export async function saveDiagramAction(title: string, sceneData: any, id?: string) {
+  const supabase = await createSupabaseServerClient();
+
+  // Prepare the payload
+  const payload = {
+    name: title,
+    scene_data: sceneData,
+  };
+
+  let result;
+
+  if (id) {
+    // UPDATE existing diagram
+    result = await supabase
+      .from("diagrams")
+      .update(payload)
+      .eq("id", id)
+      .select("id")
+      .single();
+  } else {
+    // INSERT new diagram
+    result = await supabase
+      .from("diagrams")
+      .insert(payload)
+      .select("id")
+      .single();
+  }
+
+  if (result.error) {
+    return { error: result.error.message };
+  }
+
+  revalidatePath("/admin/whiteboard"); // Optional: clear cache if you have a list page
+  return { success: true, id: result.data.id };
+}

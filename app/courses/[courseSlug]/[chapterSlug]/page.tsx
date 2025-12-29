@@ -1,5 +1,8 @@
 import { readchapterdetailsbyid } from '@/lib/actions/blog';
 import BlogBody from '@/components/editor/BlogBody';
+// @ts-ignore
+import "@excalidraw/excalidraw/index.css"; // <--- Add this here
+
 export default async function ChapterPage({
   params,
 }: {

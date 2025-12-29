@@ -1,7 +1,8 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import React from 'react';
 import YouTubeEmbed from './YouTubeEmbed';
-import { Copy, Check, Terminal } from 'lucide-react'; // Make sure to have lucide-react
+import Diagram from './Diagram';
+import { Copy, Check, Terminal } from 'lucide-react'; 
 
 interface Props {
   source: string;
@@ -187,6 +188,7 @@ export default function BlogBody({ source }: Props) {
           // Custom Components passed through
           YouTubeEmbed,
           Table: Table,
+          Diagram, // <--- Added here
           
           // Callout Box (Optional Techy addition)
           Callout: ({ children, type = "info" }: { children: React.ReactNode, type?: "info" | "warn" }) => (

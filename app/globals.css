@@ -242,4 +242,16 @@ li {
 }
 
 
+/* Fix Excalidraw + Tailwind conflict */
+.excalidraw .layer-ui__wrapper {
+  /* Tailwind resets 'button' background to transparent, making icons invisible */
+  background-color: transparent; 
+}
+
+.excalidraw button {
+  /* Restore default border behavior for Excalidraw buttons */
+  border: none; 
+}
+
+
 
