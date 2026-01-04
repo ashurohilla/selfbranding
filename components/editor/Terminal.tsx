@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef } from "react";
 // @ts-ignore
 import "asciinema-player/dist/bundle/asciinema-player.css";

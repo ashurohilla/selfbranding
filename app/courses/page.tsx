@@ -4,11 +4,6 @@ import Image from "next/image";
 import { readcourse } from "@/lib/actions/blog";
 import Navbar from "../navbar/navbar";
 import { Terminal, Calendar, ArrowRight, Layers, ArrowUpRight } from "lucide-react"; // Icons for tech feel
-
-
-
-
-
 export default async function Page() {
   let { data: Courses } = await readcourse();
 
