@@ -1,17 +1,16 @@
 "use client";
 import { 
-  Github, Mail, Phone, Projector, ExternalLink, MapPin, Calendar, 
+  Github, Mail, Phone, Projector, ExternalLink, MapPin, 
   Briefcase, GraduationCap, Code, Award, BookOpen, Menu, X, 
-  Linkedin, ShoppingBagIcon, Cpu, Zap, Instagram, ArrowRight 
+  Linkedin, ShoppingBagIcon, Cpu, Instagram, ArrowRight 
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { readmoreblog } from "@/lib/actions/blog"; // Ensure this path is correct
+import { readmoreblog } from "@/lib/actions/blog"; 
 import { IBlog } from "@/lib/types"
 import { InstagramEmbed } from '../blog/[id]/components/Instagramembed';
-
 
 function extractImageUrlsFromMarkdown(markdown: string): string[] {
   const imageUrls: string[] = [];
@@ -131,13 +130,15 @@ export default function Page() {
                 Ashish Rohilla
               </h1>
               <p className="text-xl md:text-2xl text-slate-500 font-light leading-relaxed max-w-2xl">
-                Full Stack Developer & DevOps Engineer. I build scalable infrastructure, banking fintech solutions, and I love tinkering with hardware.
+                Associate DevOps Engineer specializing in AI/ML Infrastructure. I build scalable banking fintech solutions, automate CI/CD pipelines, and bridge the gap between development and operations.
               </p>
               
               <div className="mt-8 flex flex-wrap gap-4">
+                <Link href={"https://drive.google.com/file/d/1hJrewpm3qB1vpM2gwkBus105Fdn6uaF4/view?usp=sharing"} target="_blank" rel="noopener noreferrer">
                  <Button className="rounded-full bg-slate-900 hover:bg-slate-800 px-6">
-                    Download Resume
+                   Download Resume
                  </Button>
+                </Link>
                  <div className="flex items-center gap-4 px-4">
                     <a href="https://github.com/ashurohilla" target="_blank" className="text-slate-400 hover:text-slate-900 transition-colors"><Github className="w-6 h-6"/></a>
                     <a href="https://linkedin.com" target="_blank" className="text-slate-400 hover:text-blue-700 transition-colors"><Linkedin className="w-6 h-6"/></a>
@@ -146,29 +147,29 @@ export default function Page() {
               </div>
             </header>
 
-            {/* 2. Experience Section */}
+            {/* 2. Experience Section - UPDATED TO MATCH RESUME */}
             <section>
               <h2 className="text-2xl font-light text-slate-800 mb-8 flex items-center gap-3">
                 <Briefcase className="w-5 h-5 text-slate-400" /> Professional Journey
               </h2>
               
               <div className="space-y-12 border-l border-slate-200 ml-3 pl-8 relative">
-                 {/* Job 1 */}
+                 {/* Job 1 - Fintech Role */}
                  <div className="relative group">
                     <span className="absolute -left-[41px] top-1 w-5 h-5 bg-blue-600 rounded-full border-4 border-white shadow-sm group-hover:scale-110 transition-transform"></span>
                     <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-2">
-                        <h3 className="text-xl font-medium text-slate-900">Developer</h3>
+                        <h3 className="text-xl font-medium text-slate-900">Associate Software Engineer (DevOps)</h3>
                         <span className="text-sm text-slate-500 font-mono">Dec 2024 – Present</span>
                     </div>
                     <div className="text-blue-600 font-medium mb-4">Decimal Technologies</div>
                     <ul className="list-disc ml-4 space-y-2 text-slate-600 text-base leading-relaxed">
-                        <li>Developed innovative no-code solutions for banking fintech applications, reducing dev time by 70%.</li>
-                        <li>Designed APIs for seamless banking system integration.</li>
-                        <li>Streamlined workflows for secure financial data access.</li>
+                        <li>Engineered end-to-end CI/CD pipelines for Fintech Account Opening, reducing deployment time by 70%.</li>
+                        <li>Orchestrated high-availability infrastructure using Kubernetes, supporting 10,000+ concurrent users with 99.99% uptime.</li>
+                        <li>Implemented DevSecOps scanning to secure PII and KYC data in compliance with banking regulations.</li>
                     </ul>
                  </div>
 
-                 {/* Job 2 */}
+                 {/* Job 2 - Internship */}
                  <div className="relative group">
                     <span className="absolute -left-[41px] top-1 w-5 h-5 bg-slate-200 rounded-full border-4 border-white group-hover:bg-slate-400 transition-colors"></span>
                     <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-2">
@@ -177,15 +178,15 @@ export default function Page() {
                     </div>
                     <div className="text-slate-500 font-medium mb-4">Diana Advance Tech Academy</div>
                     <ul className="list-disc ml-4 space-y-2 text-slate-600 text-base leading-relaxed">
-                        <li>Deployed microservices using Django REST and Docker.</li>
-                        <li>Implemented CI/CD pipelines with GitLab.</li>
-                        <li>Built desktop apps with Electron.js for activity tracking.</li>
+                        <li>Containerized Python microservices using Docker for horizontal scaling.</li>
+                        <li>Engineered automated GitOps workflows to streamline backend testing and deployment.</li>
+                        <li>Automated build processes for internal monitoring tools, integrating real-time system observability.</li>
                     </ul>
                  </div>
               </div>
             </section>
 
-             {/* 3. Certifications (NEW SECTION) */}
+             {/* 3. Certifications */}
              <section>
                 <h2 className="text-2xl font-light text-slate-800 mb-8 flex items-center gap-3">
                     <Award className="w-5 h-5 text-slate-400" /> Certifications
@@ -224,7 +225,7 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* 4. Projects */}
+            {/* 4. Projects - UPDATED TO DEVOPS FOCUS */}
             <section>
               <h2 className="text-2xl font-light text-slate-800 mb-8 flex items-center gap-3">
                 <Code className="w-5 h-5 text-slate-400" /> Featured Work
@@ -239,30 +240,30 @@ export default function Page() {
                         </div>
                         <a href="https://github.com/ashurohilla/ArchEngineInfra" target='_blank' className="p-2 bg-slate-50 rounded-full group-hover:bg-slate-100"><Github className="w-5 h-5"/></a>
                     </div>
-                    <p className="text-slate-600 mb-4 text-sm">AI agent generator with PDF/URL support using Go, K8s, and RabbitMQ.</p>
+                    <p className="text-slate-600 mb-4 text-sm">Architected a decoupled microservices platform using Go, Next.js, and RabbitMQ for event-driven async communication.</p>
                     <div className="flex flex-wrap gap-2">
                         {['Go', 'K8s', 'Docker', 'RabbitMQ'].map(t => <span key={t} className="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium">{t}</span>)}
                     </div>
                  </div>
 
-                 {/* Project 2 */}
+                 {/* Project 2 - SWAPPED TO AWS EKS PROJECT */}
                  <div className="group bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <div className="flex justify-between items-start mb-4">
                         <div>
-                            <h3 className="text-xl font-bold text-slate-900">Hardware Garage</h3>
-                            <p className="text-sm text-slate-500 mt-1">Full Stack Platform</p>
+                            <h3 className="text-xl font-bold text-slate-900">AWS EKS Cloud Native Deployment</h3>
+                            <p className="text-sm text-slate-500 mt-1">Infrastructure as Code</p>
                         </div>
-                        <a href="#" className="p-2 bg-slate-50 rounded-full group-hover:bg-slate-100"><ExternalLink className="w-5 h-5"/></a>
+                        <a href="https://github.com/ashurohilla/devopsinfra_ci_cd" target='_blank' className="p-2 bg-slate-50 rounded-full group-hover:bg-slate-100"><Github className="w-5 h-5"/></a>
                     </div>
-                    <p className="text-slate-600 mb-4 text-sm">A full-stack hardware blogging platform with automated image handling via Supabase.</p>
+                    <p className="text-slate-600 mb-4 text-sm">Provisioned immutable infrastructure using Terraform and automated deployments with AWS CodePipeline, ECR, and ALB.</p>
                     <div className="flex flex-wrap gap-2">
-                        {['Next.js', 'Django', 'PostgreSQL', 'Docker'].map(t => <span key={t} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-md font-medium">{t}</span>)}
+                        {['AWS EKS', 'Terraform', 'CodePipeline', 'ALB'].map(t => <span key={t} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-md font-medium">{t}</span>)}
                     </div>
                  </div>
               </div>
             </section>
 
-             {/* 5. Hardware & Hobbies (NEW SECTION) */}
+             {/* 5. Hardware & Hobbies */}
              <section>
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-2xl font-light text-slate-800 flex items-center gap-3">
@@ -273,8 +274,7 @@ export default function Page() {
                     </a>
                 </div>
                 
-                {/* Reels Grid Simulation */}
-              <div className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-8 flex items-center justify-center">
+                <div className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-8 flex items-center justify-center">
                     <InstagramEmbed />
                 </div>
                 <p className="mt-4 text-sm text-slate-500">
@@ -282,7 +282,7 @@ export default function Page() {
                 </p>
             </section>
 
-            {/* 6. DevOps Blogs (Integrated) */}
+            {/* 6. DevOps Blogs */}
             <section>
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-2xl font-light text-slate-800 flex items-center gap-3">
@@ -295,35 +295,32 @@ export default function Page() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {blogs.length > 0 ? blogs.slice(0, 4).map((blog, index) => {
-    const images = extractImageUrlsFromMarkdown(blog.content);
-    
-    // FIX: Added '|| placeholderImages[0]' at the end to satisfy TypeScript
-    // that this value will never be undefined.
-    const displayImage = images.length > 0 
-      ? images[0] 
-      : placeholderImages[index % placeholderImages.length] || placeholderImages[0];
-    
-    return (
-            <Link key={index} href={`/blog/${blog.slug}`} className="group block">
-            <div className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition-all duration-300">
-                <div className="relative h-48 w-full overflow-hidden">
-                    <Image 
-                        src={displayImage || '/placeholder.png'} // Now strictly typed as string
-                        alt={blog.title || '/placeholder.png'} 
-                        fill 
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                </div>
-                <div className="p-5">
-                    <div className="text-xs text-slate-400 mb-2">{new Date(blog.created_at).toDateString()}</div>
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        {blog.title}
-                    </h3>
-                </div>
-            </div>
-            </Link>
-    )
-}) : (
+                    const images = extractImageUrlsFromMarkdown(blog.content);
+                    const displayImage = images.length > 0 
+                      ? images[0] 
+                      : placeholderImages[index % placeholderImages.length] || placeholderImages[0];
+                    
+                    return (
+                        <Link key={index} href={`/blog/${blog.slug}`} className="group block">
+                        <div className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition-all duration-300">
+                            <div className="relative h-48 w-full overflow-hidden">
+                                <Image 
+                                    src={displayImage || '/placeholder.png'} 
+                                    alt={blog.title || '/placeholder.png'} 
+                                    fill 
+                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                            </div>
+                            <div className="p-5">
+                                <div className="text-xs text-slate-400 mb-2">{new Date(blog.created_at).toDateString()}</div>
+                                <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                    {blog.title}
+                                </h3>
+                            </div>
+                        </div>
+                        </Link>
+                    )
+                }) : (
                         <div className="col-span-2 py-10 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
                             Loading thoughts...
                         </div>
@@ -356,7 +353,7 @@ export default function Page() {
                     </div>
                 </div>
 
-                {/* Skills Cloud */}
+                {/* Skills Cloud - UPDATED */}
                 <div className="space-y-6">
                     <div>
                         <h4 className="font-medium text-slate-900 mb-3 text-sm">Languages</h4>
@@ -369,12 +366,13 @@ export default function Page() {
                     <div>
                         <h4 className="font-medium text-slate-900 mb-3 text-sm">DevOps Stack</h4>
                         <div className="flex flex-wrap gap-2">
-                            {['AWS', 'Docker', 'Kubernetes', 'Terraform', 'Jenkins', 'Ansible'].map(s => (
+                            {/* Removed Ansible, Added EKS, CodePipeline */}
+                            {['AWS EKS', 'Docker', 'Kubernetes', 'Terraform', 'CodePipeline', 'Prometheus'].map(s => (
                                 <span key={s} className="px-3 py-1 bg-green-50 border border-green-100 rounded-full text-xs text-green-700 font-medium hover:border-green-300 transition-colors cursor-default">{s}</span>
                             ))}
                         </div>
                     </div>
-                     <div>
+                      <div>
                         <h4 className="font-medium text-slate-900 mb-3 text-sm">Frameworks</h4>
                         <div className="flex flex-wrap gap-2">
                             {['Next.js', 'React', 'Django', 'Flask', 'PyTorch'].map(s => (
@@ -404,7 +402,7 @@ export default function Page() {
         {/* --- Footer --- */}
         <footer className="mt-24 pt-8 border-t border-slate-200 text-center">
           <p className="text-sm text-slate-400">
-            Crafted by Ashish Rohilla © 2024
+            Crafted by Ashish Rohilla © 2026
           </p>
         </footer>
 
