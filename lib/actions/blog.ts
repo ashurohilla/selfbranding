@@ -516,3 +516,39 @@ export async function saveDiagramAction(title: string, sceneData: any, id?: stri
   revalidatePath("/admin/whiteboard"); // Optional: clear cache if you have a list page
   return { success: true, id: result.data.id };
 }
+
+
+export async function deleteDiagramAction(id: string) {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from("diagrams")
+    .delete()
+    .eq("id", id);
+
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+
+export async function createNewDiagramAction() {
+  const supabase = await createSupabaseServerClient();
+  
+  // Default empty Excalidraw scene structure
+  const emptyScene = {
+    elements: [],
+    appState: { viewBackgroundColor: "#ffffff" }
+  };
+
+  const { data, error } = await supabase
+    .from("diagrams")
+    .insert({
+      name: "Untitled Diagram",
+      scene_data: emptyScene,
+      created_at: new Date().toISOString()
+    })
+    .select("id")
+    .single();
+
+  if (error) return { error: error.message };
+  return { success: true, id: data.id };
+}

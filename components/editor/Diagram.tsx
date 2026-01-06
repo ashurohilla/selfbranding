@@ -1,12 +1,11 @@
 import { createClient } from "@supabase/supabase-js"; // Use the core library directly for public data
 import DiagramViewer from "./DiagramViewer";
 import { AlertCircle, FileQuestion } from "lucide-react";
-
-// Create a simple client that doesn't depend on cookies/headers
-// This is safe for Static Site Generation (SSG)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
+// @ts-ignore
+import "@excalidraw/excalidraw/index.css";
 
 async function getDiagramData(id: string) {
   try {

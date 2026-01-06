@@ -11,8 +11,7 @@ export default function DashboardLayout({
 }) {
   return (
     <PrivateRoute>
-      <section>
-        <Navbar />
+    <section>
         {children}
       </section>
     </PrivateRoute>

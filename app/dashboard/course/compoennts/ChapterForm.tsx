@@ -10,46 +10,18 @@ import { IchapterDetails, Catagories, IModule } from "@/lib/types";
 import { Chapterformschematype } from "../../blog/schema";
 import { readCatogries, readmodulescourse } from "@/lib/actions/blog";
 import dynamic from "next/dynamic";
-import Footer from "@/components/Footer";
-import { Copy, Check, Upload, X, Plus } from 'lucide-react';
-import ImageGallery from "../../blog/components/ImageGallery";
-
-import { onUploadImageAction } from "../../blog/components/feats/file/actions/image-upload.action";
 import { 
-  Terminal, 
-  Code, 
-  Eye, 
-  Edit3, 
-  Save, 
-  FileText, 
-  User, 
-  Calendar,
-  Hash,
-  Image as ImageIcon,
-  Loader2,
-  BookOpen,
-  Layers,
-  Tag
+  Code, Eye, Edit3, Save, FileText, User, Calendar, Hash,
+  Image as ImageIcon, Loader2, BookOpen, Layers, Tag, Video, 
+  Plus, Copy, Check, Folder, Terminal as TerminalIcon, Sparkles, Wand2, X, Info , Layout
 } from "lucide-react";
+import ImageGallery from "../../blog/components/ImageGallery";
+import { onUploadImageAction } from "../../blog/components/feats/file/actions/image-upload.action";
 
 const MdxEditor = dynamic(() => import("@/components/editor/mdx-editor"), { ssr: false });
-const BlogBody = dynamic(() => import("@/components/editor/BlogBody"), { 
-  ssr: false,
-  loading: () => (
-    <div className="min-h-[500px] bg-gray-50 border border-gray-200 rounded p-4 flex items-center justify-center">
-      <div className="flex items-center gap-2 text-gray-500">
-        <Loader2 className="w-5 h-5 animate-spin" />
-        <span>Loading preview...</span>
-      </div>
-    </div>
-  )
-});
+const BlogBody = dynamic(() => import("@/components/editor/BlogBody"), { ssr: false });
 
-export default function ChapterForm({
-  id,
-  onHandleSubmit,
-  defaultlesson,
-}: {
+export default function ChapterForm({ id, onHandleSubmit, defaultlesson }: {
   id: string;
   defaultlesson: IchapterDetails;
   onHandleSubmit: (data: Chapterformschematype) => void;
@@ -58,21 +30,25 @@ export default function ChapterForm({
   const [isPreview, setPreview] = useState(false);
   const [categories, setCategories] = useState<Catagories[]>([]);
   const [modulescourse, setModulecourse] = useState<IModule>();
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [isClient, setIsClient] = useState(false);
   const [showImageGallery, setShowImageGallery] = useState(false);
+  const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
 
+  // AI State
+  const [showAiDrawer, setShowAiDrawer] = useState(false);
+  const [aiTopic, setAiTopic] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const user = useUser((state) => state.user);
 
   const form = useForm<Chapterformschematype>({
-    mode: "all",
+    mode: "onChange",
     defaultValues: {
       catagory_id: defaultlesson?.catagory_id || 0,
       chapter_name: defaultlesson?.chapter_name || "",
       content: defaultlesson?.content || "",
       course_id: defaultlesson?.course_id || "",
-      created_at: defaultlesson?.created_at || "",
+      created_at: defaultlesson?.created_at || new Date().toISOString(),
       description: defaultlesson?.content || "",
       instructor: defaultlesson?.instructor || "",
       module_id: defaultlesson?.module_id || "",
@@ -82,417 +58,351 @@ export default function ChapterForm({
     },
   });
 
-  // Ensure component is mounted on client
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Update time every second
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const onSubmit = (data: Chapterformschematype) => {
-    startTransition(() => {
-      onHandleSubmit(data);
-    });
-  };
-
-  const onChangeValue = useCallback((markdown: string) => {
-    form.setValue("content", markdown);
-    form.setValue("description", markdown.slice(0, 160));
-  }, [form]);
-
-  useEffect(() => {
-    // Fetch categories from Supabase backend
-    fetchCategories();
-    fetchmodulecourse();
-  }, []);
+  useEffect(() => { setIsClient(true); fetchCategories(); fetchmodulecourse(); }, []);
 
   const fetchCategories = async () => {
-    try {
-      const { data: Catagories } = await readCatogries();
-      if (Catagories) {
-        setCategories(Catagories);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    const { data } = await readCatogries();
+    if (data) setCategories(data);
   };
 
   const fetchmodulecourse = async () => {
-    try {
-      const { data: modulescourse } = await readmodulescourse(id);
-      if (modulescourse) {
-        setModulecourse(modulescourse);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    const { data } = await readmodulescourse(id);
+    if (data) setModulecourse(data);
   };
 
   useEffect(() => {
-    if (form.getValues().chapter_name && user?.id) {
-      const slug = slugify(form.getValues().chapter_name, { lower: true }) + user?.id;
-      const course_id = modulescourse?.course_id || "";
-      form.setValue("slug", slug);
-      form.setValue("instructor", user?.id);
-      form.setValue("created_at", new Date().toISOString().slice(0, 16));
-      form.setValue("module_id", id);
-      form.setValue("course_id", course_id);
-    }
-  }, [form.getValues().chapter_name, user?.id, modulescourse, id, form]);
+    const subscription = form.watch((value, { name }) => {
+      if (name === "chapter_name" && value.chapter_name) {
+        const generatedSlug = slugify(value.chapter_name, { lower: true }) + "-" + (user?.id?.slice(0, 5) || "");
+        form.setValue("slug", generatedSlug);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, user?.id]);
 
-  const formStatus = form.formState.isValid ? "Ready" : "Invalid";
-  const wordCount = form.getValues().content?.length || 0;
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedLabel(label);
+    setTimeout(() => setCopiedLabel(null), 2000);
+  };
 
-  // Memoize the ReactMarkdown component to prevent unnecessary re-renders
-  const memoizedBlogBody = useMemo(() => {
-    const content = form.getValues().content || '';
-    return <BlogBody source={content} />;
-  }, [form.watch("content")]);
+  // --- BUILD WITH AI LOGIC ---
+  const handleAiGenerate = async () => {
+    if (!aiTopic) return;
+    setIsGenerating(true);
+
+    // DUMMY DELAY
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const dummyResponse = `
+# Understanding Docker: Revolutionizing Software Deployment
+
+![Docker Logo](https://owerrlaobwdowecvbfgk.supabase.co/storage/v1/object/public/images/uploads/4yGcQJ8_rTEByiRm-ew_D_docker.png)
+
+<Callout type="info">
+  Generated by AI. This article provides a comprehensive introduction to Docker, its core concepts, and practical applications.
+</Callout>
+
+## Introduction: The "Ship It" Problem
+
+In the fast-paced world of software development, a common headache for engineers is the infamous phrase: "It works on my machine!" This problem arises because applications often rely on specific environments – a particular version of Node.js, a certain database driver, or a unique set of operating system libraries. When you move an application from a developer's machine to a testing environment, and then to production, these environmental differences can cause unexpected bugs, deployment failures, and wasted time.
+
+This is precisely the problem Docker was designed to solve. Docker is an open-source platform that enables developers to automate the deployment, scaling, and management of applications using containerization. Think of it like a standardized shipping container for your software: no matter where the container goes (your laptop, a test server, a cloud instance), its contents remain consistent and isolated from the host environment. This ensures your application behaves identically everywhere, bringing unprecedented consistency and efficiency to the development lifecycle.
+
+<Diagram id="82d31745-24b3-4e5f-97c0-02d34eb43843" />
+
+## The Core Concepts of Docker
+
+To truly grasp Docker, it's essential to understand its foundational concepts:
+
+### 1. Docker Images
+An **image** is a lightweight, standalone, executable package that includes everything needed to run a piece of software, including the code, a runtime, system tools, system libraries, and settings. It's like a blueprint or a "read-only" template. For instance, you could have an image for an Nginx web server, a Python application, or a MongoDB database. Images are built from a .
+
+### 2. Docker Containers
+A **container** is a runnable instance of an image. When you run a Docker image, it becomes a container. A container is a portable, isolated environment where your application runs. Each container has its own isolated filesystem, network interfaces, and process space, ensuring that it doesn't interfere with other containers or the host system. You can start, stop, move, or delete a container without affecting other parts of your system.
+
+### 3. Dockerfile
+A **Dockerfile** is a simple text file that contains a series of instructions on how to build a Docker image. It specifies the base image, adds application code, installs dependencies, sets environment variables, and defines the command to run when the container starts. It's the recipe for your software "shipping container."
+
+### 4. Docker Hub & Registries
+Docker Hub is a cloud-based registry service where you can find and share Docker images. It's similar to GitHub for code. You can pull (download) public images from Docker Hub or push (upload) your own custom images. Other registries like Google Container Registry (GCR) or Amazon Elastic Container Registry (ECR) also exist.
+
+## Why Use Docker? Key Benefits
+
+<YouTubeEmbed videoId="Gjnup-PuquQ" />
+
+Docker brings several significant advantages to modern software development and operations:
+
+<Steps>
+  <Step number="1" title="Consistency Across Environments">
+    Docker eliminates the "works on my machine" problem. Applications run the same way from development to testing to production, reducing bugs and simplifying debugging.
+  </Step>
+  <Step number="2" title="Isolation and Security">
+    Containers encapsulate applications and their dependencies, preventing conflicts between different applications on the same host and adding a layer of security.
+  </Step>
+  <Step number="3" title="Portability">
+    A Docker container can run on any system that has Docker installed, regardless of the underlying operating system. This is invaluable for cloud deployments.
+  </Step>
+  <Step number="4" title="Faster Deployment">
+    Containers are lightweight and start up quickly, leading to faster build, test, and deployment cycles.
+  </Step>
+  <Step number="5" title="Resource Efficiency">
+    Containers share the host OS kernel, making them much more lightweight than traditional virtual machines, which include an entire guest OS. This saves system resources.
+  </Step>
+</Steps>
+
+## Example Implementation: A Simple Web App
+
+Let's imagine you have a simple Node.js web application. Here's a basic dockerfile to containerize it:
+
+\`\`\`dockerfile
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to install dependencies
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Copy the rest of your app's source code
+COPY . .
+
+# Expose port 3000
+EXPOSE 3000
+
+# Define the command to run the app
+CMD ["npm", "start"]
+\`\`\`
+
+To build and run this:
+
+\`\`\`bash
+# Build the Docker image
+docker build -t my-node-app .
+
+# Run the container
+docker run -p 3000:3000 my-node-app
+\`\`\`
+
+This simple process packages your application into a portable, consistent unit.
+
+## Conclusion
+
+Docker has fundamentally changed how we build, ship, and run software. By providing a standardized, isolated environment for applications, it solves critical consistency issues and dramatically improves efficiency for developers and operations teams alike. Whether you're a single developer or part of a large enterprise, understanding and leveraging Docker is an indispensable skill in today's cloud-native landscape. It empowers you to focus more on writing great code and less on battling environmental discrepancies.
+
+---
+<Badge variant="success">MVP READY</Badge> <Badge variant="outline">Learn Docker</Badge>
+`;
+
+    form.setValue("content", dummyResponse);
+    form.setValue("chapter_name", aiTopic);
+    setIsGenerating(false);
+    setShowAiDrawer(false);
+    setAiTopic("");
+  };
+
+  const components = [
+    { name: "YouTube", icon: <Video className="w-4 h-4" />, snippet: '<YouTubeEmbed videoId="YOUR_VIDEO_ID" />' },
+    { name: "Excalidraw", icon: <Layout className="w-4 h-4" />, snippet: '<Diagram id="YOUR_DRAWING_ID" />' },
+    { name: "Terminal", icon: <TerminalIcon className="w-4 h-4" />, snippet: '<Terminal src="video_url_here" />' },
+    { name: "Callout", icon: <FileText className="w-4 h-4" />, snippet: '<Callout type="info">\n  Your message here\n</Callout>' },
+    { name: "Accordion", icon: <Layers className="w-4 h-4" />, snippet: '<Accordion title="Click to expand">\n  Content goes here...\n</Accordion>' },
+    { name: "Steps", icon: <Plus className="w-4 h-4" />, snippet: '<Steps>\n  <Step number="1" title="First Step">\n    Details here\n  </Step>\n</Steps>' },
+    { name: "Code Block", icon: <Code className="w-4 h-4" />, snippet: '```tsx\n// Your code here\n```' },
+    { name: "File Tree", icon: <Folder className="w-4 h-4" />, snippet: '<FileTree>\n  <TreeItem name="src" type="folder" />\n</FileTree>' },
+    { name: "Badge", icon: <Tag className="w-4 h-4" />, snippet: '<Badge variant="success">New Feature</Badge>' },
+    { name: "Card", icon: <Layout className="w-4 h-4" />, snippet: '<Card title="Title" icon={<BookOpen />}>\n  Card content description...\n</Card>' },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-700">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <BookOpen className="w-5 h-5 text-gray-500" />
-            <span className="text-gray-800 font-medium">Chapter Editor</span>
+    <div className="flex flex-col min-h-screen bg-[#F8FAFC]">
+      {/* Top Navbar */}
+      <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-2">
+          <div className="bg-blue-600 p-1.5 rounded-lg">
+            <BookOpen className="w-5 h-5 text-white" />
           </div>
-          <div className="text-sm text-gray-500">
-            {currentTime.toLocaleTimeString()} | {user?.email || "Guest"}
-          </div>
-        </div>
-      </div>
-
-      {/* Status Bar */}
-      <div className="bg-gray-100 border-b border-gray-200 p-3 text-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-gray-600">Status:</span>
-              <span className={`${formStatus === "Ready" ? "text-green-600" : "text-orange-600"}`}>
-                {formStatus}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-600">Mode:</span>
-              <span className="text-blue-600">
-                {isPreview ? "Preview" : "Edit"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-600">Words:</span>
-              <span className="text-gray-700">{wordCount}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-              <Button
-              type="button"
-              onClick={() => setShowImageGallery(!showImageGallery)}
-              variant="outline"
-              className="text-gray-700 flex float-right border-gray-300 hover:bg-gray-50"
-            >
-              <ImageIcon className="w-4 h-4 float-right" />
-              {showImageGallery ? 'Hide Gallery' : 'Show Gallery'}
-            </Button>
-            {isPending && <Loader2 className="w-4 h-4 animate-spin text-gray-500" />}
-            <span className="text-gray-600">
-              {isPending ? "Saving..." : "Ready"}
-            </span>
+          <div>
+            <h1 className="text-sm font-bold text-slate-900">Chapter Content Editor</h1>
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Module: {modulescourse?.module_name || "Loading..."}</p>
           </div>
         </div>
-      </div>
 
-      <Form {...form}>
-        {/* Control Panel */}
-        <div className="bg-white border-b border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                type="button"
-                onClick={() => setPreview(!isPreview)}
-                variant="outline"
-                className="text-gray-700 border-gray-300 hover:bg-gray-50"
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => setShowAiDrawer(true)} 
+            className="flex gap-2 border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors"
+          >
+            <Sparkles className="w-4 h-4" /> Build with AI
+          </Button>
+          <div className="h-6 w-[1px] bg-slate-200 mx-1" />
+          <Button variant="outline" size="sm" onClick={() => setShowImageGallery(true)} className="hidden md:flex gap-2 border-slate-200">
+            <ImageIcon className="w-4 h-4" /> Gallery
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => setPreview(!isPreview)} className="gap-2 text-slate-600">
+            {isPreview ? <><Edit3 className="w-4 h-4" /> Write</> : <><Eye className="w-4 h-4" /> Preview</>}
+          </Button>
+          <Button size="sm" onClick={form.handleSubmit(onHandleSubmit)} disabled={isPending} className="bg-blue-600 hover:bg-blue-700 shadow-md px-6">
+            {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+            Save Chapter
+          </Button>
+        </div>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar */}
+        <aside className="w-64 bg-white border-r border-slate-200 p-4 hidden lg:block overflow-y-auto">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Quick Components</h2>
+          <div className="space-y-2">
+            {components.map((comp) => (
+              <button
+                key={comp.name}
+                onClick={() => copyToClipboard(comp.snippet, comp.name)}
+                className="w-full flex items-center justify-between p-2 rounded-md hover:bg-slate-50 group border border-transparent hover:border-slate-100 transition-all text-left"
               >
+                <div className="flex items-center gap-3 text-slate-600">
+                  {comp.icon}
+                  <span className="text-sm font-medium">{comp.name}</span>
+                </div>
+                {copiedLabel === comp.name ? <Check className="w-3 h-3 text-green-500" /> : <Plus className="w-3 h-3 text-slate-300 group-hover:text-blue-500" />}
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        {/* Main Editor */}
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+          <Form {...form}>
+            <div className="max-w-4xl mx-auto space-y-8">
+              <section className="space-y-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <FormField
+                  control={form.control}
+                  name="chapter_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          {...field}
+                          placeholder="Chapter Title"
+                          className="w-full text-3xl font-bold bg-transparent border-none focus:ring-0 placeholder:text-slate-300 text-slate-900"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex flex-wrap items-center gap-6 pt-2 border-t border-slate-50 text-slate-500">
+                  <div className="flex items-center gap-2">
+                    <Hash className="w-3.5 h-3.5" />
+                    <span className="text-xs font-mono">{form.watch("slug") || "auto-slug"}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span className="text-xs">{new Date().toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </section>
+
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm min-h-[700px] overflow-hidden">
                 {isPreview ? (
-                  <>
-                    <Edit3 className="w-4 h-4 mr-2" />
-                    Edit
-                  </>
+                  <div className="p-8 prose prose-slate max-w-none prose-headings:font-bold prose-pre:bg-slate-900">
+                    <BlogBody source={form.watch("content") || ""} />
+                  </div>
                 ) : (
-                  <>
-                    <Eye className="w-4 h-4 mr-2" />
-                    Preview
-                  </>
+                  <div className="p-2">
+                     <MdxEditor
+                        key="chapter-editor"
+                        defaultValue={form.watch("content")|| ""}
+                        onChange={(val) => {
+                          form.setValue("content", val);
+                          form.setValue("description", val.slice(0, 160));
+                        }}
+                      />
+                  </div>
                 )}
+              </div>
+            </div>
+          </Form>
+        </main>
+      </div>
+
+      {/* AI DRAWER MODAL */}
+      {showAiDrawer && (
+        <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-end">
+          <div className="w-full max-w-md h-full bg-white shadow-2xl animate-in slide-in-from-right duration-300 p-6 flex flex-col">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <Wand2 className="w-5 h-5 text-purple-600" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-xl">Build with AI</h3>
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => setShowAiDrawer(false)}>
+                <X className="w-5 h-5" />
               </Button>
             </div>
-            <Button
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={!form.formState.isValid || isPending}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+
+            <div className="space-y-6 flex-1">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700">What is the topic?</label>
+                <Input 
+                  placeholder="e.g. Docker Fundamentals or React Hooks"
+                  value={aiTopic}
+                  onChange={(e) => setAiTopic(e.target.value)}
+                  className="h-12 border-slate-200 focus:ring-purple-500"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                  <Info className="w-3 h-3" /> How it works
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  The AI will generate a comprehensive chapter structure including an introduction, technical steps, and code examples formatted for your MDX editor.
+                </p>
+              </div>
+            </div>
+
+            <Button 
+              onClick={handleAiGenerate}
+              disabled={!aiTopic || isGenerating}
+              className="w-full h-12 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-lg shadow-purple-100 transition-all flex items-center justify-center gap-2"
             >
-              {isPending ? (
+              {isGenerating ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Generating Magic...
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save
+                  <Sparkles className="w-5 h-5" /> Generate Content
                 </>
               )}
             </Button>
           </div>
         </div>
+      )}
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-6xl mx-auto space-y-6">
-            {/* Chapter Title Input */}
-                    {showImageGallery && (
-                          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                            <div className="bg-white rounded-lg max-w-5xl max-h-[90vh] w-full overflow-hidden shadow-2xl">
-                              {/* Modal Header */}
-                              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                  <ImageIcon className="w-5 h-5 text-gray-600" />
-                                  <h2 className="text-lg font-semibold text-gray-800">Image Gallery</h2>
-                                  <span className="text-sm text-gray-500">
-                                    Manage your images for MDX editor
-                                  </span>
-                                </div>
-                                <button
-                                  onClick={() => setShowImageGallery(false)}
-                                  className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-200 rounded-full"
-                                >
-                                  <X className="w-5 h-5" />
-                                </button>
-                              </div>
-                              
-                              {/* Modal Content */}
-                              <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
-                                <ImageGallery 
-                                  onUploadImageAction={onUploadImageAction}
-                                  className="border-0 shadow-none rounded-none"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-            <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-3">
-                <FileText className="w-4 h-4 text-gray-500" />
-                <span className="text-gray-700 font-medium">Chapter Title</span>
-              </div>
-              <FormField
-                control={form.control}
-                name="chapter_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter chapter title..."
-                        {...field}
-                        className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-500" />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Chapter Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Chapter Number */}
-              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
-                  <Hash className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-700 font-medium">Chapter Number</span>
-                </div>
-                <FormField
-                  control={form.control}
-                  name="chapterno"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Enter chapter number..."
-                          {...field}
-                          className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Category Selection */}
-              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
-                  <Tag className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-700 font-medium">Category</span>
-                </div>
-                <FormField
-                  control={form.control}
-                  name="catagory_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <select
-                          {...field}
-                          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-                        >
-                          <option value="">Select a category...</option>
-                          {categories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                              {category.name}
-                            </option>
-                          ))}
-                        </select>
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Metadata Panel */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <Hash className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-600 text-sm">Slug</span>
-                </div>
-                <div className="text-gray-700 text-sm break-all">
-                  {form.getValues().slug || "auto-generated"}
-                </div>
-              </div>
-              
-              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <User className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-600 text-sm">Instructor</span>
-                </div>
-                <div className="text-gray-700 text-sm">
-                  {user?.email || "Unknown"}
-                </div>
-              </div>
-              
-              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-600 text-sm">Created</span>
-                </div>
-                <div className="text-gray-700 text-sm">
-                  {form.getValues().created_at ? 
-                    new Date(form.getValues().created_at).toLocaleDateString() : 
-                    "Now"
-                  }
-                </div>
-              </div>
-            </div>
-
-            {/* Editor/Preview Panel */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                <div className="flex items-center gap-3">
-                  <Code className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-700 font-medium">
-                    {isPreview ? "Preview" : "Content"}
-                  </span>
-                  <div className="flex items-center gap-2 ml-auto">
-                    <div className={`w-2 h-2 rounded-full ${
-                      wordCount > 0 ? 'bg-green-500' : 'bg-gray-400'
-                    }`}></div>
-                    <span className="text-xs text-gray-500">
-                      {wordCount > 0 ? 'Active' : 'Empty'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 relative">
-                {/* Editor - always mounted but hidden when in preview mode */}
-                <div className={`min-h-[900px] transition-opacity duration-200 ${
-                  isPreview ? 'opacity-0 pointer-events-none absolute inset-4' : 'opacity-100'
-                }`}>
-                  <MdxEditor
-                    key="editor"
-                    defaultValue={form.getValues().content || ""}
-                    onChange={onChangeValue}
-                  />
-                </div>
-
-                {/* Preview - always mounted but hidden when in edit mode */}
-                <div className={`min-h-[500px] transition-opacity duration-200 ${
-                  !isPreview ? 'opacity-0 pointer-events-none absolute inset-4' : 'opacity-100'
-                }`}>
-                  {isClient ? (
-                    <div className="bg-gray-50 border border-gray-200 rounded p-4">
-                      <div className="prose prose-gray max-w-none
-                        prose-headings:text-gray-800
-                        prose-p:text-gray-700 prose-p:leading-relaxed
-                        prose-code:bg-gray-100 prose-code:text-gray-800
-                        prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200
-                        prose-blockquote:border-l-gray-400 prose-blockquote:bg-gray-50
-                        prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                        prose-strong:text-gray-800 prose-em:text-gray-600
-                        prose-li:text-gray-700
-                      ">
-                        {memoizedBlogBody}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-gray-50 border border-gray-200 rounded p-4 flex items-center justify-center">
-                      <div className="flex items-center gap-2 text-gray-500">
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Loading preview...</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Module & Course Info */}
-            <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <Layers className="w-4 h-4 text-gray-500" />
-                <span className="text-gray-700 font-medium">Module Information</span>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Module ID:</span>
-                  <span className="text-gray-700 font-mono text-sm">
-                    {form.getValues().module_id || id}
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Course ID:</span>
-                  <span className="text-gray-700 font-mono text-sm">
-                    {form.getValues().course_id || modulescourse?.course_id || "Loading..."}
-                  </span>
-                </div>
-              </div>
-            </div>
+      {/* Gallery Modal - same as before */}
+      {showImageGallery && (
+        <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+             <div className="p-4 border-b flex justify-between items-center bg-slate-50">
+                <h3 className="font-bold text-slate-800 flex items-center gap-2"><ImageIcon className="w-4 h-4" /> Media Library</h3>
+                <Button variant="ghost" size="icon" onClick={() => setShowImageGallery(false)}><X className="w-4 h-4" /></Button>
+             </div>
+             <div className="max-h-[70vh] overflow-y-auto">
+                <ImageGallery onUploadImageAction={onUploadImageAction} />
+             </div>
           </div>
         </div>
-      </Form>
-
-      {/* Footer */}
-      <Footer/>
+      )}
     </div>
   );
 }

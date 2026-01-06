@@ -44,9 +44,8 @@ export default function CreateForm({ params }: { params: { id : string } }) {
 		}
 	};
 	return (
-		<div className="pt-[60px]">
+		<div className="]">
 	{/* <NewBlogForm/> */}
-
 		<ChapterForm
 		    id={params.id}
 			onHandleSubmit={onHandleSubmit}

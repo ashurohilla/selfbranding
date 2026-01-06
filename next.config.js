@@ -35,18 +35,26 @@ const nextConfig = {
         protocol: "https",
         hostname: "instagram.com",
       },
+
+       {
+        protocol: "https",
+        hostname: "youtube.com",
+      },
+
+
+
+      
     ],
   },
 
   // 👇 ADD THIS SECTION TO FIX THE BLOB ERROR
-  async headers() {
+ async headers() {
     return [
       {
         source: "/:path*",
         headers: [
           {
             key: "Content-Security-Policy",
-            // This policy explicitly allows 'blob:' and 'data:' schemes for images and fonts
             value: `
               default-src 'self';
               script-src 'self' 'unsafe-eval' 'unsafe-inline';
@@ -54,6 +62,8 @@ const nextConfig = {
               img-src 'self' blob: data: https:;
               font-src 'self' blob: data:;
               connect-src 'self' https:;
+              frame-src 'self' https://www.youtube.com https://youtube.com blob:;
+              worker-src 'self' blob:;
             `
               .replace(/\s{2,}/g, " ")
               .trim(),
