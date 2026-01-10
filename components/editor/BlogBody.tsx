@@ -9,6 +9,7 @@ import {
 import YouTubeEmbed from './YouTubeEmbed';
 import Diagram from './Diagram';
 import Terminal from './Terminal';
+import Table from './Table'
 
 // --- UI Components ---
 
@@ -148,6 +149,7 @@ export default function BlogBody({ source }: { source: string }) {
             YouTubeEmbed,
             Diagram,
             Terminal,
+            Table,
           }}
         />
       </div>

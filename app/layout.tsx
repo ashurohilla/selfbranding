@@ -32,8 +32,8 @@ export default function RootLayout({
         <meta name="google-site-verification" content="fHSavvDPZFfd4bkxslX8z-LAzm3GPWk6p2FsyJxDz5I" />
       <head>
         
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7557474007097933"
-     crossOrigin="anonymous"></script>
+      <script async src="https://pl28447865.effectivegatecpm.com/62/a9/e2/62a9e29d3f0234bc58ffa4cf15d51cbb.js"></script>"
+    
      <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
      <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='' />

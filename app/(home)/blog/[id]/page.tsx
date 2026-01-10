@@ -17,7 +17,6 @@ export async function generateStaticParams() {
 
   return blogs?.map((blog) => ({ id: blog.slug }));
 }
-
 function extractImageUrlsFromMarkdown(markdown: string): string[] {
 	const imageUrls: string[] = [];
 	
