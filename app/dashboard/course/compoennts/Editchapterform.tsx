@@ -467,9 +467,6 @@ export default function Editchapterform({
           </div>
         </div>
       </Form>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

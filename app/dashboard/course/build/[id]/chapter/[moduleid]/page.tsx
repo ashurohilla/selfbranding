@@ -1,11 +1,10 @@
 import React from "react";
 import { SITE_URL } from "@/app/config"
 import supabase from "@/utils/supabase/supabase";
-import "react-quill/dist/quill.snow.css";
-import ChapterTable from "../../../compoennts/ChaptersTable";
-import ALLchapters from "../../../compoennts/allchapters";
+// import "react-quill/dist/quill.snow.css";
+import ChapterTable from "@/app/dashboard/course/compoennts/ChaptersTable";
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string , moduleid: string } }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -43,26 +42,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </p>
               </div>
               <div className="p-6">
-                <ChapterTable id={params.id} />
+                <ChapterTable courseid={params.moduleid} id={params.id} />
               </div>
             </div>
 
-            {/* Uncomment when ready to use */}
-            {/* 
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  All Chapters
-                </h2>
-                <p className="text-sm text-gray-600 mt-1">
-                  View all chapters in this section
-                </p>
-              </div>
-              <div className="p-6">
-                <ALLchapters id={params.id} />
-              </div>
-            </div>
-            */}
           </div>
 
           {/* Sidebar */}

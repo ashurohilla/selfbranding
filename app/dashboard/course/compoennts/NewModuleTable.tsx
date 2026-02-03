@@ -48,7 +48,7 @@ export default async function ModuleTable({ id }: Props) {
           </div>
         ) : (
           modules?.map((module, index) => (
-            <ModuleCard key={module.id} module={module} index={index} />
+            <ModuleCard key={module.id} module={module} index={index} courseid={id} />
           ))
         )}
       </div>
@@ -56,7 +56,7 @@ export default async function ModuleTable({ id }: Props) {
   );
 }
 
-const ModuleCard = ({ module, index }: { module: any; index: number }) => {
+const ModuleCard = ({ module, index, courseid }: { module: any; index: number; courseid: string }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
       {/* Module Header */}
@@ -90,7 +90,7 @@ const ModuleCard = ({ module, index }: { module: any; index: number }) => {
             Chapters
           </h3>
         </div>
-        <ChapterTable id={module.slug} />
+        <ChapterTable courseid={courseid} id={module.slug} />
       </div>
     </div>
   );

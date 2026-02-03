@@ -9,14 +9,13 @@ import { PlusIcon } from "@radix-ui/react-icons";
 
 interface Props {
     id: any;
+	courseid: string;
   }
   
-export default async function 
-
-ChapterTable( {id}: Props) {
+export default async function ChapterTable(  {id, courseid}: Props) {
+	console.log("course id from params", courseid);
 
     const { data: chapters } = await readchaptersbymodule(id);
-	console.log(chapters);
 	return (
 		<>
 			<div className="rounded-md bg-graident-dark border-[0.5px] overflow-y-scroll ">
@@ -24,7 +23,7 @@ ChapterTable( {id}: Props) {
 					<div className="grid grid-cols-2 border-b p-5 dark:text-gray-500">
 						<h1 className=" col-span-2">Title</h1>
                         <Link className="" 
-                        href={`/dashboard/course/build/chapter/lesson/${id}`}>
+                        href={`/dashboard/course/build/${courseid}/chapter/lesson/${id}`}>
                         <Button className="gap-2 mt-2 mr-2" variant="outline">
                       <PlusIcon />
                       Add a chapter
@@ -46,7 +45,7 @@ ChapterTable( {id}: Props) {
 									</h4> */}
                                     </div>
 
-									<Actions id={chapter.id } slug={chapter.slug} />
+									<Actions id={chapter.id } courseid={courseid} slug={chapter.slug} />
 								</div>
 							);	
 						})}
@@ -57,12 +56,12 @@ ChapterTable( {id}: Props) {
 	);
 }
 
-const Actions = ({ id, slug }: { id: number; slug: string } ) => {
+const Actions = ({ id, courseid, slug }: { id: number; courseid: string; slug: string } ) => {
 	return (
 		<div className="flex items-center gap-2 md:flex-wrap">
 			{/* TODO: change to id */}
 			<DeleteAlert id={id} />
-			<Link href={`/dashboard/course/build/chapter/EditLesson/${slug}`}>
+			<Link href={`/dashboard/course/build/${courseid}/chapter/EditLesson/${slug}`}>
 				<Button className="flex gap-2 items-center" variant="outline">
 					<Pencil1Icon />
 					Edit

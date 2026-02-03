@@ -1,7 +1,7 @@
 import React from "react";
 import { SITE_URL } from "@/app/config";
 import supabase from "@/utils/supabase/supabase";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 import ModuleTable from "../../compoennts/NewModuleTable";
 import { CalendarIcon, BookmarkIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";

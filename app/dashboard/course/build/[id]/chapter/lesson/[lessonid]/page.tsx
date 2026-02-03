@@ -1,4 +1,4 @@
-"use client"
+"use client";	
 import React from "react";
 
 import { toast } from "@/components/ui/use-toast";
@@ -8,13 +8,14 @@ import { createlesson } from "@/lib/actions/blog";
 import { Chapterformschematype } from "@/app/dashboard/blog/schema";
 import { useRouter } from "next/navigation";
 import ChapterForm from "@/app/dashboard/course/compoennts/ChapterForm";
-export default function CreateForm({ params }: { params: { id : string } }) {
+export default function CreateForm({ params }: { params: { id : string , lessonid: string } }) {
 	const router = useRouter();
 
 	const onHandleSubmit = async (data: Chapterformschematype) => {
-		console.log("submit button pressed")
+		console.log("submit button pressed" , data)
 		try {
 			const result = await createlesson(data);	
+			console.log("result", result);
 			if (!result) {
 				throw new Error("No response received from server.");
 			}
@@ -48,6 +49,7 @@ export default function CreateForm({ params }: { params: { id : string } }) {
 	{/* <NewBlogForm/> */}
 		<ChapterForm
 		    id={params.id}
+			lessonid={params.lessonid}
 			onHandleSubmit={onHandleSubmit}
 			defaultlesson={defaultlesson}
 			/>

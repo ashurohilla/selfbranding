@@ -8,8 +8,6 @@ import BlogForm from "../components/BlogForm";
 import { createBlog } from "../../../../lib/actions/blog";
 import { BlogFormSchemaType } from "../schema";
 import { useRouter } from "next/navigation";
-import NewBlogForm from "../components/newBlogForm";
-
 export default function CreateForm() {
 	const router = useRouter();
 
