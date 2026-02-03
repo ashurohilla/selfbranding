@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react"
 
 import ReactQueryProvider from './dashboard/blog/components/query-client-provider/query-client-provider';
+import Navbar from './navbar/navbar';
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
 const defaultUrl = process.env.VERCEL_URL
@@ -14,7 +15,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'Ashish Rohilla - The Engineer',
+  title: 'Algo System - Learn systems design & MLOps and DevOps',
   description: 'devops and mlops ',
 }
 
@@ -32,9 +33,9 @@ export default function RootLayout({
         <meta name="google-site-verification" content="fHSavvDPZFfd4bkxslX8z-LAzm3GPWk6p2FsyJxDz5I" />
       <head>
         
-      <script async src="https://pl28447865.effectivegatecpm.com/62/a9/e2/62a9e29d3f0234bc58ffa4cf15d51cbb.js"></script>"
+      {/* <script async src="https://pl28447865.effectivegatecpm.com/62/a9/e2/62a9e29d3f0234bc58ffa4cf15d51cbb.js"></script>"
     
-     <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+     <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script> */}
      <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='' />
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet"/>
@@ -50,6 +51,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Navbar />
 
           
             <main className='w-full mx-4'>

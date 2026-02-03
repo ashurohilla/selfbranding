@@ -2,20 +2,12 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { readcourse } from "@/lib/actions/blog";
-import AlgoFeatures from "@/components/Features";
-import Footer from "@/components/Footer";
-
 export default async function Page() {
   let { data: Courses } = await readcourse();
   if (!Courses?.length) Courses = [];
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#050505] text-zinc-900 dark:text-zinc-100 selection:bg-teal-500/30 transition-colors duration-300">
-      
-      {/* ENHANCED GRID: 
-          Visible in both modes with different opacities. 
-          Added a scanning line effect.
-      */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808025_1px,transparent_1px),linear-gradient(to_bottom,#80808025_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:40px_40px]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#050505]" />
@@ -51,7 +43,7 @@ export default async function Page() {
               const isFeatured = index === 0;
               return (
                 <div key={index} className={`group relative flex flex-col overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 backdrop-blur-md transition-all duration-500 hover:border-teal-500 ${isFeatured ? "lg:col-span-2 md:col-span-3" : ""}`}>
-                  <Link href={"/courses/" + course.slug} className="flex-1">
+                  <Link href={"/courses/roadmap/" + course.slug} className="flex-1">
                     <div className={`relative w-full overflow-hidden ${isFeatured ? "aspect-video md:h-[420px]" : "aspect-video"}`}>
                       <Image src={course.banner_image} alt={course.Name} fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
                       <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#050505] via-transparent opacity-90" />
@@ -68,8 +60,6 @@ export default async function Page() {
           </div>
         ) : null}
       </main>
-      <AlgoFeatures />
-      <Footer/>
     </div>
   );
 }

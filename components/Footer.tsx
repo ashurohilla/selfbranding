@@ -1,101 +1,122 @@
+"use client";
+import Link from "next/link";
 import React from "react";
-import { Github, Linkedin, MessageCircle } from "lucide-react";
+import Image from "next/image";
+import logoDark from "../public/logodark.png";
+import logoLight from "../public/logolight.png";
+import { useTheme } from "next-themes";
+import {  Github, Youtube, Instagram, Twitter, Mail, Globe, Cpu } from "lucide-react";
 
 export default function Footer() {
-	return (
-		<footer className="border-t bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-				{/* Main Footer Content */}
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-					{/* Brand Section */}
-					<div className="lg:col-span-2 space-y-6">
-						<div className="space-y-4">
-							<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-								Ashish Rohilla
-							</h1>
-							<p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base max-w-md leading-relaxed">
-								Get the knowledge of Software World and DevOps
-							</p>
-						</div>
-						
-						{/* Social Media Links */}
-						<div className="flex items-center gap-4">
-							<a 
-								href="https://github.com" 
-								className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
-								aria-label="GitHub Profile"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<Github className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-							</a>
-							<a 
-								href="https://linkedin.com" 
-								className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
-								aria-label="LinkedIn Profile"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<Linkedin className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-							</a>
-							<a 
-								href="https://discord.com" 
-								className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
-								aria-label="Discord Server"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<MessageCircle className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-							</a>
-						</div>
-					</div>
+  const { theme } = useTheme();
+  const year = new Date().getFullYear();
 
-					{/* Navigation Links */}
-					<div className="space-y-4">
-						<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-							Quick Links
-						</h3>
-						<nav className="flex flex-col space-y-2">
-							<a
-								href="/privacypolicy"
-								className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 text-sm sm:text-base"
-							>
-								Privacy Policy
-							</a>
-							<a
-								href="/contactus"
-								className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 text-sm sm:text-base"
-							>
-								Contact Us
-							</a>
-							<a
-								href="/aboutus"
-								className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 text-sm sm:text-base"
-							>
-								About Us
-							</a>
-							<a
-								href="/"
-								className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors duration-200 text-sm sm:text-base"
-							>
-								Hire Me
-							</a>
-						</nav>
-					</div>
-				</div>
+  return (
+    <footer className="relative bg-white dark:bg-[#050505] border-t border-zinc-200 dark:border-zinc-800 overflow-hidden">
+      {/* Grid Decor - Aligned with the rest of the UI */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-				{/* Bottom Bar */}
-				<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-					<div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-						<p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center sm:text-left">
-							&copy; 2024 Ashish Rohilla. All rights reserved.
-						</p>
-						<p className="text-xs text-gray-400 dark:text-gray-500">
-							Built with ❤️ for the dev community
-						</p>
-					</div>
-				</div>
-			</div>
-		</footer>
-	);
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          
+          {/* Brand & Status Section */}
+          <div className="col-span-1 md:col-span-1 space-y-4">
+            <Link href="/" className="inline-block mb-4">
+              <div className="relative h-8 w-32 overflow-hidden">
+                <Image 
+                  src={theme === 'dark' ? logoDark : logoLight} 
+                  alt="Algo System" 
+                  fill 
+                  className="object-contain" 
+                />
+              </div>
+            </Link>
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-mono leading-relaxed">
+              Architecture for the modern engineer. Building high-availability knowledge modules since 2025.
+            </p>
+            <div className="flex items-center gap-2 text-[10px] font-mono text-teal-600 dark:text-teal-500 uppercase tracking-tighter">
+               <div className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
+               System_v.3.0_Operational
+            </div>
+          </div>
+
+          {/* Sitemaps */}
+          <FooterColumn title="Platform">
+            <FooterLink href="/courses" label="All Courses" />
+            <FooterLink href="/practice" label="DSA Practice" />
+            <FooterLink href="/docs" label="Documentation" />
+            <FooterLink href="/newsletter" label="Newsletter" />
+          </FooterColumn>
+
+          <FooterColumn title="Community">
+            <FooterLink href="#" label="Discord Server" />
+            <FooterLink href="#" label="GitHub Repo" />
+            <FooterLink href="#" label="Open Source" />
+            <FooterLink href="#" label="Contribute" />
+          </FooterColumn>
+
+          {/* Contact / Command Section */}
+          <FooterColumn title="Command Center">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400 text-sm">
+                <Mail size={16} className="text-teal-500" />
+                <span>root@algosystem.com</span>
+              </div>
+              <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400 text-sm">
+                <Globe size={16} className="text-teal-500" />
+                <span>HQ: New Delhi, India</span>
+              </div>
+              {/* Static Colored Social Icons in Footer */}
+              <div className="flex items-center gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                 <Link href="#" className="text-[#FF0000] hover:scale-110 transition-transform"><Youtube size={20} /></Link>
+                 <Link href="#" className="text-[#E4405F] hover:scale-110 transition-transform"><Instagram size={20} /></Link>
+                 <Link href="#" className="text-[#1DA1F2] hover:scale-110 transition-transform"><Twitter size={20} /></Link>
+                 <Link href="#" className="text-zinc-900 dark:text-white hover:scale-110 transition-transform"><Github size={20} /></Link>
+              </div>
+            </div>
+          </FooterColumn>
+        </div>
+
+        {/* Bottom Bar: Logs Style */}
+        <div className="pt-8 border-t border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest flex items-center gap-4">
+            <span>&copy; {year} ALGO_SYSTEM</span>
+            <span className="hidden md:inline border-l border-zinc-800 pl-4">SEC_ENCRYPTED: AES-256</span>
+            <span className="hidden md:inline border-l border-zinc-800 pl-4">LATENCY: 24ms</span>
+          </div>
+          <div className="flex items-center gap-6 text-[10px] font-mono text-zinc-400">
+            <Link href="/privacy" className="hover:text-teal-500 transition-colors">PRIVACY_POLICY</Link>
+            <Link href="/terms" className="hover:text-teal-500 transition-colors">TERMS_OF_SERVICE</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// --- Sub-components for Footer ---
+
+function FooterColumn({ title, children }: { title: string, children: React.ReactNode }) {
+  return (
+    <div className="space-y-6">
+      <h4 className="text-xs font-black text-zinc-900 dark:text-zinc-100 uppercase tracking-[0.2em] flex items-center gap-2">
+        <Cpu size={14} className="text-teal-500" />
+        {title}
+      </h4>
+      <div className="flex flex-col space-y-3">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FooterLink({ href, label }: { href: string, label: string }) {
+  return (
+    <Link 
+      href={href} 
+      className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-teal-500 dark:hover:text-teal-400 font-mono transition-all hover:translate-x-1"
+    >
+      {">"} {label}
+    </Link>
+  );
 }
